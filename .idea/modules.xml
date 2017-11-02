@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/ClubConnect.iml" filepath="$PROJECT_DIR$/ClubConnect.iml" />
+      <module fileurl="file://C:\Users\naman\OneDrive\Documents\ClubConnectApp\ClubConnect.iml" filepath="C:\Users\naman\OneDrive\Documents\ClubConnectApp\ClubConnect.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ClubConnectApp.iml" filepath="$PROJECT_DIR$/ClubConnectApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

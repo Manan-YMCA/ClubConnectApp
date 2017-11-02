@@ -12,34 +12,27 @@
         android:orientation="vertical"
         android:padding="30dp">
         <EditText
-            android:id="@+id/email"
-            android:hint="Email Address"
+            android:id="@+id/usernameAdmin"
+            android:hint="Username"
             android:inputType="textEmailAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
         <EditText
-            android:id="@+id/password"
+            android:id="@+id/passwordAdmin"
             android:hint="Password"
             android:inputType="textPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <Button
-            android:id="@+id/loginbtn"
+            android:id="@+id/loginAsAdminbtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
             android:background="@color/colorPrimaryDark"
             android:gravity="center"
-            android:text="Log In"
+            android:text="Admin Log In"
             android:textColor="#ffffff" />
-
-        <com.facebook.login.widget.LoginButton
-            android:id="@+id/login_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-             />
 
         <View
             android:layout_width="match_parent"
@@ -48,13 +41,13 @@
             android:background="@color/colorPrimary" />
 
         <Button
-            android:id="@+id/adminmodebtn"
+            android:id="@+id/usermodebtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
             android:background="@color/colorPrimaryDark"
             android:gravity="center"
-            android:text="Use Admin Mode"
+            android:text="Use User Mode"
             android:textColor="#ffffff" />
     </LinearLayout>
 
