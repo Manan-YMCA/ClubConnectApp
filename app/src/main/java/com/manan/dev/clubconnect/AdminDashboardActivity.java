@@ -1,5 +1,6 @@
 package com.manan.dev.clubconnect;
 
+import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,7 +17,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
         addNewEventFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(AdminDashboardActivity.this,AddNewEventActivity.class));
             }
         });
     }
