@@ -31,7 +31,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
+        setTheme(android.R.style.Theme_Black_NoTitleBar_Fullscreen);
         mAuth = FirebaseAuth.getInstance();
 
         loginButton = (LoginButton) findViewById(R.id.login_button);
@@ -63,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
