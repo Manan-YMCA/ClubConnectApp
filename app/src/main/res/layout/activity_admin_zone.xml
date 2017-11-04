@@ -2,15 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/com_facebook_button_border_color_focused">
+    android:background="@drawable/bg">
 
     <TextView
         android:id="@+id/heading_admin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:fontFamily="monospace"
         android:layout_margin="28dp"
+        android:fontFamily="monospace"
         android:text="ADMIN ZONE"
         android:textSize="48sp" />
 
@@ -20,7 +20,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/heading_admin"
         android:hint="Username"
-        android:inputType="textEmailAddress" />
+        android:inputType="textEmailAddress"
+        android:textColor="@android:color/white" />
 
     <EditText
         android:id="@+id/passwordAdmin"
@@ -28,7 +29,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/usernameAdmin"
         android:hint="Password"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        android:textColor="@android:color/white" />
 
     <LinearLayout
         android:layout_width="match_parent"
