@@ -43,7 +43,7 @@
         </activity>
         <activity android:name=".AdminDashboardActivity" />
         <activity android:name=".UserDashboardActivity" />
-        <activity android:name=".AdminLoginActivity"></activity>
+        <activity android:name=".AdminZoneActivity"></activity>
     </application>
 
 </manifest>

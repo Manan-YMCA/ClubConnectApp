@@ -5,8 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -27,8 +26,7 @@ public class MainActivity extends AppCompatActivity {
     LoginButton loginButton;
     CallbackManager callbackManager;
     FirebaseAuth mAuth;
-    Button adminModeBtn, loginBtn;
-    EditText emailEditText, passwordEditText;
+    TextView toAdminZone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,21 +35,12 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         loginButton = (LoginButton) findViewById(R.id.login_button);
-        adminModeBtn = (Button) findViewById(R.id.adminmodebtn);
-        loginBtn = (Button) findViewById(R.id.loginbtn);
-        emailEditText = (EditText) findViewById(R.id.email);
-        passwordEditText = (EditText) findViewById(R.id.password);
+        toAdminZone = (TextView) findViewById(R.id.to_admin_zone);
 
-        adminModeBtn.setOnClickListener(new View.OnClickListener() {
+        toAdminZone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, AdminLoginActivity.class));
-            }
-        });
-        loginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loginWithEmail();
+                startActivity(new Intent(MainActivity.this, AdminZoneActivity.class));
             }
         });
         loginButton.setReadPermissions("email", "public_profile");
@@ -93,38 +82,8 @@ public class MainActivity extends AppCompatActivity {
                         } else {
                             Toast.makeText(MainActivity.this, "task isn't successful.", Toast.LENGTH_SHORT).show();
                         }
-
                     }
                 });
-    }
-
-    private void loginWithEmail() {
-        String email = emailEditText.getText().toString();
-        String password = passwordEditText.getText().toString();
-        if (email.isEmpty()) {
-            Toast.makeText(this, "Enter Email ID", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (password.isEmpty()) {
-            Toast.makeText(this, "Enter password", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        try {
-            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (task.isSuccessful()) {
-                        startActivity(new Intent(MainActivity.this, UserDashboardActivity.class));
-                        finish();
-                    } else {
-                        Toast.makeText(MainActivity.this, "task isn't successful.", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -132,8 +91,11 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         // Check if user is signed in
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null) {
+        if (currentUser != null && currentUser.getProviders().get(0).equals("facebook.com")) {
             startActivity(new Intent(MainActivity.this, UserDashboardActivity.class));
+            finish();
+        } else if(currentUser != null){
+            startActivity(new Intent(MainActivity.this, AdminDashboardActivity.class));
             finish();
         }
     }

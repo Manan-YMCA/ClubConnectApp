@@ -1,61 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:weightSum="1">
-
-    <LinearLayout
+    android:background="#6b695a">
+    <TextView
+        android:id="@+id/heading"
+        android:text="Club Connect"
+        android:fontFamily="cursive"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="48dp"
+        android:textSize="48sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:layout_below="@+id/heading"
+        android:layout_margin="28dp"
+        android:text="Event Details in the Campus"
+        android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textAlignment="center"
+        android:layout_height="wrap_content" />
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/login_button"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#c456555c"
-        android:orientation="vertical"
-        android:padding="30dp">
-        <EditText
-            android:id="@+id/email"
-            android:hint="Email Address"
-            android:inputType="textEmailAddress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        <EditText
-            android:id="@+id/password"
-            android:hint="Password"
-            android:inputType="textPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="28dp"
+        android:paddingBottom="15dp"
+        android:paddingTop="15dp" />
 
-        <Button
-            android:id="@+id/loginbtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:background="@color/colorPrimaryDark"
-            android:gravity="center"
-            android:text="Log In"
-            android:textColor="#ffffff" />
+    <TextView
+        android:id="@+id/to_admin_zone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="8dp"
+        android:padding="8dp"
+        android:text="Are you an Admin? Tap Here!"
+        android:textSize="20sp" />
 
-        <com.facebook.login.widget.LoginButton
-            android:id="@+id/login_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-             />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginTop="25dp"
-            android:background="@color/colorPrimary" />
-
-        <Button
-            android:id="@+id/adminmodebtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:background="@color/colorPrimaryDark"
-            android:gravity="center"
-            android:text="Use Admin Mode"
-            android:textColor="#ffffff" />
-    </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>
