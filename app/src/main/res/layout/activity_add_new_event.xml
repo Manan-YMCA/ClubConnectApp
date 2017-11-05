@@ -72,35 +72,43 @@
             android:layout_margin="16dp"
             android:background="#b9e10a">
 
-            <TextView
-                android:id="@+id/input_start_date_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:padding="4dp"
-                android:text="Sat 4 Nov, 2017"
-                android:textSize="24sp" />
 
-            <TextView
-                android:id="@+id/input_start_time_textview"
-                android:layout_width="wrap_content"
+            <EditText
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/input_start_date_textview"
-                android:layout_margin="4dp"
-                android:padding="4dp"
-                android:text="4:30 PM"
-                android:textSize="22sp" />
+                android:id="@+id/in_date"
+                android:layout_marginTop="82dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
 
-            <TextView
-                android:id="@+id/input_end_time_textview"
+            <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_below="@+id/input_start_date_textview"
-                android:layout_margin="4dp"
-                android:padding="4dp"
-                android:text="5:30 PM"
-                android:textSize="22sp" />
+                android:text="SELECT DATE"
+                android:id="@+id/btn_date"
+                android:layout_alignBottom="@+id/in_date"
+                android:layout_toRightOf="@+id/in_date"
+                android:layout_toEndOf="@+id/in_date" />
+
+            <EditText
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/in_time"
+                android:layout_below="@+id/in_date"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SELECT TIME"
+                android:id="@+id/btn_time"
+                android:layout_below="@+id/btn_date"
+                android:layout_alignLeft="@+id/btn_date"
+                android:layout_alignStart="@+id/btn_date" />
+
+
         </RelativeLayout>
 
         <android.support.v7.widget.RecyclerView
