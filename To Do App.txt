@@ -1,0 +1,38 @@
+ADMIN -> YATIN + NAMAN
+ 
+1. Remove select date and select time buttons from event creation.
+2. Handle number of days case.
+3. Improve UI of event creation like time,date...
+4. Co-ordinators make it drop down by fetching data from firebase from child of the name of club.
+5. Make LOGOUT.
+6. Option to upload posters of the event with its name and thumbnail on Event creation.
+
+
+ADMIN -> SS
+
+1. IMPROVE UI.
+2. IMPROVE buttons, admin page, description box in event creation(Leave Report-applicant form-K sir).
+3. Remove fullscreen.
+4. Change editbox.   
+5. At the top do LOGOUT, ATTACH PHOTOS. 
+6. Sign in -> Change background of the colour, Progress Dialog.
+7. Bottom of the two links should be changed like admin login and back to home page.  
+
+
+Beta version:
+
+1. admin should be able to select coordinators
+2. admin should be able to add/create coordinators
+*3. admin should be able to upload photos of prev events.
+
+4. User should be able to see events and see posters and details of coordinators.
+5. user should be able to bookmark events (user ke bookmark mei event ki id add krdo).
+6. User should be able to see prev events and their pics.
+
+
+MAJOR CHANGE:
+1. Add prev related events option in database for events
+2. Save users and their data attained from facebook in the database under the child of 'users'
+
+
+
