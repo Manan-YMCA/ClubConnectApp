@@ -56,6 +56,11 @@ public class AdminZoneActivity extends AppCompatActivity {
         loginAsAdminBtn = (Button) findViewById(R.id.loginAsAdminbtn);
         signUpAsAdminBtn = (Button) findViewById(R.id.signUpAsAdminbtn);
         backToLoginScreen = (TextView) findViewById(R.id.back_to_login);
+        pd = new ProgressDialog(this);
+        pd.setMessage("Loading...");
+        pd.setCanceledOnTouchOutside(false);
+        pd.setCancelable(false);
+
 
         backToLoginScreen.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,11 +136,6 @@ public class AdminZoneActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(AdminZoneActivity.this, "Error signing you in.", Toast.LENGTH_SHORT).show();
                     }
-                }
-            }).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    pd.hide();
                 }
             });
 
