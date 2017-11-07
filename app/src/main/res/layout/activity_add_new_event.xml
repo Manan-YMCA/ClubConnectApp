@@ -4,10 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
         <android.support.design.widget.TextInputLayout
             android:id="@+id/input_layout_eventname"
             android:layout_width="match_parent"
@@ -15,6 +17,19 @@
 
             <EditText
                 android:id="@+id/input_eventname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Event Name"
+                android:inputType="textCapSentences" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_layout_event_venue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/input_event_venu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Event Name"
@@ -29,9 +44,12 @@
                 android:id="@+id/input_clubname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:drawableLeft="@android:drawable/ic_media_pause"
                 android:hint="Club Name"
                 android:inputType="textCapSentences" />
+
         </android.support.design.widget.TextInputLayout>
+
         <android.support.design.widget.TextInputLayout
             android:id="@+id/input_layout_description"
             android:layout_width="match_parent"
@@ -41,13 +59,17 @@
                 android:id="@+id/input_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Event Name"
-                android:inputType="textMultiLine" />
+                android:gravity="top|left"
+                android:hint="Description"
+                android:inputType="textMultiLine"
+                android:maxLines="10" />
         </android.support.design.widget.TextInputLayout>
+
         <TextView
             android:id="@+id/input_starttime"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:hint="ST" />
 
     </LinearLayout>
 </ScrollView>
