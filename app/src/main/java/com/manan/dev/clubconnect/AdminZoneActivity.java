@@ -1,5 +1,7 @@
 package com.manan.dev.clubconnect;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
@@ -25,6 +27,7 @@ public class AdminZoneActivity extends AppCompatActivity {
     Button signUpAsAdminBtn, loginAsAdminBtn;
     EditText usernameAdminEditText, passwordAdminEditText;
     TextView backToLoginScreen;
+    private ProgressDialog pd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,10 +36,10 @@ public class AdminZoneActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.rgb(126,14,14));
+            window.setStatusBarColor(Color.rgb(126, 14, 14));
         }
 
-      //  Window window = activity.getWindow();
+        //  Window window = activity.getWindow();
 
 // clear FLAG_TRANSLUCENT_STATUS flag:
         //window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -45,7 +48,7 @@ public class AdminZoneActivity extends AppCompatActivity {
         //window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
 // finally change the color
-      //  window.setStatusBarColor(ContextCompat.getColor(activity,R.color.my_statusbar_color))
+        //  window.setStatusBarColor(ContextCompat.getColor(activity,R.color.my_statusbar_color))
         //setTitle("Admin Zone");
         mAuth = FirebaseAuth.getInstance();
         usernameAdminEditText = (EditText) findViewById(R.id.usernameAdmin);
@@ -73,7 +76,6 @@ public class AdminZoneActivity extends AppCompatActivity {
                 attemptAdminSignUp();
             }
         });
-
     }
 
     private void attemptAdminSignUp() {
@@ -119,6 +121,7 @@ public class AdminZoneActivity extends AppCompatActivity {
             return;
         }
         try {
+            pd.show();
             mAuth.signInWithEmailAndPassword(username, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
@@ -129,8 +132,16 @@ public class AdminZoneActivity extends AppCompatActivity {
                         Toast.makeText(AdminZoneActivity.this, "Error signing you in.", Toast.LENGTH_SHORT).show();
                     }
                 }
+            }).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    pd.hide();
+                }
             });
+
         } catch (Exception e) {
+            pd.hide();
+
             e.printStackTrace();
         }
     }

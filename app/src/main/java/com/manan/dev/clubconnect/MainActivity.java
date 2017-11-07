@@ -1,5 +1,6 @@
 package com.manan.dev.clubconnect;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     LoginButton loginButton;
     CallbackManager callbackManager;
     FirebaseAuth mAuth;
+    private ProgressDialog pd;
     TextView toAdminZone;
 
     @Override
@@ -68,6 +70,10 @@ public class MainActivity extends AppCompatActivity {
                 // ...
             }
         });
+        pd = new ProgressDialog(this);
+        pd.setMessage("Loading...");
+        pd.setCanceledOnTouchOutside(false);
+        pd.setCancelable(false);
 
 
     }
