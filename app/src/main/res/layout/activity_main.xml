@@ -59,7 +59,8 @@
         android:layout_margin="10dp"
         android:paddingBottom="15dp"
         android:paddingTop="15dp"
-        android:textSize="18dp"/>
+        android:textSize="18dp"
+        android:paddingLeft="10dp"/>
 
     <TextView
         android:id="@+id/to_admin_zone"

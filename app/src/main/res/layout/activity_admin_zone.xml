@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/login_back"
     android:backgroundTintMode="add"
-    android:backgroundTint="#545658">
+    android:backgroundTint="#3e3d03">
 
 <ImageView
     android:layout_height="200dp"
