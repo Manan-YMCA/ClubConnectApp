@@ -1,226 +1,231 @@
 package com.manan.dev.clubconnect;
 
-import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.icu.util.Calendar;
+import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.View;
-import android.widget.Button;
+import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.manan.dev.clubconnect.Models.Event;
 
-import java.security.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Locale;
 
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
-
-public class AddNewEventActivity extends AppCompatActivity implements View.OnClickListener{
-    private EditText eventNameView, descriptionView, coordinatorsView, eventOrganiser;
-    private RecyclerView coordinatorRecyclerView;
-    private TextView dateView, startTimeView, endTimeView;
-    private FloatingActionButton submitEventFab;
-    long startTimestamp, endTimestamp;
-    private DatabaseReference database;
+public class AddNewEventActivity extends AppCompatActivity{
     String clubName;
-    Button btnDatePicker, btnTimePicker,btnEndTimePicker;
-    EditText txtDate, txtTime;
-    private int mYear, mMonth, mDay, mHour, mMinute;
+    private EditText input_eventname, input_event_venue, input_clubname, input_description, input_date, input_start_time, input_end_time;
+    private ImageView Add_new_date;
+    private LinearLayout event_day_layout;
+    int count = 0;
+    ArrayList<EditText> date;
+    ArrayList<EditText> startTime, endTime;
+    ArrayList<Long> dateData, startTimeData, endTimeData;
+    private Drawable drawableOriginal;
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_event);
 
+        input_eventname = (EditText) findViewById(R.id.input_eventname);
+        input_event_venue = (EditText) findViewById(R.id.input_event_venu);
+        input_clubname = (EditText) findViewById(R.id.input_clubname);
+        input_description = (EditText) findViewById(R.id.input_description);
+        input_date = (EditText) findViewById(R.id.input_date);
+        input_start_time = (EditText) findViewById(R.id.input_start_time);
+        input_end_time =(EditText) findViewById(R.id.input_end_time);
+        Add_new_date = (ImageView) findViewById(R.id.Add_new_date);
+        event_day_layout = (LinearLayout) findViewById(R.id.event_day_layout);
+        date = new ArrayList<EditText>();
+        startTime =  new ArrayList<EditText>();
+        endTime = new ArrayList<EditText>();
+        dateData = new ArrayList<Long>();
+        startTimeData = new ArrayList<Long>();
+        endTimeData = new ArrayList<Long>();
+
+
+        dateData.add((long) 0);
+        startTimeData.add((long) 0);
+        endTimeData.add((long) 0);
+        date.add(input_date);
+        startTime.add(input_start_time);
+        endTime.add(input_end_time);
+        date.get(count).setOnClickListener(createOnClickListenerDate(count));
+        startTime.get(count).setOnClickListener(createOnClickListenerTime(count, true));
+        endTime.get(count).setOnClickListener(createOnClickListenerTime(count, false));
+        startTime.get(count).setFocusable(false);
+        date.get(count).setFocusable(false);
+        endTime.get(count).setFocusable(false);
+        drawableOriginal = input_date.getBackground();
 
         clubName = FirebaseAuth.getInstance().getCurrentUser().getEmail().split("@")[0];
+        input_clubname.setText(clubName);
 
-//        eventNameView = (EditText) findViewById(R.id.input_eventname);
-//        eventOrganiser = (EditText) findViewById(R.id.input_organiser);
-//        eventOrganiser.setText(clubName);
-//        descriptionView = (EditText) findViewById(R.id.input_description);
-//        coordinatorsView = (EditText) findViewById(R.id.input_coordinators);
-//        // dateView = (TextView) findViewById(R.id.input_start_date_textview);
-//        //startTimeView = (TextView) findViewById(R.id.input_start_time_textview);
-//        //endTimeView = (TextView) findViewById(R.id.input_end_time_textview);
-//        submitEventFab = (FloatingActionButton) findViewById(R.id.submit_event_fab);
-////
-////        startTimeView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-////                DialogFragment newFragment = new TimePickerFragment();
-////                newFragment.show(getFragmentManager(),"startTimePicker");
-//            }
-//        });
-//        endTimeView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-////                DialogFragment newFragment = new TimePickerFragment();
-////                newFragment.show(getFragmentManager(),"endTimePicker");
-//            }
-//        });
-//        dateView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-////                DialogFragment newFragment = new DatePickerFragment();
-////                newFragment.show(getFragmentManager(), "datePicker");
-//            }
-//        });
-//
-//
-//        btnDatePicker = (Button) findViewById(R.id.btn_date);
-//        btnTimePicker = (Button) findViewById(R.id.btn_time);
-//        //btnEndTimePicker = (Button) findViewById(R.id.btn_endTime);
-//        txtDate = (EditText) findViewById(R.id.in_date);
-//        txtTime = (EditText) findViewById(R.id.in_time);
-//        //txtEndTime = (EditText) findViewById(R.id.end_time);
-//
-//        btnDatePicker.setOnClickListener((View.OnClickListener) this);
-//        btnTimePicker.setOnClickListener((View.OnClickListener) this);
-//
-//        database = FirebaseDatabase.getInstance().getReference();
-//        database.keepSynced(true);
-//        submitEventFab.setOnClickListener(new View.OnClickListener() {
-//            @RequiresApi(api = Build.VERSION_CODES.N)
-//            @Override
-//            public void onClick(View v) {
-//                attemptEventAddition();
-//            }
-//        });
-
+        Add_new_date.setOnClickListener(newEventAdditionListener());
 
     }
 
-    @TargetApi(Build.VERSION_CODES.N)
+    View.OnClickListener newEventAdditionListener(){
+
+        return new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onClick(View v) {
+
+
+                final LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
+                count++;
+                final LinearLayout.LayoutParams lparams1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                lparams1.setMarginStart((int) convertDpToPixel(50, getApplicationContext()));
+                final LinearLayout.LayoutParams lparams2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                int width = (int) convertDpToPixel(5, getApplicationContext());
+                //lparams2.setMargins(width, width, width, width);k
+
+                //Log.d("countChecker", Integer.toString(count));
+                dateData.add((long) 0);
+                startTimeData.add((long) 0);
+                endTimeData.add((long) 0);
+                date.add(new EditText(AddNewEventActivity.this));
+                startTime.add(new EditText(AddNewEventActivity.this));
+                endTime.add(new EditText(AddNewEventActivity.this));
+                date.get(count).setWidth((int) convertDpToPixel(200, getApplicationContext()));
+                startTime.get(count).setWidth((int) convertDpToPixel(140, getApplicationContext()));
+                endTime.get(count).setWidth((int) convertDpToPixel(140, getApplicationContext()));
+
+                startTime.get(count).setHint(R.string.start_time);
+                date.get(count).setHint(R.string.date);
+                endTime.get(count).setHint(R.string.end_time);
+
+                LinearLayout layout1 = new LinearLayout(AddNewEventActivity.this);
+                layout1.setOrientation(LinearLayout.HORIZONTAL);
+                LinearLayout layout2 = new LinearLayout(AddNewEventActivity.this);
+                layout2.setOrientation(LinearLayout.HORIZONTAL);
+
+                TextView day = new TextView(AddNewEventActivity.this);
+                TextView textView = new TextView(AddNewEventActivity.this);
+                textView.setText("TO");
+                String dayText = "DAY" + " " + (count+1);
+                day.setText(dayText);
+                day.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+                date.get(count).setLayoutParams(lparams2);
+                date.get(count).setBackground(drawableOriginal);
+                startTime.get(count).setBackground(drawableOriginal);
+                endTime.get(count).setBackground(drawableOriginal);
+
+                layout1.addView(day);
+                layout1.addView(date.get(count));
+                layout1.setLayoutParams(lparams);
+
+                layout2.setLayoutParams(lparams2);
+                startTime.get(count).setLayoutParams(lparams1);
+                layout2.addView(startTime.get(count));
+                layout2.addView(textView);
+                layout2.addView(endTime.get(count));
+
+                event_day_layout.addView(layout1);
+                event_day_layout.addView(layout2);
+
+                date.get(count).setOnClickListener(createOnClickListenerDate(count));
+                startTime.get(count).setOnClickListener(createOnClickListenerTime(count, true));
+                endTime.get(count).setOnClickListener(createOnClickListenerTime(count, false));
+                date.get(count).setFocusable(false);
+                startTime.get(count).setFocusable(false);
+                endTime.get(count).setFocusable(false);
+            }
+        };
+
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private void attemptEventAddition() {
-        String eventname = eventNameView.getText().toString();
-        String eventdesc = descriptionView.getText().toString();
-        String coordinators = coordinatorsView.getText().toString();
+    View.OnClickListener createOnClickListenerDate(final int i)
+    {
 
-        startTimestamp = componentTimeToTimestamp(mYear,mMonth,mDay,mHour,mMinute);
-        Log.e("Time","TIMESENT" + startTimestamp);
-        endTimestamp = 9999;
+        return new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onClick(final View v) {
+                java.util.Calendar mcurrentDate = java.util.Calendar.getInstance();
+                final int mYear = mcurrentDate.get(java.util.Calendar.YEAR);
+                final int mMonth = mcurrentDate.get(java.util.Calendar.MONTH);
+                final int mDay = mcurrentDate.get(java.util.Calendar.DAY_OF_MONTH);
 
-        Event event = new Event(eventname, eventdesc, coordinators, startTimestamp, endTimestamp);
-        String key = database.child("events").child(clubName).push().getKey();
-        database.child("events").child(clubName).child(key).setValue(event);
+                DatePickerDialog mDatePicker = new DatePickerDialog(AddNewEventActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
+                        java.util.Calendar myCalendar = java.util.Calendar.getInstance();
+                        myCalendar.setTimeInMillis(0);
+                        myCalendar.set(java.util.Calendar.YEAR, selectedyear);
+                        myCalendar.set(java.util.Calendar.MONTH, selectedmonth);
+                        myCalendar.set(java.util.Calendar.DAY_OF_MONTH, selectedday);
+                        String myFormat = "dd/MM/yy"; //Change as you need
+                        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.ENGLISH);
+                        date.get(i).setText(sdf.format(myCalendar.getTime()));
+
+                        dateData.set(i,myCalendar.getTimeInMillis());
+                    }
+                }, mYear, mMonth, mDay);
+                mDatePicker.setTitle("Select date");
+                mDatePicker.getDatePicker().setCalendarViewShown(true);
+                mDatePicker.show();
+
+            }
+        };
     }
 
-    //    public static class TimePickerFragment extends DialogFragment
-//            implements TimePickerDialog.OnTimeSetListener {
-//
-//        @Override
-//        public Dialog onCreateDialog(Bundle savedInstanceState) {
-//            // Use the current time as the default values for the picker
-//            final Calendar c = Calendar.getInstance();
-//            int hour = c.get(Calendar.HOUR_OF_DAY);
-//            int minute = c.get(Calendar.MINUTE);
-//
-//            // Create a new instance of TimePickerDialog and return it
-//            return new TimePickerDialog(getActivity(), this, hour, minute,
-//                    DateFormat.is24HourFormat(getActivity()));
-//        }
-//
-//        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-//            // Do something with the time chosen by the user
-//        }
-//    }
-//    public static class DatePickerFragment extends DialogFragment
-//            implements DatePickerDialog.OnDateSetListener {
-//
-//        @Override
-//        public Dialog onCreateDialog(Bundle savedInstanceState) {
-//            // Use the current time as the default values for the picker
-//            final Calendar c = Calendar.getInstance();
-//            int year = c.get(Calendar.YEAR);
-//            int month = c.get(Calendar.MONTH);
-//            int date = c.get(Calendar.DATE);
-//
-//            // Create a new instance of TimePickerDialog and return it
-//            return new DatePickerDialog(getActivity(), this, year, month, date);
-//        }
-//
-//        public void onDateSet(DatePicker view, int year, int month,int date) {
-//            // Do something with the time chosen by the user
-//
-//        }
-//    }
-    @TargetApi(Build.VERSION_CODES.N)
     @RequiresApi(api = Build.VERSION_CODES.N)
-    @Override
-    public void onClick(View v) {
+    View.OnClickListener createOnClickListenerTime(final int i, final boolean isStart)
+    {
 
-        if (v == btnDatePicker) {
+        return new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onClick(final View v) {
+                final java.util.Calendar mcurrentDate = java.util.Calendar.getInstance();
+                final int mHour = mcurrentDate.get(java.util.Calendar.HOUR_OF_DAY);
+                final int mMinute = mcurrentDate.get(java.util.Calendar.MINUTE);
 
-            // Get Current Date
-            final Calendar c = Calendar.getInstance();
-            mYear = c.get(Calendar.YEAR);
-            mMonth = c.get(Calendar.MONTH);
-            mDay = c.get(Calendar.DAY_OF_MONTH);
+                TimePickerDialog mTimePicker = new TimePickerDialog(AddNewEventActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        String displayTime = String.format("%02d:%02d",hourOfDay, minute);
+                        if(isStart)
+                            startTime.get(i).setText(displayTime);
+                        else
+                            endTime.get(i).setText(displayTime);
+                        int time = hourOfDay * 60 * 60 + minute * 60;
+                        if(isStart)
+                            startTimeData.set(i, (long) (time * 1000));
+                        else
+                            endTimeData.set(i, (long)(time*1000));
+                    }
+                }, mHour, mMinute, true);
 
-
-            DatePickerDialog datePickerDialog = new DatePickerDialog(this,
-                    new DatePickerDialog.OnDateSetListener() {
-
-                        @Override
-                        public void onDateSet(DatePicker view, int year,
-                                              int monthOfYear, int dayOfMonth) {
-
-                          //  txtDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
-
-                        }
-                    }, mYear, mMonth, mDay);
-            datePickerDialog.show();
-        }
-        if (v == btnTimePicker) {
-
-            // Get Current Time
-            final Calendar c = Calendar.getInstance();
-            mHour = c.get(Calendar.HOUR_OF_DAY);
-            mMinute = c.get(Calendar.MINUTE);
-
-            // Launch Time Picker Dialog
-            TimePickerDialog timePickerDialog = new TimePickerDialog(this,
-                    new TimePickerDialog.OnTimeSetListener() {
-
-                        @Override
-                        public void onTimeSet(TimePicker view, int hourOfDay,
-                                              int minute) {
-
-                            txtTime.setText(hourOfDay + ":" + minute);
-                        }
-                    }, mHour, mMinute, false);
-            timePickerDialog.show();
-        }
-    }
-    @TargetApi(Build.VERSION_CODES.N)
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    int componentTimeToTimestamp(int year, int month, int day, int hour, int minute) {
-
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.YEAR, year);
-        c.set(Calendar.MONTH, month);
-        c.set(Calendar.DAY_OF_MONTH, day);
-        c.set(Calendar.HOUR, hour);
-        c.set(Calendar.MINUTE, minute);
-        c.set(Calendar.SECOND, 0);
-        c.set(Calendar.MILLISECOND, 0);
-
-        return (int) (c.getTimeInMillis() / 1000L);
+                mTimePicker.setTitle("Select date");
+                mTimePicker.show();
+            }
+        };
     }
 
+    public static float convertDpToPixel(float dp, Context context) {
+        Resources resources = context.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        float px = dp * ((float) metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+        return px;
+    }
 
 }

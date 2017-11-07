@@ -97,6 +97,7 @@
         <!--LinearLayout for single duration!!!!!!!!!!!!!!!-->
 
         <LinearLayout
+            android:id="@+id/event_day_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
@@ -119,6 +120,8 @@
                     android:textSize="15sp" />
 
                 <EditText
+                    android:id="@+id/input_date"
+                    android:inputType="date"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:background="@android:drawable/editbox_background"
@@ -133,6 +136,8 @@
                 android:orientation="horizontal">
 
                 <EditText
+                    android:id="@+id/input_start_time"
+                    android:inputType="time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -147,6 +152,8 @@
                     android:text="TO" />
 
                 <EditText
+                    android:id="@+id/input_end_time"
+                    android:inputType="time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -169,6 +176,7 @@
                 android:textSize="20sp" />
 
             <AutoCompleteTextView
+                android:id="@+id/coordinator_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
