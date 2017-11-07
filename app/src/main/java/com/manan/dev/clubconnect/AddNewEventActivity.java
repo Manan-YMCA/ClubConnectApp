@@ -44,6 +44,7 @@ public class AddNewEventActivity extends AppCompatActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_event);
 
+
         clubName = FirebaseAuth.getInstance().getCurrentUser().getEmail().split("@")[0];
 
         eventNameView = (EditText) findViewById(R.id.input_eventname);

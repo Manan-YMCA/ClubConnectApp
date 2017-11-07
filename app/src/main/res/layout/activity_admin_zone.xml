@@ -73,9 +73,9 @@
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
             android:layout_weight="1"
-            android:background="@color/materialRed"
             android:gravity="center"
             android:padding="10dp"
+            android:background="@drawable/ripple_effect"
             android:text="Sign In"
             android:shadowColor="#000000"
             android:textColor="#ffffff" />

@@ -4,4 +4,7 @@
     <color name="colorPrimaryDark">#227302</color>
     <color name="colorAccent">#ff8a65</color>
     <color name="materialRed">#7e0e0e</color>
+    <color name="primary">#ba2525</color>
+    <color name="primaryFocused">#ae1010</color>
+    <color name="primaryPressed">#830202</color>
 </resources>

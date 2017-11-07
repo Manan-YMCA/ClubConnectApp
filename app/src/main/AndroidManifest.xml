@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity"
-           >
+            android:theme="@style/CodeFont">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -42,10 +42,11 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".AdminDashboardActivity" />
+        <activity android:name=".AdminDashboardActivity"/>
         <activity android:name=".UserDashboardActivity" />
-        <activity android:name=".AdminZoneActivity" />
-        <activity android:name=".AddNewEventActivity"></activity>
+        <activity android:name=".AdminZoneActivity"
+            android:theme="@style/CodeFont"/>
+        <activity android:name=".AddNewEventActivity"/>
     </application>
 
 </manifest>
