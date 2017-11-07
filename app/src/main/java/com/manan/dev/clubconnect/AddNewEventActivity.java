@@ -47,17 +47,17 @@ public class AddNewEventActivity extends AppCompatActivity implements View.OnCli
 
         clubName = FirebaseAuth.getInstance().getCurrentUser().getEmail().split("@")[0];
 
-        eventNameView = (EditText) findViewById(R.id.input_eventname);
-        eventOrganiser = (EditText) findViewById(R.id.input_organiser);
-        eventOrganiser.setText(clubName);
-        descriptionView = (EditText) findViewById(R.id.input_description);
-        coordinatorsView = (EditText) findViewById(R.id.input_coordinators);
-        // dateView = (TextView) findViewById(R.id.input_start_date_textview);
-        //startTimeView = (TextView) findViewById(R.id.input_start_time_textview);
-        //endTimeView = (TextView) findViewById(R.id.input_end_time_textview);
-        submitEventFab = (FloatingActionButton) findViewById(R.id.submit_event_fab);
-//
-//        startTimeView.setOnClickListener(new View.OnClickListener() {
+//        eventNameView = (EditText) findViewById(R.id.input_eventname);
+//        eventOrganiser = (EditText) findViewById(R.id.input_organiser);
+//        eventOrganiser.setText(clubName);
+//        descriptionView = (EditText) findViewById(R.id.input_description);
+//        coordinatorsView = (EditText) findViewById(R.id.input_coordinators);
+//        // dateView = (TextView) findViewById(R.id.input_start_date_textview);
+//        //startTimeView = (TextView) findViewById(R.id.input_start_time_textview);
+//        //endTimeView = (TextView) findViewById(R.id.input_end_time_textview);
+//        submitEventFab = (FloatingActionButton) findViewById(R.id.submit_event_fab);
+////
+////        startTimeView.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
 ////                DialogFragment newFragment = new TimePickerFragment();
@@ -78,27 +78,27 @@ public class AddNewEventActivity extends AppCompatActivity implements View.OnCli
 ////                newFragment.show(getFragmentManager(), "datePicker");
 //            }
 //        });
-
-
-        btnDatePicker = (Button) findViewById(R.id.btn_date);
-        btnTimePicker = (Button) findViewById(R.id.btn_time);
-        //btnEndTimePicker = (Button) findViewById(R.id.btn_endTime);
-        txtDate = (EditText) findViewById(R.id.in_date);
-        txtTime = (EditText) findViewById(R.id.in_time);
-        //txtEndTime = (EditText) findViewById(R.id.end_time);
-
-        btnDatePicker.setOnClickListener((View.OnClickListener) this);
-        btnTimePicker.setOnClickListener((View.OnClickListener) this);
-
-        database = FirebaseDatabase.getInstance().getReference();
-        database.keepSynced(true);
-        submitEventFab.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onClick(View v) {
-                attemptEventAddition();
-            }
-        });
+//
+//
+//        btnDatePicker = (Button) findViewById(R.id.btn_date);
+//        btnTimePicker = (Button) findViewById(R.id.btn_time);
+//        //btnEndTimePicker = (Button) findViewById(R.id.btn_endTime);
+//        txtDate = (EditText) findViewById(R.id.in_date);
+//        txtTime = (EditText) findViewById(R.id.in_time);
+//        //txtEndTime = (EditText) findViewById(R.id.end_time);
+//
+//        btnDatePicker.setOnClickListener((View.OnClickListener) this);
+//        btnTimePicker.setOnClickListener((View.OnClickListener) this);
+//
+//        database = FirebaseDatabase.getInstance().getReference();
+//        database.keepSynced(true);
+//        submitEventFab.setOnClickListener(new View.OnClickListener() {
+//            @RequiresApi(api = Build.VERSION_CODES.N)
+//            @Override
+//            public void onClick(View v) {
+//                attemptEventAddition();
+//            }
+//        });
 
 
     }
@@ -179,7 +179,7 @@ public class AddNewEventActivity extends AppCompatActivity implements View.OnCli
                         public void onDateSet(DatePicker view, int year,
                                               int monthOfYear, int dayOfMonth) {
 
-                            txtDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                          //  txtDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
 
                         }
                     }, mYear, mMonth, mDay);

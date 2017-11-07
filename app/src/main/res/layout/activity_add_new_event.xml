@@ -4,15 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="8dp"
-        tools:context="com.manan.dev.clubconnect.AddNewEventActivity">
-
+        android:layout_height="match_parent">
         <android.support.design.widget.TextInputLayout
             android:id="@+id/input_layout_eventname"
             android:layout_width="match_parent"
@@ -23,125 +18,36 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Event Name"
-                android:inputType="textShortMessage" />
-
+                android:inputType="textCapSentences" />
         </android.support.design.widget.TextInputLayout>
-
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/input_layout_organiser"
+            android:id="@+id/input_layout_clubname"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/input_layout_eventname">
+            android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/input_organiser"
+                android:id="@+id/input_clubname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/input_layout_organiser"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="12dp"
-                android:enabled="false"
                 android:hint="Club Name"
-                android:text="Srijan" />
-
+                android:inputType="textCapSentences" />
         </android.support.design.widget.TextInputLayout>
-
         <android.support.design.widget.TextInputLayout
             android:id="@+id/input_layout_description"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/input_layout_organiser">
+            android:layout_height="wrap_content">
 
             <EditText
                 android:id="@+id/input_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/input_layout_organiser"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="12dp"
-                android:hint="Description"
-                android:inputType="textMultiLine" />
-
-        </android.support.design.widget.TextInputLayout>
-
-        <RelativeLayout
-            android:id="@+id/time_relative_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/input_layout_description"
-            android:layout_margin="16dp"
-            android:background="#b9e10a">
-
-
-            <EditText
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/in_date"
-                android:layout_marginTop="82dp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="SELECT DATE"
-                android:id="@+id/btn_date"
-                android:layout_alignBottom="@+id/in_date"
-                android:layout_toRightOf="@+id/in_date"
-                android:layout_toEndOf="@+id/in_date" />
-
-            <EditText
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/in_time"
-                android:layout_below="@+id/in_date"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="SELECT TIME"
-                android:id="@+id/btn_time"
-                android:layout_below="@+id/btn_date"
-                android:layout_alignLeft="@+id/btn_date"
-                android:layout_alignStart="@+id/btn_date" />
-
-
-        </RelativeLayout>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/coordnator_recyler_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/time_relative_layout" />
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/input_layout_coordinators"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="32dp"
-            android:layout_below="@+id/coordnator_recyler_view">
-
-            <EditText
-                android:id="@+id/input_coordinators"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/input_layout_organiser"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="12dp"
-                android:hint="Coordinators"
+                android:hint="Event Name"
                 android:inputType="textMultiLine" />
         </android.support.design.widget.TextInputLayout>
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/submit_event_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/ic_launcher"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_margin="28dp"/>
-    </RelativeLayout>
+        <TextView
+            android:id="@+id/input_starttime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
 </ScrollView>
