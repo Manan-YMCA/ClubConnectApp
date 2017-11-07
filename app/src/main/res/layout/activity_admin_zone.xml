@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/login_back"
     android:backgroundTintMode="add"
-    android:backgroundTint="@color/materialRed">
+    android:backgroundTint="#545658">
 
 <ImageView
     android:layout_height="200dp"
@@ -45,7 +45,8 @@
         android:inputType="textEmailAddress"
         android:textColor="@android:color/white"
         android:background="@drawable/border_textview"
-        android:padding="10dp"/>
+        android:padding="10dp"
+        android:textColorHint="#fff"/>
 
     <EditText
        android:layout_marginLeft="50dp"
@@ -59,7 +60,10 @@
         android:inputType="textPassword"
         android:textColor="@android:color/white"
         android:background="@drawable/border_textview"
-        android:padding="10dp"/>
+        android:padding="10dp"
+        android:textColorHint="#fff"
+        android:drawableLeft="@android:drawable/ic_lock_idle_lock"/>
+
 
     <LinearLayout
         android:layout_width="match_parent"
