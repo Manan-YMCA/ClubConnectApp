@@ -8,6 +8,9 @@ public class Event {
     String eventName,eventDesc,eventCoordnators;
     long startTime,endTime;
 
+    public Event() {
+    }
+
     public Event(String eventName, String eventDesc, String eventCoordinators, long startTime, long endTime) {
         this.eventName = eventName;
         this.eventDesc = eventDesc;

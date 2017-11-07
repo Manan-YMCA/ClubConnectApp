@@ -5,13 +5,17 @@ package com.manan.dev.clubconnect.Models;
  */
 
 public class Coordinator {
-    String name,email,phone,photoLink;
+    String name,email,phone, photo;
+
+    public Coordinator() {
+    } // For Firebase
 
     public Coordinator(String name, String email, String phone, String photoLink) {
         this.name = name;
+
         this.email = email;
         this.phone = phone;
-        this.photoLink = photoLink;
+        this.photo = photoLink;
     }
 
     public Coordinator(String name, String email, String phone) {
@@ -44,11 +48,11 @@ public class Coordinator {
         this.phone = phone;
     }
 
-    public String getPhotoLink() {
-        return photoLink;
+    public String getPhoto() {
+        return photo;
     }
 
-    public void setPhotoLink(String photoLink) {
-        this.photoLink = photoLink;
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 }

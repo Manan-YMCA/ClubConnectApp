@@ -48,8 +48,10 @@
         <activity
             android:name=".AdminZoneActivity"
             android:theme="@style/CodeFont" />
-        <activity android:name=".AddNewEventActivity"
-            android:label="Create New Event"/>
+        <activity
+            android:name=".AddNewEventActivity"
+            android:label="Create New Event" />
+        <activity android:name=".DelActivity"></activity>
     </application>
 
 </manifest>
