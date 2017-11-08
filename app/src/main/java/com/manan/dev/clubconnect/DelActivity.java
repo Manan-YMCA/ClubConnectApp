@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -20,6 +19,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.manan.dev.clubconnect.Adapters.CoordinatorAdapter;
 import com.manan.dev.clubconnect.Models.Coordinator;
 
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ public class DelActivity extends AppCompatActivity {
     private ArrayList<Coordinator> coordinatorsList;
     private String nameList[];
     private AutoCompleteTextView coordinatorAutoCompleteTextView;
-    private ArrayAdapter<String> adapter;
+    private CoordinatorAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +93,7 @@ public class DelActivity extends AppCompatActivity {
                             Toast.makeText(DelActivity.this, coordinator.getName(), Toast.LENGTH_SHORT).show();
 
                             try {
-                                coordinatorsList.add(coordinator); //TODO error here else everything is working
+                                coordinatorsList.add(coordinator);
                                 Toast.makeText(DelActivity.this, "" + coordinatorsList.size(), Toast.LENGTH_SHORT).show();
                             } catch (Exception e) {
                                 Toast.makeText(DelActivity.this, "Error" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
@@ -123,9 +123,10 @@ public class DelActivity extends AppCompatActivity {
                     nameList[i] = coordinatorsList.get(i).getEmail();
                     Log.d("bhasad", nameList[i]);
                 }
-                adapter = new ArrayAdapter<>(DelActivity.this, android.R.layout.select_dialog_item, nameList);
+                adapter = new CoordinatorAdapter(DelActivity.this, R.layout.coordinator_item_view, nameList);
                 coordinatorAutoCompleteTextView.setThreshold(1);
                 coordinatorAutoCompleteTextView.setAdapter(adapter);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }

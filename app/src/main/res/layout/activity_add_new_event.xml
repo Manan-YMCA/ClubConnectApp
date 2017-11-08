@@ -62,16 +62,16 @@
         <!--android:layout_height="wrap_content">-->
 
         <EditText
-            android:layout_marginTop="10dp"
             android:id="@+id/input_description"
-            android:padding="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:background="@drawable/border_textview"
             android:gravity="top|left"
             android:hint="Description"
             android:inputType="textMultiLine"
             android:minLines="5"
+            android:padding="5dp"
             android:scrollbarAlwaysDrawHorizontalTrack="true" />
 
         <!--</android.support.design.widget.TextInputLayout>-->
@@ -194,6 +194,18 @@
 
         </LinearLayout>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Upload Photos" />
+
+        <ImageView
+            android:id="@+id/upload_photos_btn"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            android:src="@drawable/ic_add_black" />
     </LinearLayout>
 
 </ScrollView>
