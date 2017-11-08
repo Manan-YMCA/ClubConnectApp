@@ -86,7 +86,7 @@ public class AdminZoneActivity extends AppCompatActivity {
     }
 
     private void attemptAdminSignUp() {
-        String username = usernameAdminEditText.getText().toString();
+        String username = usernameAdminEditText.getText().toString()+"@ymca.com";
         String password = passwordAdminEditText.getText().toString();
         if (username.isEmpty()) {
             Toast.makeText(this, "Enter Username", Toast.LENGTH_SHORT).show();
@@ -116,7 +116,7 @@ public class AdminZoneActivity extends AppCompatActivity {
     }
 
     private void attemptAdminSignIn() {
-        String username = usernameAdminEditText.getText().toString();
+        String username = usernameAdminEditText.getText().toString()+"@ymca.com";
         String password = passwordAdminEditText.getText().toString();
         if (username.isEmpty()) {
             Toast.makeText(this, "Enter Username", Toast.LENGTH_SHORT).show();

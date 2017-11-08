@@ -12,7 +12,6 @@ public class Coordinator {
 
     public Coordinator(String name, String email, String phone, String photoLink) {
         this.name = name;
-
         this.email = email;
         this.phone = phone;
         this.photo = photoLink;
