@@ -3,10 +3,15 @@ package com.manan.dev.clubconnect;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
@@ -20,23 +25,31 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class AddNewEventActivity extends AppCompatActivity{
+public class AddNewEventActivity extends AppCompatActivity {
     String clubName;
     private EditText input_eventname, input_event_venue, input_clubname, input_description, input_date, input_start_time, input_end_time;
-    private ImageView Add_new_date;
-    private LinearLayout event_day_layout;
-    int count = 0;
+    private ImageView Add_new_date, addPhotosBtn;
+    private LinearLayout event_day_layout, uploadedPhotoLL;
+    int count = 0, PICK_IMAGE_REQUEST = 111, imgCount = 0;
     ArrayList<EditText> date;
     ArrayList<EditText> startTime, endTime;
     ArrayList<Long> dateData, startTimeData, endTimeData;
     private Drawable drawableOriginal;
+    private StorageReference firebaseStorage;
+    Uri filePath;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -44,17 +57,21 @@ public class AddNewEventActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_event);
 
+        firebaseStorage = FirebaseStorage.getInstance().getReference();
+
         input_eventname = (EditText) findViewById(R.id.input_eventname);
         input_event_venue = (EditText) findViewById(R.id.input_event_venu);
         input_clubname = (EditText) findViewById(R.id.input_clubname);
         input_description = (EditText) findViewById(R.id.input_description);
         input_date = (EditText) findViewById(R.id.input_date);
         input_start_time = (EditText) findViewById(R.id.input_start_time);
-        input_end_time =(EditText) findViewById(R.id.input_end_time);
+        input_end_time = (EditText) findViewById(R.id.input_end_time);
         Add_new_date = (ImageView) findViewById(R.id.Add_new_date);
+        addPhotosBtn = (ImageView) findViewById(R.id.upload_photos_btn);
         event_day_layout = (LinearLayout) findViewById(R.id.event_day_layout);
+        uploadedPhotoLL = (LinearLayout) findViewById(R.id.img_uploaded_ll);
         date = new ArrayList<EditText>();
-        startTime =  new ArrayList<EditText>();
+        startTime = new ArrayList<EditText>();
         endTime = new ArrayList<EditText>();
         dateData = new ArrayList<Long>();
         startTimeData = new ArrayList<Long>();
@@ -79,15 +96,60 @@ public class AddNewEventActivity extends AppCompatActivity{
         input_clubname.setText(clubName);
 
         Add_new_date.setOnClickListener(newEventAdditionListener());
+        addPhotosBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_PICK);
+                startActivityForResult(Intent.createChooser(intent, "Select Image"), PICK_IMAGE_REQUEST);
+            }
+        });
 
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            filePath = data.getData();
+            try {
+                final Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                StorageReference childRef = firebaseStorage.child(input_eventname.getText().toString() + imgCount + "image.jpg");
+                // To be put on final add event button to avoid useless uploads
+                UploadTask uploadTask = childRef.putFile(filePath);
+                uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Toast.makeText(AddNewEventActivity.this, "Upload successful", Toast.LENGTH_SHORT).show();
+                        //Setting image to ImageView
+                        ImageView imgView = new ImageView(AddNewEventActivity.this);
+                        imgView.setImageBitmap(bitmap);
+                        uploadedPhotoLL.addView(imgView);
+                        imgCount++;
+                        // TODO Add photoLink in database
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(AddNewEventActivity.this, "Upload successful", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            Toast.makeText(AddNewEventActivity.this, "Select an image", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_new_event, menu);
         return true;
     }
 
-    View.OnClickListener newEventAdditionListener(){
+    View.OnClickListener newEventAdditionListener() {
 
         return new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
@@ -95,7 +157,7 @@ public class AddNewEventActivity extends AppCompatActivity{
             public void onClick(View v) {
 
 
-                final LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
+                final LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
                 count++;
                 final LinearLayout.LayoutParams lparams1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 lparams1.setMarginStart((int) convertDpToPixel(50, getApplicationContext()));
@@ -126,7 +188,7 @@ public class AddNewEventActivity extends AppCompatActivity{
                 TextView day = new TextView(AddNewEventActivity.this);
                 TextView textView = new TextView(AddNewEventActivity.this);
                 textView.setText("TO");
-                String dayText = "DAY" + " " + (count+1);
+                String dayText = "DAY" + " " + (count + 1);
                 day.setText(dayText);
                 day.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
                 date.get(count).setLayoutParams(lparams2);
@@ -159,8 +221,7 @@ public class AddNewEventActivity extends AppCompatActivity{
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    View.OnClickListener createOnClickListenerDate(final int i)
-    {
+    View.OnClickListener createOnClickListenerDate(final int i) {
 
         return new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
@@ -182,7 +243,7 @@ public class AddNewEventActivity extends AppCompatActivity{
                         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.ENGLISH);
                         date.get(i).setText(sdf.format(myCalendar.getTime()));
 
-                        dateData.set(i,myCalendar.getTimeInMillis());
+                        dateData.set(i, myCalendar.getTimeInMillis());
                     }
                 }, mYear, mMonth, mDay);
                 mDatePicker.setTitle("Select date");
@@ -195,8 +256,7 @@ public class AddNewEventActivity extends AppCompatActivity{
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    View.OnClickListener createOnClickListenerTime(final int i, final boolean isStart)
-    {
+    View.OnClickListener createOnClickListenerTime(final int i, final boolean isStart) {
 
         return new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
@@ -209,16 +269,16 @@ public class AddNewEventActivity extends AppCompatActivity{
                 TimePickerDialog mTimePicker = new TimePickerDialog(AddNewEventActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        String displayTime = String.format("%02d:%02d",hourOfDay, minute);
-                        if(isStart)
+                        String displayTime = String.format("%02d:%02d", hourOfDay, minute);
+                        if (isStart)
                             startTime.get(i).setText(displayTime);
                         else
                             endTime.get(i).setText(displayTime);
                         int time = hourOfDay * 60 * 60 + minute * 60;
-                        if(isStart)
+                        if (isStart)
                             startTimeData.set(i, (long) (time * 1000));
                         else
-                            endTimeData.set(i, (long)(time*1000));
+                            endTimeData.set(i, (long) (time * 1000));
                     }
                 }, mHour, mMinute, true);
 

@@ -6,6 +6,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/add_new_event_ll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="10dp"
@@ -206,6 +207,11 @@
             android:layout_gravity="center"
             android:layout_margin="8dp"
             android:src="@drawable/ic_add_black" />
+        <LinearLayout
+            android:id="@+id/img_uploaded_ll"
+            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:layout_height="64dp"/>
     </LinearLayout>
 
 </ScrollView>
