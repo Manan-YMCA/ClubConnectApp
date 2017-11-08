@@ -8,8 +8,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_margin="10dp">
+        android:layout_margin="10dp"
+        android:orientation="vertical">
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/input_layout_eventname"
@@ -86,12 +86,21 @@
                 android:textSize="24sp" />
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/Add_new_date"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:src="@android:drawable/ic_input_add"
-                android:id="@+id/Add_new_date"/>
+                android:layout_marginEnd="35dp"
+                android:src="@drawable/ic_add_black" />
+
+            <ImageView
+                android:id="@+id/Sub_new_date"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_sub_black" />
         </RelativeLayout>
 
         <!--LinearLayout for single duration!!!!!!!!!!!!!!!-->
@@ -100,11 +109,11 @@
             android:id="@+id/event_day_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingLeft="50dp"
             android:layout_margin="15dp"
+            android:background="@drawable/border_textview"
+            android:orientation="vertical"
             android:padding="5dp"
-            android:background="@drawable/border_textview">
+            android:paddingLeft="50dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -114,51 +123,51 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingRight="5dp"
                     android:layout_marginRight="5dp"
+                    android:paddingRight="5dp"
                     android:text="DAY 1"
                     android:textSize="15sp" />
 
                 <EditText
                     android:id="@+id/input_date"
-                    android:inputType="date"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:background="@android:drawable/editbox_background"
-                    android:hint="Date" />
+                    android:hint="Date"
+                    android:inputType="date" />
             </LinearLayout>
 
             <LinearLayout
-                android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="50dp"
+                android:layout_marginTop="5dp"
                 android:orientation="horizontal">
 
                 <EditText
                     android:id="@+id/input_start_time"
-                    android:inputType="time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@android:drawable/editbox_background"
                     android:hint="Start Time"
+                    android:inputType="time"
                     android:textSize="12sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="15dp"
-                    android:text="TO" />
+                    android:text="TO"
+                    android:textSize="15dp" />
 
                 <EditText
                     android:id="@+id/input_end_time"
-                    android:inputType="time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@android:drawable/editbox_background"
                     android:hint="End Time"
+                    android:inputType="time"
                     android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>
@@ -177,10 +186,10 @@
 
             <AutoCompleteTextView
                 android:id="@+id/coordinator_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:hint="Co-ordinator's Name" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:hint="Co-ordinator's Name" />
 
         </LinearLayout>
 
