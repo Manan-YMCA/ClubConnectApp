@@ -23,7 +23,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
         addNewEventFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(AdminDashboardActivity.this,AddNewEventActivity.class));
+                startActivity(new Intent(AdminDashboardActivity.this,DelActivity.class));
             }
         });
     }

@@ -1,13 +1,11 @@
 package com.manan.dev.clubconnect;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
@@ -84,7 +82,7 @@ public class AdminZoneActivity extends AppCompatActivity {
     }
 
     private void attemptAdminSignUp() {
-        String username = usernameAdminEditText.getText().toString();
+        String username = usernameAdminEditText.getText().toString()+"@ymca.com";
         String password = passwordAdminEditText.getText().toString();
         if (username.isEmpty()) {
             Toast.makeText(this, "Enter Username", Toast.LENGTH_SHORT).show();
@@ -114,7 +112,7 @@ public class AdminZoneActivity extends AppCompatActivity {
     }
 
     private void attemptAdminSignIn() {
-        String username = usernameAdminEditText.getText().toString();
+        String username = usernameAdminEditText.getText().toString()+"@ymca.com";
         String password = passwordAdminEditText.getText().toString();
         if (username.isEmpty()) {
             Toast.makeText(this, "Enter Username", Toast.LENGTH_SHORT).show();

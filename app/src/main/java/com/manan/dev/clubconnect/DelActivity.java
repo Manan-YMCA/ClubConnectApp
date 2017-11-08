@@ -4,8 +4,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,16 +31,50 @@ public class DelActivity extends AppCompatActivity {
     private ArrayList<Coordinator> coordinatorsList;
     private String nameList[];
     private AutoCompleteTextView coordinatorAutoCompleteTextView;
+    private ArrayAdapter<String> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_del);
-        coordinatorsList = new ArrayList<>();
+        final LinearLayout ll = (LinearLayout) findViewById(R.id.ll);
+        coordinatorsList = new ArrayList<Coordinator>();
         coordinatorAutoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.coordinator_text_view);
         new FetchDBDetails().execute("");
+        nameList = new String[]{"Kushank"};
+        coordinatorAutoCompleteTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                coordinatorAutoCompleteTextView.showDropDown();
+            }
+        });
+       coordinatorAutoCompleteTextView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+           @Override
+           public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
+           }
 
+           @Override
+           public void onNothingSelected(AdapterView<?> parent) {
+
+           }
+       });
+        coordinatorAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TextView tv = new TextView(DelActivity.this);
+                tv.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                String email = coordinatorAutoCompleteTextView.getText().toString();
+                int i;
+                for(i=0;i<coordinatorsList.size();i++){
+                    if(nameList[i].equals(email))
+                        break;
+                }
+                tv.setText(coordinatorsList.get(i).getName());
+                ll.addView(tv);
+                coordinatorAutoCompleteTextView.setText("");
+            }
+        });
     }
 
     private class FetchDBDetails extends AsyncTask<String, Void, String> {
@@ -52,14 +91,15 @@ public class DelActivity extends AppCompatActivity {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             Coordinator coordinator = snapshot.getValue(Coordinator.class);
                             Toast.makeText(DelActivity.this, coordinator.getName(), Toast.LENGTH_SHORT).show();
+
                             try {
                                 coordinatorsList.add(coordinator); //TODO error here else everything is working
-                                Toast.makeText(DelActivity.this, coordinatorsList.size(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(DelActivity.this, "" + coordinatorsList.size(), Toast.LENGTH_SHORT).show();
                             } catch (Exception e) {
-                                Toast.makeText(DelActivity.this, "Error" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(DelActivity.this, "Error" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
-
+                        onPost();
                     }
 
                     @Override
@@ -73,26 +113,23 @@ public class DelActivity extends AppCompatActivity {
             return "executed";
         }
 
-        @Override
-        protected void onPostExecute(String s) {
-            if (s.equals("executed")) {
+        private void onPost() {
 
-                int si = coordinatorsList.size();
-                Log.d("bhasad", si + "");
-                try {
-                    nameList = new String[si];
-                    for (int i = 0; i < si; i++) {
-                        nameList[i] = coordinatorsList.get(i).getName();
-                        Log.d("bhasad", nameList[i]);
-                    }
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(DelActivity.this, android.R.layout.select_dialog_item, nameList);
-                    coordinatorAutoCompleteTextView.setThreshold(2);
-                    coordinatorAutoCompleteTextView.setAdapter(adapter);
-                } catch (Exception e) {
-                    e.printStackTrace();
+            int si = coordinatorsList.size();
+            Log.d("bhasad", si + "");
+            try {
+                nameList = new String[si];
+                for (int i = 0; i < si; i++) {
+                    nameList[i] = coordinatorsList.get(i).getEmail();
+                    Log.d("bhasad", nameList[i]);
                 }
-
+                adapter = new ArrayAdapter<>(DelActivity.this, android.R.layout.select_dialog_item, nameList);
+                coordinatorAutoCompleteTextView.setThreshold(1);
+                coordinatorAutoCompleteTextView.setAdapter(adapter);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+
         }
     }
 }
