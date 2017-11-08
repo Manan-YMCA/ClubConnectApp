@@ -1,13 +1,11 @@
 package com.manan.dev.clubconnect;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
@@ -56,6 +54,10 @@ public class AdminZoneActivity extends AppCompatActivity {
         loginAsAdminBtn = (Button) findViewById(R.id.loginAsAdminbtn);
         signUpAsAdminBtn = (Button) findViewById(R.id.signUpAsAdminbtn);
         backToLoginScreen = (TextView) findViewById(R.id.back_to_login);
+
+        usernameAdminEditText.setText("manan@ymca.com");
+        passwordAdminEditText.setText("12345678");
+
         pd = new ProgressDialog(this);
         pd.setMessage("Loading...");
         pd.setCanceledOnTouchOutside(false);

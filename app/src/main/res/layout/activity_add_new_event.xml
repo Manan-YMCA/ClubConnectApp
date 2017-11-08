@@ -9,7 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="10dp"
-        android:background="@drawable/border_textview"
         android:orientation="vertical">
 
         <android.support.design.widget.TextInputLayout
@@ -57,20 +56,25 @@
 
         </android.support.design.widget.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/input_layout_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <!--<android.support.design.widget.TextInputLayout-->
+        <!--android:id="@+id/input_layout_description"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
 
-            <EditText
-                android:id="@+id/input_description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="top|left"
-                android:hint="Description"
-                android:inputType="textMultiLine"
-                android:maxLines="8" />
-        </android.support.design.widget.TextInputLayout>
+        <EditText
+            android:layout_marginTop="10dp"
+            android:id="@+id/input_description"
+            android:padding="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/border_textview"
+            android:gravity="top|left"
+            android:hint="Description"
+            android:inputType="textMultiLine"
+            android:minLines="5"
+            android:scrollbarAlwaysDrawHorizontalTrack="true" />
+
+        <!--</android.support.design.widget.TextInputLayout>-->
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -87,24 +91,16 @@
                 android:paddingRight="20dp"
                 android:paddingTop="10dp"
                 android:text="Duration"
-                android:textSize="24sp" />
+                android:textSize="18sp" />
 
             <ImageView
                 android:id="@+id/Add_new_date"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="35dp"
                 android:src="@drawable/ic_add_black" />
 
-            <ImageView
-                android:id="@+id/Sub_new_date"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_sub_black" />
         </RelativeLayout>
 
         <LinearLayout

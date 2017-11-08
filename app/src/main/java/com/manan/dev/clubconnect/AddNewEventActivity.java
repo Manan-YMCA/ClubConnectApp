@@ -11,6 +11,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
@@ -79,6 +80,11 @@ public class AddNewEventActivity extends AppCompatActivity{
 
         Add_new_date.setOnClickListener(newEventAdditionListener());
 
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_new_event, menu);
+        return true;
     }
 
     View.OnClickListener newEventAdditionListener(){
@@ -186,6 +192,7 @@ public class AddNewEventActivity extends AppCompatActivity{
             }
         };
     }
+
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     View.OnClickListener createOnClickListenerTime(final int i, final boolean isStart)
