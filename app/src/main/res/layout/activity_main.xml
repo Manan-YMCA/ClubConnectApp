@@ -1,66 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/login_back">
-<ImageView
-    android:id="@+id/logo"
-    android:layout_width="250dp"
-    android:layout_height="250dp"
-    android:src="@drawable/logo_cc"
-    android:layout_marginTop="50dp"
-    android:layout_centerHorizontal="true"/>
-    <TextView
-        android:id="@+id/heading"
-        android:layout_below="@id/logo"
-        android:layout_centerHorizontal="true"
-        android:text="Welcome"
-        android:textAllCaps="true"
-        android:textSize="38dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#ffffff"
-        android:fontFamily="sans-serif-condensed"
-        android:layout_marginTop="10dp"
+    android:background="@drawable/animation_list">
 
-        />
+    <LinearLayout
+        android:id="@+id/heading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/details"
+        android:orientation="vertical"
+        android:weightSum="6"
+        >
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:layout_margin="20dp"
+            android:layout_weight="4"
+            android:src="@drawable/back_login" />
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/heading"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:layout_marginBottom="13dp"
+            android:layout_weight="1"
+            android:src="@drawable/name_logo" />
+    </LinearLayout>
+
     <TextView
         android:id="@+id/details"
-        android:layout_below="@+id/heading"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/user_know"
+        android:layout_centerHorizontal="true"
         android:layout_margin="4dp"
         android:text="Event Details in the Campus! Now get all the information related to events on a single platform!"
-        android:layout_width="300dp"
-        android:layout_centerHorizontal="true"
         android:textAlignment="center"
-        android:layout_height="wrap_content"
         android:textColor="#ffffff"
         android:textSize="12dp"
+
         />
 
     <TextView
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:text="New User?"
         android:id="@+id/user_know"
-        android:layout_below="@id/details"
-        android:textSize="18dp"
-       android:textColor="#ffffff"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/login_button"
+
         android:layout_centerHorizontal="true"
         android:fontFamily="sans-serif-condensed"
+        android:text="New User?"
+        android:textColor="#ffffff"
+        android:textSize="18dp"
 
         />
+
     <com.facebook.login.widget.LoginButton
         android:id="@+id/login_button"
-        android:layout_below="@id/user_know"
+
         android:layout_width="300dp"
         android:layout_height="wrap_content"
+        android:layout_above="@id/view_b"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_margin="10dp"
         android:paddingBottom="15dp"
+        android:paddingLeft="10dp"
+
         android:paddingTop="15dp"
-        android:textSize="18dp"
-        android:paddingLeft="10dp"/>
+        android:textSize="18dp" />
+
+    <View
+        android:id="@+id/view_b"
+        android:layout_width="match_parent"
+
+        android:layout_height="2dp"
+        android:layout_above="@id/to_admin_zone"
+        android:layout_centerHorizontal="true"
+        android:background="#ffffff" />
 
     <TextView
         android:id="@+id/to_admin_zone"
@@ -70,6 +96,7 @@
         android:layout_centerHorizontal="true"
         android:layout_margin="8dp"
         android:padding="8dp"
+
         android:text="Are you an Admin? Tap Here!"
         android:textColor="@android:color/white"
         android:textSize="20sp" />

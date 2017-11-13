@@ -1,8 +1,10 @@
 package com.manan.dev.clubconnect;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.TransitionDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,6 +14,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,17 +29,21 @@ public class AdminZoneActivity extends AppCompatActivity {
     EditText usernameAdminEditText, passwordAdminEditText;
     TextView backToLoginScreen;
     private ProgressDialog pd;
-
+RelativeLayout rlAdminzone;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_zone);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.rgb(126, 14, 14));
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            Window window = getWindow();
+//            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//            window.setStatusBarColor(Color.rgb(126, 14, 14));
+//        }
 
+        rlAdminzone = (RelativeLayout) findViewById(R.id.admin_container);
+
+        TransitionDrawable trans = (TransitionDrawable) rlAdminzone.getBackground();
+        trans.startTransition(6000);
         //  Window window = activity.getWindow();
 
 // clear FLAG_TRANSLUCENT_STATUS flag:
@@ -55,7 +62,7 @@ public class AdminZoneActivity extends AppCompatActivity {
         signUpAsAdminBtn = (Button) findViewById(R.id.signUpAsAdminbtn);
         backToLoginScreen = (TextView) findViewById(R.id.back_to_login);
 
-        usernameAdminEditText.setText("manan@ymca.com");
+        usernameAdminEditText.setText("manan");
         passwordAdminEditText.setText("12345678");
 
         pd = new ProgressDialog(this);
@@ -63,6 +70,12 @@ public class AdminZoneActivity extends AppCompatActivity {
         pd.setCanceledOnTouchOutside(false);
         pd.setCancelable(false);
 
+        pd.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                pd.dismiss();
+            }
+        });
 
         backToLoginScreen.setOnClickListener(new View.OnClickListener() {
             @Override

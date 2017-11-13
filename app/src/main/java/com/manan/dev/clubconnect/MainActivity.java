@@ -2,11 +2,16 @@ package com.manan.dev.clubconnect;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,13 +36,18 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     private ProgressDialog pd;
     TextView toAdminZone;
-
+    RelativeLayout containeer;
+    AnimationDrawable anim;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-        setTheme(android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+        containeer = (RelativeLayout) findViewById(R.id.container);
+
+        TransitionDrawable trans = (TransitionDrawable) containeer.getBackground();
+        trans.startTransition(3000);
+        //setTheme(android.R.style.Theme_Black_NoTitleBar_Fullscreen);
         mAuth = FirebaseAuth.getInstance();
 
         loginButton = (LoginButton) findViewById(R.id.login_button);

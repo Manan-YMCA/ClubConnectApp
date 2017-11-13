@@ -1,74 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/admin_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/login_back"
-    android:backgroundTintMode="add"
-    android:backgroundTint="#3e3d03">
+    android:background="@drawable/animation_list2">
 
-<ImageView
-    android:layout_height="200dp"
-    android:layout_width="wrap_content"
-    android:src="@drawable/logo_cc"
-    android:id="@+id/logo_admin"
-    />
+    <LinearLayout
+        android:id="@+id/ll_adminzone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/heading_admin"
+        android:orientation="vertical"
+        android:weightSum="5">
+
+        <ImageView
+            android:id="@+id/logo_admin"
+            android:layout_margin="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_alignParentStart="true"
+
+            android:layout_alignParentTop="true"
+            android:layout_weight="3"
+            android:src="@drawable/back_admin" />
+
+        <ImageView
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="center"
+            android:layout_weight="2"
+            android:src="@drawable/name_logo" />
+    </LinearLayout>
+
     <TextView
         android:id="@+id/heading_admin"
-        android:layout_below="@id/logo_admin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@id/text_admin"
         android:layout_centerHorizontal="true"
+        android:layout_margin="20dp"
         android:fontFamily="sans-serif-condensed"
         android:text="ADMIN ZONE"
         android:textColor="#ffffff"
         android:textSize="48sp" />
+
     <TextView
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:text="Admin Can Login Here! Create and Manipulate Events"
-        android:textColor="#ffffff"
-        android:fontFamily="sans-serif-condensed"
-        android:layout_below="@id/heading_admin"
-        android:layout_centerHorizontal="true"
         android:id="@+id/text_admin"
-        />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/usernameAdmin"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="sans-serif-condensed"
+        android:text="Clubs Can Login Here! Create and Manipulate Events"
+        android:textColor="#ffffff" />
 
     <EditText
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginLeft="50dp"
         android:id="@+id/usernameAdmin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/text_admin"
+
+        android:layout_above="@id/passwordAdmin"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/border_textview"
         android:hint="Username"
         android:inputType="textEmailAddress"
-        android:textColor="@android:color/white"
-        android:background="@drawable/border_textview"
         android:padding="10dp"
-        android:textColorHint="#fff"/>
+        android:textColor="@android:color/white"
+        android:textColorHint="#fff" />
 
     <EditText
-       android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginTop="10dp"
         android:id="@+id/passwordAdmin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/usernameAdmin"
+        android:layout_above="@id/ll_adminzone2"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/border_textview"
+        android:drawableLeft="@android:drawable/ic_lock_idle_lock"
         android:hint="Password"
         android:inputType="textPassword"
-        android:textColor="@android:color/white"
-        android:background="@drawable/border_textview"
         android:padding="10dp"
-        android:textColorHint="#fff"
-        android:drawableLeft="@android:drawable/ic_lock_idle_lock"/>
+        android:textColor="@android:color/white"
+        android:textColorHint="#fff" />
 
 
     <LinearLayout
+        android:id="@+id/ll_adminzone2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/passwordAdmin"
+        android:layout_above="@id/view_admin"
+        android:layout_marginBottom="20dp"
         android:orientation="horizontal">
 
         <Button
@@ -77,27 +103,36 @@
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
             android:layout_weight="1"
+            android:background="@drawable/ripple_effect"
             android:gravity="center"
             android:padding="10dp"
-            android:background="@drawable/ripple_effect"
-            android:text="Sign In"
             android:shadowColor="#000000"
+            android:text="Sign In"
             android:textColor="#ffffff" />
 
         <Button
             android:id="@+id/signUpAsAdminbtn"
-            android:shadowColor="#000000"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
             android:layout_weight="1"
-            android:padding="10dp"
             android:background="@color/colorPrimaryDark"
             android:gravity="center"
+            android:padding="10dp"
+            android:shadowColor="#000000"
             android:text="Sign Up"
             android:textColor="#ffffff" />
 
     </LinearLayout>
+
+    <View
+        android:id="@+id/view_admin"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_above="@id/back_to_login"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:background="#ffffff" />
 
     <TextView
         android:id="@+id/back_to_login"
@@ -106,9 +141,9 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_margin="8dp"
-        android:layout_marginTop="25dp"
+
         android:gravity="center"
-        android:textColor="#ffffff"
         android:text="Back to Login Screen"
+        android:textColor="#ffffff"
         android:textSize="20sp" />
 </RelativeLayout>
