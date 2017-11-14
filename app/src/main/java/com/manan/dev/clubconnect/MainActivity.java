@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
     LoginButton loginButton;
     CallbackManager callbackManager;
     FirebaseAuth mAuth;
-    private ProgressDialog pd;
     TextView toAdminZone;
     RelativeLayout containeer;
     AnimationDrawable anim;
@@ -100,7 +99,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -120,8 +118,7 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    void LogInStub(String s)
-    {
+    void LogInStub(String s) {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null && currentUser.getProviders().get(0).equals("facebook.com")) {
             startActivity(new Intent(MainActivity.this, UserDashboardActivity.class));
@@ -139,3 +136,4 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         mAuth.removeAuthStateListener(mAuthListener);
     }
+}
