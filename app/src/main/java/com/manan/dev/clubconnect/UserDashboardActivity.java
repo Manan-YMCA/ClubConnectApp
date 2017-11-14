@@ -35,12 +35,16 @@ public class UserDashboardActivity extends AppCompatActivity {
                 } catch (Exception e){
                     e.printStackTrace();
                 }
-                Intent i = new Intent(UserDashboardActivity.this, MainActivity.class);
-                startActivity(i);
                 finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }

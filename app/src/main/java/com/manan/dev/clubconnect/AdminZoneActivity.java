@@ -143,7 +143,7 @@ RelativeLayout rlAdminzone;
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
-                        startActivity(new Intent(AdminZoneActivity.this, AdminDashboardActivity.class));
+                        //startActivity(new Intent(AdminZoneActivity.this, MainActivity.class));
                         finish();
                     } else {
                         Toast.makeText(AdminZoneActivity.this, "Error signing you in.", Toast.LENGTH_SHORT).show();

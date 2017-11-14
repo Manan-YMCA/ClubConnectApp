@@ -35,12 +35,16 @@ public class AdminDashboardActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_settings:
                 FirebaseAuth.getInstance().signOut();
-                Intent i = new Intent(AdminDashboardActivity.this, AdminZoneActivity.class);
-                startActivity(i);
                 finish();
                 return true;
             default:
