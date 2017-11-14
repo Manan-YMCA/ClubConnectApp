@@ -70,7 +70,7 @@
         android:inputType="textEmailAddress"
         android:padding="10dp"
         android:textColor="@android:color/white"
-        android:textColorHint="#fff" />
+        android:textColorHint="#eee" />
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
@@ -79,6 +79,7 @@
         app:errorEnabled="true"
         app:passwordToggleEnabled="true"
         android:textColorHint="#fff"
+        app:passwordToggleTint="#FFF"
         android:hint=" "
         android:id="@+id/passwordAdminly">
 
@@ -96,7 +97,7 @@
             android:inputType="textPassword"
             android:padding="10dp"
             android:textColor="@android:color/white"
-            android:textColorHint="#fff" />
+            android:textColorHint="#eee" />
     </android.support.design.widget.TextInputLayout>
 
     <LinearLayout
@@ -147,13 +148,13 @@
 
     <TextView
         android:id="@+id/back_to_login"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_margin="8dp"
+        android:background="#60d84B35"
         android:gravity="center"
-        android:padding="8dp"
+        android:padding="16dp"
         android:text="Back to Login Screen"
         android:textColor="#ffffff"
         android:textSize="20sp" />
