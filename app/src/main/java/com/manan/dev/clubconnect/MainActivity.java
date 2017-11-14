@@ -127,10 +127,7 @@ public class MainActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            LogInStub("Facebook: ");
-                        }
-                        else{
+                        if (!task.isSuccessful()) {
                             Toast.makeText(MainActivity.this, "Login UnSuccessful!", Toast.LENGTH_SHORT).show();
                         }
                         pd.hide();
