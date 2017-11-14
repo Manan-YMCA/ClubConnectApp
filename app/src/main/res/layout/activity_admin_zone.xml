@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/admin_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -60,7 +61,7 @@
         android:id="@+id/usernameAdmin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/passwordAdmin"
+        android:layout_above="@id/passwordAdminly"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
         android:layout_marginTop="10dp"
@@ -71,28 +72,39 @@
         android:textColor="@android:color/white"
         android:textColorHint="#fff" />
 
-    <EditText
-        android:id="@+id/passwordAdmin"
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/ll_adminzone2"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/border_signin_admin"
-        android:drawableLeft="@android:drawable/ic_lock_idle_lock"
-        android:hint="Password"
-        android:inputType="textPassword"
-        android:padding="10dp"
-        android:textColor="@android:color/white"
-        android:textColorHint="#fff" />
+        app:errorEnabled="true"
+        app:passwordToggleEnabled="true"
+        android:textColorHint="#fff"
+        android:hint=" "
+        android:id="@+id/passwordAdminly">
+
+
+        <EditText
+            android:id="@+id/passwordAdmin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/border_signin_admin"
+            android:drawableLeft="@android:drawable/ic_lock_idle_lock"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:padding="10dp"
+            android:textColor="@android:color/white"
+            android:textColorHint="#fff" />
+    </android.support.design.widget.TextInputLayout>
 
     <LinearLayout
         android:id="@+id/ll_adminzone2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_above="@id/view_admin"
+        android:gravity="center"
         android:orientation="horizontal">
 
         <Button

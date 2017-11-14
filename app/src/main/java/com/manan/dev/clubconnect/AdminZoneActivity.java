@@ -2,13 +2,17 @@ package com.manan.dev.clubconnect;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,8 +25,10 @@ import com.google.firebase.auth.FirebaseAuth;
 public class AdminZoneActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     Button signUpAsAdminBtn, loginAsAdminBtn;
-    EditText usernameAdminEditText, passwordAdminEditText;
+    EditText usernameAdminEditText;
+    EditText passwordAdminEditText;
     TextView backToLoginScreen;
+    private ImageView ivShowPassword;
     private ProgressDialog pd;
 RelativeLayout rlAdminzone;
     @Override
@@ -55,6 +61,7 @@ RelativeLayout rlAdminzone;
         mAuth = FirebaseAuth.getInstance();
         usernameAdminEditText = (EditText) findViewById(R.id.usernameAdmin);
         passwordAdminEditText = (EditText) findViewById(R.id.passwordAdmin);
+
         loginAsAdminBtn = (Button) findViewById(R.id.loginAsAdminbtn);
        // signUpAsAdminBtn = (Button) findViewById(R.id.signUpAsAdminbtn);
         backToLoginScreen = (TextView) findViewById(R.id.back_to_login);
