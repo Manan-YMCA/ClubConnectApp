@@ -55,6 +55,10 @@ public class MainActivity extends AppCompatActivity {
         trans.startTransition(3000);
         //setTheme(android.R.style.Theme_Black_NoTitleBar_Fullscreen);
 
+        if (getIntent().getBooleanExtra("EXIT", false)) {
+            finish();
+        }
+
         mAuth = FirebaseAuth.getInstance();
         //LogInStub("de");
         loginButton = (LoginButton) findViewById(R.id.login_button);
