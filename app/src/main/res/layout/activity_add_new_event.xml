@@ -22,7 +22,7 @@
                 android:id="@+id/input_eventname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@android:drawable/ic_media_pause"
+                android:drawableLeft="@drawable/vector_name"
                 android:hint="Event Name"
                 android:inputType="textCapSentences" />
         </android.support.design.widget.TextInputLayout>
@@ -36,7 +36,7 @@
                 android:id="@+id/input_event_venu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@android:drawable/ic_media_pause"
+                android:drawableLeft="@drawable/vector_venue"
 
                 android:hint="Event Venue"
                 android:inputType="textCapSentences" />
@@ -51,7 +51,7 @@
                 android:id="@+id/input_clubname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@android:drawable/ic_media_pause"
+                android:drawableLeft="@drawable/vector_club"
                 android:hint="Club Name"
                 android:inputType="textCapSentences" />
 
@@ -67,6 +67,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:drawableStart="@drawable/vector_description"
             android:background="@drawable/border_textview"
             android:gravity="top|left"
             android:hint="Description"
@@ -85,6 +86,7 @@
             android:orientation="horizontal">
 
             <TextView
+                android:drawableLeft="@drawable/vector_duration"
                 android:id="@+id/input_starttime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -100,7 +102,7 @@
                 android:layout_height="30dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:src="@drawable/ic_add_black" />
+                android:src="@drawable/vector_add" />
 
         </RelativeLayout>
 
@@ -112,6 +114,7 @@
             android:background="@drawable/border_textview"
             android:orientation="vertical"
             android:padding="5dp"
+
             android:paddingLeft="50dp">
 
             <LinearLayout
@@ -125,6 +128,7 @@
                     android:layout_marginRight="5dp"
                     android:paddingRight="5dp"
                     android:text="DAY 1"
+                    android:drawableLeft="@drawable/vector_date"
                     android:textSize="15sp" />
 
                 <EditText
@@ -180,6 +184,7 @@
             android:orientation="horizontal">
 
             <TextView
+                android:drawableLeft="@drawable/vector_coordinator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="2dp"
@@ -198,7 +203,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Upload Photos" />
+            android:text="Upload Photos"
+            android:textSize="20sp"
+            android:drawableLeft="@drawable/vector_photo"/>
 
         <ImageView
             android:id="@+id/upload_photos_btn"
@@ -206,7 +213,7 @@
             android:layout_height="64dp"
             android:layout_gravity="center"
             android:layout_margin="8dp"
-            android:src="@drawable/ic_add_black" />
+            android:src="@drawable/vector_add" />
         <LinearLayout
             android:id="@+id/img_uploaded_ll"
             android:layout_width="wrap_content"
