@@ -6,9 +6,11 @@ import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +38,9 @@ public class MainActivity extends AppCompatActivity {
     TextView toAdminZone;
     RelativeLayout containeer;
     AnimationDrawable anim;
+    private ProgressDialog pd;
+    private FirebaseAuth.AuthStateListener mAuthListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +56,13 @@ public class MainActivity extends AppCompatActivity {
         loginButton = (LoginButton) findViewById(R.id.login_button);
         toAdminZone = (TextView) findViewById(R.id.to_admin_zone);
 
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                LogInStub("AuthListener");
+            }
+        };
+
         toAdminZone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,25 +76,27 @@ public class MainActivity extends AppCompatActivity {
             public void onSuccess(LoginResult loginResult) {
                 Log.d(TAG, "facebook:onSuccess:" + loginResult);
                 handleFacebookAccessToken(loginResult.getAccessToken());
+                Toast.makeText(MainActivity.this, "Login Successful!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onCancel() {
                 Log.d(TAG, "facebook:onCancel");
-                // ...
+                Toast.makeText(MainActivity.this, "Login Cancelled!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onError(FacebookException error) {
                 Log.d(TAG, "facebook:onError", error);
-                // ...
+                Toast.makeText(MainActivity.this, "Login Error! " + error.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+
+
         pd = new ProgressDialog(this);
         pd.setMessage("Loading...");
         pd.setCanceledOnTouchOutside(false);
         pd.setCancelable(false);
-
     }
 
 
@@ -99,27 +113,29 @@ public class MainActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            startActivity(new Intent(MainActivity.this, UserDashboardActivity.class));
-                            finish();
-                        } else {
-                            Toast.makeText(MainActivity.this, "task isn't successful.", Toast.LENGTH_SHORT).show();
+                        if (!task.isSuccessful()) {
+                            Toast.makeText(MainActivity.this, "Login UnSuccessful!", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in
+    void LogInStub(String s)
+    {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null && currentUser.getProviders().get(0).equals("facebook.com")) {
             startActivity(new Intent(MainActivity.this, UserDashboardActivity.class));
             finish();
-        } else if(currentUser != null){
+        } else if (currentUser != null) {
+            Toast.makeText(MainActivity.this, "Switching to Dashboard!", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(MainActivity.this, AdminDashboardActivity.class));
             finish();
         }
+
     }
-}
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mAuth.removeAuthStateListener(mAuthListener);
+    }
