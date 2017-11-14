@@ -66,7 +66,6 @@
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/login_button"
-
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_above="@id/view_b"
@@ -75,14 +74,12 @@
         android:layout_margin="10dp"
         android:paddingBottom="15dp"
         android:paddingLeft="10dp"
-
         android:paddingTop="15dp"
         android:textSize="18dp" />
 
     <View
         android:id="@+id/view_b"
         android:layout_width="match_parent"
-
         android:layout_height="2dp"
         android:layout_above="@id/to_admin_zone"
         android:layout_centerHorizontal="true"
@@ -96,7 +93,6 @@
         android:layout_centerHorizontal="true"
         android:layout_margin="8dp"
         android:padding="8dp"
-
         android:text="Are you an Admin? Tap Here!"
         android:textColor="@android:color/white"
         android:textSize="20sp" />

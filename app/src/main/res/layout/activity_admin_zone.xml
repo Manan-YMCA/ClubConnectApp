@@ -15,12 +15,12 @@
 
         <ImageView
             android:id="@+id/logo_admin"
-            android:layout_margin="10dp"
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:layout_alignParentStart="true"
-
             android:layout_alignParentTop="true"
+
+            android:layout_margin="10dp"
             android:layout_weight="3"
             android:src="@drawable/back_admin" />
 
@@ -40,11 +40,11 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/text_admin"
         android:layout_centerHorizontal="true"
-        android:layout_margin="20dp"
+        android:layout_margin="10dp"
         android:fontFamily="sans-serif-condensed"
-        android:text="ADMIN ZONE"
+        android:text="Admin Portal"
         android:textColor="#ffffff"
-        android:textSize="48sp" />
+        android:textSize="40sp" />
 
     <TextView
         android:id="@+id/text_admin"
@@ -60,12 +60,11 @@
         android:id="@+id/usernameAdmin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:layout_above="@id/passwordAdmin"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/border_textview"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/border_signin_admin"
         android:hint="Username"
         android:inputType="textEmailAddress"
         android:padding="10dp"
@@ -80,7 +79,7 @@
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
         android:layout_marginTop="10dp"
-        android:background="@drawable/border_textview"
+        android:background="@drawable/border_signin_admin"
         android:drawableLeft="@android:drawable/ic_lock_idle_lock"
         android:hint="Password"
         android:inputType="textPassword"
@@ -88,40 +87,41 @@
         android:textColor="@android:color/white"
         android:textColorHint="#fff" />
 
-
     <LinearLayout
         android:id="@+id/ll_adminzone2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:layout_above="@id/view_admin"
-        android:layout_marginBottom="20dp"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/loginAsAdminbtn"
-            android:layout_width="0dp"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
             android:background="@drawable/ripple_effect"
             android:gravity="center"
-            android:padding="10dp"
+            android:paddingBottom="15dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="15dp"
             android:shadowColor="#000000"
             android:text="Sign In"
             android:textColor="#ffffff" />
 
-        <Button
-            android:id="@+id/signUpAsAdminbtn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:layout_weight="1"
-            android:background="@color/colorPrimaryDark"
-            android:gravity="center"
-            android:padding="10dp"
-            android:shadowColor="#000000"
-            android:text="Sign Up"
-            android:textColor="#ffffff" />
+        <!--<Button-->
+        <!--android:id="@+id/signUpAsAdminbtn"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_margin="15dp"-->
+        <!--android:layout_weight="1"-->
+        <!--android:background="@color/colorPrimaryDark"-->
+        <!--android:gravity="center"-->
+        <!--android:padding="10dp"-->
+        <!--android:shadowColor="#000000"-->
+        <!--android:text="Sign Up"-->
+        <!--android:textColor="#ffffff" />-->
 
     </LinearLayout>
 
@@ -131,7 +131,6 @@
         android:layout_height="2dp"
         android:layout_above="@id/back_to_login"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10dp"
         android:background="#ffffff" />
 
     <TextView
@@ -141,8 +140,8 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_margin="8dp"
-
         android:gravity="center"
+        android:padding="8dp"
         android:text="Back to Login Screen"
         android:textColor="#ffffff"
         android:textSize="20sp" />

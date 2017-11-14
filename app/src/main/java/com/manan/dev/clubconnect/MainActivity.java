@@ -6,11 +6,9 @@ import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -84,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
         pd.setMessage("Loading...");
         pd.setCanceledOnTouchOutside(false);
         pd.setCancelable(false);
-
 
     }
 
