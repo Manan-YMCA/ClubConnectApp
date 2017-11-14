@@ -37,6 +37,7 @@ public class UserDashboardActivity extends AppCompatActivity {
                 }
                 Intent i = new Intent(UserDashboardActivity.this, MainActivity.class);
                 startActivity(i);
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

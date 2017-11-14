@@ -1,17 +1,12 @@
 package com.manan.dev.clubconnect;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.TransitionDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -34,6 +29,7 @@ RelativeLayout rlAdminzone;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_zone);
+
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //            Window window = getWindow();
 //            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -41,9 +37,9 @@ RelativeLayout rlAdminzone;
 //        }
 
         rlAdminzone = (RelativeLayout) findViewById(R.id.admin_container);
-
         TransitionDrawable trans = (TransitionDrawable) rlAdminzone.getBackground();
         trans.startTransition(6000);
+
         //  Window window = activity.getWindow();
 
 // clear FLAG_TRANSLUCENT_STATUS flag:
@@ -55,11 +51,12 @@ RelativeLayout rlAdminzone;
 // finally change the color
         //  window.setStatusBarColor(ContextCompat.getColor(activity,R.color.my_statusbar_color))
         //setTitle("Admin Zone");
+
         mAuth = FirebaseAuth.getInstance();
         usernameAdminEditText = (EditText) findViewById(R.id.usernameAdmin);
         passwordAdminEditText = (EditText) findViewById(R.id.passwordAdmin);
         loginAsAdminBtn = (Button) findViewById(R.id.loginAsAdminbtn);
-        signUpAsAdminBtn = (Button) findViewById(R.id.signUpAsAdminbtn);
+       // signUpAsAdminBtn = (Button) findViewById(R.id.signUpAsAdminbtn);
         backToLoginScreen = (TextView) findViewById(R.id.back_to_login);
 
         usernameAdminEditText.setText("manan");
@@ -70,12 +67,12 @@ RelativeLayout rlAdminzone;
         pd.setCanceledOnTouchOutside(false);
         pd.setCancelable(false);
 
-        pd.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                pd.dismiss();
-            }
-        });
+//        pd.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                pd.dismiss();
+//            }
+//        });
 
         backToLoginScreen.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,12 +87,13 @@ RelativeLayout rlAdminzone;
                 attemptAdminSignIn();
             }
         });
-        signUpAsAdminBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                attemptAdminSignUp();
-            }
-        });
+
+        //        signUpAsAdminBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                attemptAdminSignUp();
+//            }
+//        });
     }
 
     private void attemptAdminSignUp() {
@@ -150,13 +148,13 @@ RelativeLayout rlAdminzone;
                         finish();
                     } else {
                         Toast.makeText(AdminZoneActivity.this, "Error signing you in.", Toast.LENGTH_SHORT).show();
+                        pd.dismiss();
                     }
                 }
             });
 
         } catch (Exception e) {
             pd.hide();
-
             e.printStackTrace();
         }
     }

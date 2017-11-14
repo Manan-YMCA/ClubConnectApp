@@ -6,9 +6,11 @@ import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     LoginButton loginButton;
     CallbackManager callbackManager;
     FirebaseAuth mAuth;
+    private ProgressDialog pd;
     TextView toAdminZone;
     RelativeLayout containeer;
     AnimationDrawable anim;
@@ -66,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, AdminZoneActivity.class));
             }
         });
-
         loginButton.setReadPermissions("email", "public_profile");
         callbackManager = CallbackManager.Factory.create();
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -98,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -121,7 +124,6 @@ public class MainActivity extends AppCompatActivity {
     {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null && currentUser.getProviders().get(0).equals("facebook.com")) {
-            Toast.makeText(MainActivity.this, "Switching to UserDashboard!"+s, Toast.LENGTH_SHORT).show();
             startActivity(new Intent(MainActivity.this, UserDashboardActivity.class));
             finish();
         } else if (currentUser != null) {
@@ -137,11 +139,3 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         mAuth.removeAuthStateListener(mAuthListener);
     }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        // Check if user is signed in
-        mAuth.addAuthStateListener(mAuthListener);
-    }
-};
