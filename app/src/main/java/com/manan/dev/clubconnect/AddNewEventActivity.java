@@ -161,10 +161,12 @@ public class AddNewEventActivity extends AppCompatActivity {
                 final LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
                 count++;
                 final LinearLayout.LayoutParams lparams1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                lparams1.setMarginStart((int) convertDpToPixel(50, getApplicationContext()));
+                int top = (int) convertDpToPixel(5, getApplicationContext());
+                int left = (int) convertDpToPixel(50, getApplicationContext());
+                lparams1.setMargins(left, top, 0,0);
                 final LinearLayout.LayoutParams lparams2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                int width = (int) convertDpToPixel(5, getApplicationContext());
-                //lparams2.setMargins(width, width, width, width);k
+                int width = (int) convertDpToPixel(10, getApplicationContext());
+                lparams2.setMargins(width, 0,0,0);
 
                 //Log.d("countChecker", Integer.toString(count));
                 dateData.add((long) 0);
@@ -188,6 +190,7 @@ public class AddNewEventActivity extends AppCompatActivity {
 
                 TextView day = new TextView(AddNewEventActivity.this);
                 TextView textView = new TextView(AddNewEventActivity.this);
+                day.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.vector_date, 0,0,0);
                 textView.setText("TO");
                 String dayText = "DAY" + " " + (count + 1);
                 day.setText(dayText);
@@ -196,13 +199,12 @@ public class AddNewEventActivity extends AppCompatActivity {
                 date.get(count).setBackground(drawableOriginal);
                 startTime.get(count).setBackground(drawableOriginal);
                 endTime.get(count).setBackground(drawableOriginal);
-
+                startTime.get(count).setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+                endTime.get(count).setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
                 layout1.addView(day);
                 layout1.addView(date.get(count));
                 layout1.setLayoutParams(lparams);
-
-                layout2.setLayoutParams(lparams2);
-                startTime.get(count).setLayoutParams(lparams1);
+                layout2.setLayoutParams(lparams1);
                 layout2.addView(startTime.get(count));
                 layout2.addView(textView);
                 layout2.addView(endTime.get(count));
