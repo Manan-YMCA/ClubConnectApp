@@ -77,7 +77,6 @@ RelativeLayout rlAdminzone;
         backToLoginScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(AdminZoneActivity.this, MainActivity.class));
                 finish();
             }
         });

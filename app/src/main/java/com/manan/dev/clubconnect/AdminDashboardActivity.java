@@ -24,7 +24,6 @@ public class AdminDashboardActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(AdminDashboardActivity.this,AddNewEventActivity.class));
-                finish();
             }
         });
     }
@@ -40,7 +39,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.action_settings:
                 FirebaseAuth.getInstance().signOut();
-                Intent i = new Intent(AdminDashboardActivity.this, MainActivity.class);
+                Intent i = new Intent(AdminDashboardActivity.this, AdminZoneActivity.class);
                 startActivity(i);
                 finish();
                 return true;
