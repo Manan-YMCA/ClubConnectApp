@@ -110,10 +110,11 @@
         </RelativeLayout>
 
         <LinearLayout
+            android:id="@+id/event_day_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/event_day_layout"
             android:orientation="vertical">
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -124,29 +125,29 @@
                 android:paddingLeft="50dp">
 
                 <TextView
+                    android:id="@+id/tv_date_label"
                     android:layout_width="60dp"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="5dp"
                     android:padding="5dp"
                     android:text="Day 1"
-                    android:textSize="15sp"
-                    android:id="@+id/tv_date_label"/>
+                    android:textSize="15sp" />
 
                 <EditText
-                    android:layout_toRightOf="@+id/tv_date_label"
                     android:id="@+id/input_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/tv_date_label"
                     android:background="@android:drawable/editbox_background"
                     android:hint="Date"
-                    android:padding="5dp"
-                    android:longClickable="false" />
+                    android:longClickable="false"
+                    android:padding="5dp" />
 
                 <LinearLayout
-                    android:layout_alignStart="@+id/input_date"
-                    android:layout_below="@+id/input_date"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_alignStart="@+id/input_date"
+                    android:layout_below="@+id/input_date"
                     android:layout_marginTop="5dp"
                     android:orientation="horizontal">
 
@@ -164,7 +165,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="TO"
-                        android:textSize="15dp"/>
+                        android:textSize="15dp" />
 
                     <EditText
                         android:id="@+id/input_end_time"
@@ -180,6 +181,7 @@
 
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -225,6 +227,40 @@
             android:layout_height="64dp"
             android:orientation="vertical"
             android:visibility="gone" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/iv_add_photo1"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:src="@drawable/logo_cc" />
+
+            <ImageView
+                android:id="@+id/iv_clear_pic1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:src="@drawable/vector_clear" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:id="@+id/iv_add_photo2"
+                android:layout_below="@+id/iv_add_photo1"
+                android:layout_height="150dp"
+                android:src="@drawable/logo_cc"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/iv_add_photo1"
+                android:src="@drawable/vector_clear" />
+        </RelativeLayout>
+
     </LinearLayout>
 
 </ScrollView>
