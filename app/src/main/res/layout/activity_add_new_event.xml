@@ -121,8 +121,7 @@
                 android:layout_margin="15dp"
                 android:background="@drawable/border_textview"
                 android:orientation="vertical"
-                android:padding="5dp"
-                android:paddingLeft="50dp">
+                android:padding="5dp">
 
                 <TextView
                     android:id="@+id/tv_date_label"

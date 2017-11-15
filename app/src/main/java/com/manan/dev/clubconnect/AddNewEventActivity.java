@@ -1,5 +1,6 @@
 package com.manan.dev.clubconnect;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -23,6 +24,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -37,6 +39,8 @@ import com.google.firebase.storage.UploadTask;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
+
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 public class AddNewEventActivity extends AppCompatActivity {
     String clubName;
@@ -78,6 +82,9 @@ public class AddNewEventActivity extends AppCompatActivity {
         startTimeData = new ArrayList<Long>();
         endTimeData = new ArrayList<Long>();
 
+        count = 0;
+        imgCount = 0;
+        PICK_IMAGE_REQUEST = 111;
 
         dateData.add((long) 0);
         startTimeData.add((long) 0);
@@ -157,80 +164,132 @@ public class AddNewEventActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                //setting layout parameters
-                final LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
                 count++;
-                final LinearLayout.LayoutParams lparams1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
-                int top = (int) convertDpToPixel(5, getApplicationContext());
-                int left = (int) convertDpToPixel(50, getApplicationContext());
-                lparams1.setMargins(left, top, 0,0);
-
-                final LinearLayout.LayoutParams lparams2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                int width = (int) convertDpToPixel(10, getApplicationContext());
-                lparams2.setMargins(width, 0,0,0);
-
-                //Log.d("countChecker", Integer.toString(count));
+                //adding items to arraylist for storing data
                 dateData.add((long) 0);
                 startTimeData.add((long) 0);
                 endTimeData.add((long) 0);
 
-                date.add(new EditText(AddNewEventActivity.this));
-                startTime.add(new EditText(AddNewEventActivity.this));
-                endTime.add(new EditText(AddNewEventActivity.this));
+                RelativeLayout rlayout = layoutreturner(count);
 
-                date.get(count).setWidth((int) convertDpToPixel(200, getApplicationContext()));
-                startTime.get(count).setWidth((int) convertDpToPixel(140, getApplicationContext()));
-                endTime.get(count).setWidth((int) convertDpToPixel(140, getApplicationContext()));
-                startTime.get(count).setHint(R.string.start_time);
-                date.get(count).setHint(R.string.date);
-                endTime.get(count).setHint(R.string.end_time);
+                event_day_layout.addView(rlayout);
 
-                LinearLayout layout1 = new LinearLayout(AddNewEventActivity.this);
-                layout1.setOrientation(LinearLayout.HORIZONTAL);
-                LinearLayout layout2 = new LinearLayout(AddNewEventActivity.this);
-                layout2.setOrientation(LinearLayout.HORIZONTAL);
-
-                TextView day = new TextView(AddNewEventActivity.this);
-                TextView textView = new TextView(AddNewEventActivity.this);
-                day.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.vector_date, 0,0,0);
-                textView.setText("TO");
-                String dayText = "DAY" + " " + (count + 1);
-                day.setText(dayText);
-                day.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
-
-                date.get(count).setLayoutParams(lparams2);
-                date.get(count).setBackground(drawableOriginal);
-
-                date.get(count).setLongClickable(false);
-                startTime.get(count).setLongClickable(false);
-                endTime.get(count).setLongClickable(false);
-
-                startTime.get(count).setBackground(drawableOriginal);
-                endTime.get(count).setBackground(drawableOriginal);
-                startTime.get(count).setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-                endTime.get(count).setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-
-                layout1.addView(day);
-                layout1.addView(date.get(count));
-                layout1.setLayoutParams(lparams);
-                layout2.setLayoutParams(lparams1);
-                layout2.addView(startTime.get(count));
-                layout2.addView(textView);
-                layout2.addView(endTime.get(count));
-
-                event_day_layout.addView(layout1);
-                event_day_layout.addView(layout2);
-
-                date.get(count).setOnClickListener(createOnClickListenerDate(count));
-                startTime.get(count).setOnClickListener(createOnClickListenerTime(count, true));
-                endTime.get(count).setOnClickListener(createOnClickListenerTime(count, false));
-                date.get(count).setFocusable(false);
-                startTime.get(count).setFocusable(false);
-                endTime.get(count).setFocusable(false);
             }
         };
 
+    }
+
+    @SuppressLint("ResourceType")
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    RelativeLayout layoutreturner(int count){
+        RelativeLayout rLayout = new RelativeLayout(AddNewEventActivity.this);
+        rLayout.setBackground(getResources().getDrawable(R.drawable.border_textview));
+
+        //params for relative layout
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+        int rLayoutMargins = (int) convertDpToPixel(15, getApplicationContext());
+        layoutParams.setMargins(rLayoutMargins, rLayoutMargins, rLayoutMargins, rLayoutMargins);
+        int paddingValue = (int) convertDpToPixel(5, getApplicationContext());
+        rLayout.setPadding(paddingValue, paddingValue, paddingValue, paddingValue);
+        rLayout.setLayoutParams(layoutParams);
+
+
+        //creating layout params for textView
+        RelativeLayout.LayoutParams lparams1 = new RelativeLayout.LayoutParams((int) convertDpToPixel(60, getApplicationContext()), RelativeLayout.LayoutParams.WRAP_CONTENT);
+        lparams1.setMargins(0, 0, (int) convertDpToPixel(5, getApplicationContext()), 0);
+
+        //creating layout params for date editText
+        RelativeLayout.LayoutParams lparams2 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+
+        //creating layout params for time editText
+        LinearLayout.LayoutParams lparams3 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f);
+
+
+
+        //adding items to arraylist for adding edit text
+        date.add(new EditText(AddNewEventActivity.this));
+        date.get(count).setId(3);
+        startTime.add(new EditText(AddNewEventActivity.this));
+        startTime.get(count).setId(4);
+        endTime.add(new EditText(AddNewEventActivity.this));
+        endTime.get(count).setId(5);
+
+        //setting hints to the edit text boxes
+        startTime.get(count).setHint(R.string.start_time);
+        date.get(count).setHint(R.string.date);
+        endTime.get(count).setHint(R.string.end_time);
+
+        //creating text views
+        TextView day = new TextView(AddNewEventActivity.this);
+        day.setId(1);
+        TextView textView = new TextView(AddNewEventActivity.this);
+        textView.setId(2);
+        textView.setText("TO");
+        String dayText = "Day" + " " + (count + 1);
+        day.setText(dayText);
+        day.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+        int textViewPadding = (int) convertDpToPixel(5, getApplicationContext());
+        day.setPadding(textViewPadding, textViewPadding, textViewPadding, textViewPadding);
+        day.setLayoutParams(lparams1);
+
+        //creating a linear layout
+        LinearLayout lLayout = new LinearLayout(AddNewEventActivity.this);
+        lLayout.setOrientation(LinearLayout.HORIZONTAL);
+        RelativeLayout.LayoutParams lLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT);
+        lLayoutParams.setMargins(0, (int)convertDpToPixel(5, getApplicationContext()), 0, 0);
+        lLayoutParams.addRule(RelativeLayout.BELOW, date.get(count).getId());
+        lLayoutParams.addRule(RelativeLayout.ALIGN_START, date.get(count).getId());
+        lLayout.setLayoutParams(lLayoutParams);
+
+
+
+        //adding background to the edit text
+        date.get(count).setBackground(drawableOriginal);
+        startTime.get(count).setBackground(drawableOriginal);
+        endTime.get(count).setBackground(drawableOriginal);
+
+
+        //formatting the date editText
+        date.get(count).setPadding(textViewPadding, textViewPadding, textViewPadding, textViewPadding);
+        lparams2.addRule(RelativeLayout.RIGHT_OF, day.getId());
+        date.get(count).setLayoutParams(lparams2);
+
+        //formatting the time editText
+        startTime.get(count).setLayoutParams(lparams3);
+        endTime.get(count).setLayoutParams(lparams3);
+
+
+        //setting text sizes of the edittext boxes
+        startTime.get(count).setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        endTime.get(count).setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+
+        //adding on click listeners to edittext boxes
+        date.get(count).setOnClickListener(createOnClickListenerDate(count));
+        startTime.get(count).setOnClickListener(createOnClickListenerTime(count, true));
+        endTime.get(count).setOnClickListener(createOnClickListenerTime(count, false));
+
+        //user cannot click or paste in date and time edit texts
+        date.get(count).setLongClickable(false);
+        startTime.get(count).setLongClickable(false);
+        endTime.get(count).setLongClickable(false);
+        date.get(count).setFocusable(false);
+        startTime.get(count).setFocusable(false);
+        endTime.get(count).setFocusable(false);
+
+        //adding items to the lower linear layout
+        lLayout.addView(startTime.get(count));
+        lLayout.addView(textView);
+        lLayout.addView(endTime.get(count));
+
+        //adding items to relative layout
+        rLayout.addView(day);
+        rLayout.addView(date.get(count));
+        rLayout.addView(lLayout);
+
+
+        return  rLayout;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -267,7 +326,6 @@ public class AddNewEventActivity extends AppCompatActivity {
             }
         };
     }
-
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     View.OnClickListener createOnClickListenerTime(final int i, final boolean isStart) {
