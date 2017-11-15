@@ -122,8 +122,7 @@
                 android:layout_margin="15dp"
                 android:background="@drawable/border_textview"
                 android:orientation="vertical"
-                android:padding="5dp"
-                android:paddingLeft="50dp">
+                android:padding="5dp">
 
                 <TextView
                     android:id="@+id/tv_date_label"
@@ -142,7 +141,7 @@
                     android:background="@android:drawable/editbox_background"
                     android:hint="Date"
                     android:longClickable="false"
-                    android:padding="5dp" />
+                    android:padding="@dimen/editTextPadding" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -166,7 +165,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="TO"
-                        android:textSize="15dp" />
+                        android:textSize="@dimen/fifteen" />
 
                     <EditText
                         android:id="@+id/input_end_time"

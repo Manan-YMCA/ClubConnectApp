@@ -1,6 +1,7 @@
 package com.manan.dev.clubconnect;
 
 import android.app.AlertDialog;
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
@@ -249,80 +250,137 @@ public class AddNewEventActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                //setting layout parameters
-                final LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
                 count++;
-                final LinearLayout.LayoutParams lparams1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
-                int top = (int) convertDpToPixel(5, getApplicationContext());
-                int left = (int) convertDpToPixel(50, getApplicationContext());
-                lparams1.setMargins(left, top, 0, 0);
-
-                final LinearLayout.LayoutParams lparams2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                int width = (int) convertDpToPixel(10, getApplicationContext());
-                lparams2.setMargins(width, 0, 0, 0);
-
-                //Log.d("countChecker", Integer.toString(count));
+                //adding items to arraylist for storing data
                 dateData.add((long) 0);
                 startTimeData.add((long) 0);
                 endTimeData.add((long) 0);
 
-                date.add(new EditText(AddNewEventActivity.this));
-                startTime.add(new EditText(AddNewEventActivity.this));
-                endTime.add(new EditText(AddNewEventActivity.this));
+                RelativeLayout rlayout = layoutreturner(count);
+                Toast.makeText(AddNewEventActivity.this, "layout returned", Toast.LENGTH_SHORT).show();
 
-                date.get(count).setWidth((int) convertDpToPixel(200, getApplicationContext()));
-                startTime.get(count).setWidth((int) convertDpToPixel(140, getApplicationContext()));
-                endTime.get(count).setWidth((int) convertDpToPixel(140, getApplicationContext()));
-                startTime.get(count).setHint(R.string.start_time);
-                date.get(count).setHint(R.string.date);
-                endTime.get(count).setHint(R.string.end_time);
+                event_day_layout.addView(rlayout);
 
-                LinearLayout layout1 = new LinearLayout(AddNewEventActivity.this);
-                layout1.setOrientation(LinearLayout.HORIZONTAL);
-                LinearLayout layout2 = new LinearLayout(AddNewEventActivity.this);
-                layout2.setOrientation(LinearLayout.HORIZONTAL);
-
-                TextView day = new TextView(AddNewEventActivity.this);
-                TextView textView = new TextView(AddNewEventActivity.this);
-                day.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.vector_date, 0, 0, 0);
-                textView.setText("TO");
-                String dayText = "DAY" + " " + (count + 1);
-                day.setText(dayText);
-                day.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
-
-                date.get(count).setLayoutParams(lparams2);
-                date.get(count).setBackground(drawableOriginal);
-
-                date.get(count).setLongClickable(false);
-                startTime.get(count).setLongClickable(false);
-                endTime.get(count).setLongClickable(false);
-
-                startTime.get(count).setBackground(drawableOriginal);
-                endTime.get(count).setBackground(drawableOriginal);
-                startTime.get(count).setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-                endTime.get(count).setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-
-                layout1.addView(day);
-                layout1.addView(date.get(count));
-                layout1.setLayoutParams(lparams);
-                layout2.setLayoutParams(lparams1);
-                layout2.addView(startTime.get(count));
-                layout2.addView(textView);
-                layout2.addView(endTime.get(count));
-
-                event_day_layout.addView(layout1);
-                event_day_layout.addView(layout2);
-
-                date.get(count).setOnClickListener(createOnClickListenerDate(count));
-                startTime.get(count).setOnClickListener(createOnClickListenerTime(count, true));
-                endTime.get(count).setOnClickListener(createOnClickListenerTime(count, false));
-                date.get(count).setFocusable(false);
-                startTime.get(count).setFocusable(false);
-                endTime.get(count).setFocusable(false);
             }
         };
 
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @SuppressLint("ResourceType")
+    RelativeLayout layoutreturner(int count){
+        RelativeLayout rLayout = new RelativeLayout(AddNewEventActivity.this);
+        rLayout.setBackground(getResources().getDrawable(R.drawable.border_textview));
+        Resources r = getResources();
+        int fifteen = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, r.getDisplayMetrics());
+        int five = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5 , r.getDisplayMetrics());
+        int sixty = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 60, r.getDisplayMetrics());
+        int zero = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0, r.getDisplayMetrics());
+
+        //params for relative layout
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+        layoutParams.setMargins(fifteen, fifteen, fifteen, fifteen);
+        rLayout.setPadding(five, five, five, five);
+        rLayout.setLayoutParams(layoutParams);
+
+
+        //creating layout params for textView
+        RelativeLayout.LayoutParams lparams1 = new RelativeLayout.LayoutParams(sixty, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        lparams1.setMargins(0, 0, five, 0);
+
+        //creating layout params for date editText
+        RelativeLayout.LayoutParams lparams2 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+
+        //creating layout params for time editText
+        LinearLayout.LayoutParams lparams3 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f);
+
+
+
+        //adding items to arraylist for adding edit text
+        date.add(new EditText(AddNewEventActivity.this));
+        date.get(count).setId(3);
+        startTime.add(new EditText(AddNewEventActivity.this));
+        startTime.get(count).setId(4);
+        endTime.add(new EditText(AddNewEventActivity.this));
+        endTime.get(count).setId(5);
+
+        //setting hints to the edit text boxes
+        startTime.get(count).setHint(R.string.start_time);
+        date.get(count).setHint(R.string.date);
+        endTime.get(count).setHint(R.string.end_time);
+
+        //creating text views
+        TextView day = new TextView(AddNewEventActivity.this);
+        day.setId(1);
+        TextView textView = new TextView(AddNewEventActivity.this);
+        textView.setId(2);
+        textView.setText("TO");
+        String dayText = "Day" + " " + (count + 1);
+        day.setText(dayText);
+        day.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+
+        day.setPadding(five, five, five, five);
+        day.setLayoutParams(lparams1);
+
+        //creating a linear layout
+        LinearLayout lLayout = new LinearLayout(AddNewEventActivity.this);
+        lLayout.setOrientation(LinearLayout.HORIZONTAL);
+        RelativeLayout.LayoutParams lLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT);
+        lLayoutParams.setMargins(0, five, 0, 0);
+        lLayoutParams.addRule(RelativeLayout.BELOW, date.get(count).getId());
+        lLayoutParams.addRule(RelativeLayout.ALIGN_START, date.get(count).getId());
+        lLayout.setLayoutParams(lLayoutParams);
+
+
+
+        //adding background to the edit text
+        date.get(count).setBackground(drawableOriginal);
+        startTime.get(count).setBackground(drawableOriginal);
+        endTime.get(count).setBackground(drawableOriginal);
+
+
+        //formatting the date editText
+        date.get(count).setPadding(five, five, five, five);
+        lparams2.addRule(RelativeLayout.RIGHT_OF, day.getId());
+        date.get(count).setLayoutParams(lparams2);
+
+        //formatting the time editText
+        startTime.get(count).setLayoutParams(lparams3);
+        endTime.get(count).setLayoutParams(lparams3);
+
+
+        //setting text sizes of the edittext boxes
+        startTime.get(count).setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        endTime.get(count).setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+
+
+        //adding on click listeners to edittext boxes
+        date.get(count).setOnClickListener(createOnClickListenerDate(count));
+        startTime.get(count).setOnClickListener(createOnClickListenerTime(count, true));
+        endTime.get(count).setOnClickListener(createOnClickListenerTime(count, false));
+
+        //user cannot click or paste in date and time edit texts
+        date.get(count).setLongClickable(false);
+        startTime.get(count).setLongClickable(false);
+        endTime.get(count).setLongClickable(false);
+        date.get(count).setFocusable(false);
+        startTime.get(count).setFocusable(false);
+        endTime.get(count).setFocusable(false);
+
+        //adding items to the lower linear layout
+        lLayout.addView(startTime.get(count));
+        lLayout.addView(textView);
+        lLayout.addView(endTime.get(count));
+
+        //adding items to relative layout
+        rLayout.addView(day);
+        rLayout.addView(date.get(count));
+        rLayout.addView(lLayout);
+
+
+        return  rLayout;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -360,7 +418,6 @@ public class AddNewEventActivity extends AppCompatActivity {
         };
     }
 
-
     @RequiresApi(api = Build.VERSION_CODES.N)
     View.OnClickListener createOnClickListenerTime(final int i, final boolean isStart) {
 
@@ -393,57 +450,5 @@ public class AddNewEventActivity extends AppCompatActivity {
             }
         };
     }
-
-    public static float convertDpToPixel(float dp, Context context) {
-        Resources resources = context.getResources();
-        DisplayMetrics metrics = resources.getDisplayMetrics();
-        float px = dp * ((float) metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
-        return px;
-    }
-
-    @Override
-    public void onBackPressed() {
-        fillData();
-        boolean isUntouched = (eventVenueData.equals("") &&
-                eventNameData.equals("") &&
-                descriptionData.equals("") &&
-                coordinatorsData.size() == 0 &&
-                imgLocationsData.size() == 0 &&
-                dateData.size() == 1 &&
-                startTimeData.size() == 1 &&
-                endTimeData.size() == 1 &&
-                dateData.get(0) == 0 &&
-                startTimeData.get(0) == 0 &&
-                endTimeData.get(0) == 0
-        );
-        if (isUntouched) {
-            finish();
-        } else {
-            showDialogBoxToExit();
-        }
-    }
-
-    private void showDialogBoxToExit() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Do you really want to exit?")
-                .setPositiveButton("No", null)
-                .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // delete the task on abnormal exit.
-                        AddNewEventActivity.this.finish();
-                    }
-                });
-        builder.create();
-        builder.show();
-    }
-
-
-    private void fillData() {
-        eventNameData = input_eventname.getText().toString().trim();
-        eventVenueData = input_event_venue.getText().toString().trim();
-        clubNameData = input_clubname.getText().toString().trim();
-        descriptionData = input_description.getText().toString().trim();
-    }
-
 
 }

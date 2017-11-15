@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="fifteen">15dp</dimen>
+    <dimen name="five">5dp</dimen>
+    <dimen name="sixty">60dp</dimen>
+    <dimen name="zero">0dp</dimen>
+    <dimen name="editTextPadding">5dp</dimen>
+</resources>
