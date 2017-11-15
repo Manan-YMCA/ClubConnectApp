@@ -140,7 +140,7 @@
                     android:background="@android:drawable/editbox_background"
                     android:hint="Date"
                     android:longClickable="false"
-                    android:padding="5dp" />
+                    android:padding="@dimen/editTextPadding" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -164,7 +164,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="TO"
-                        android:textSize="15dp" />
+                        android:textSize="@dimen/fifteen" />
 
                     <EditText
                         android:id="@+id/input_end_time"
@@ -223,43 +223,13 @@
         <LinearLayout
             android:id="@+id/img_uploaded_ll"
             android:layout_width="wrap_content"
-            android:layout_height="64dp"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:visibility="gone" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_marginBottom="20dp"
             android:visibility="gone">
 
-            <ImageView
-                android:id="@+id/iv_add_photo1"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:src="@drawable/logo_cc" />
-
-            <ImageView
-                android:id="@+id/iv_clear_pic1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentTop="true"
-                android:src="@drawable/vector_clear" />
-            <ImageView
-                android:layout_width="match_parent"
-                android:id="@+id/iv_add_photo2"
-                android:layout_below="@+id/iv_add_photo1"
-                android:layout_height="150dp"
-                android:src="@drawable/logo_cc"/>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_below="@+id/iv_add_photo1"
-                android:src="@drawable/vector_clear" />
-        </RelativeLayout>
-
+        </LinearLayout>
     </LinearLayout>
 
 </ScrollView>
