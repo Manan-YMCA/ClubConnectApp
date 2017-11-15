@@ -51,7 +51,6 @@
         <activity
             android:name=".AddNewEventActivity"
             android:label="Create New Event" />
-        <activity android:name=".DelActivity"></activity>
     </application>
 
 </manifest>
