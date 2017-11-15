@@ -49,6 +49,7 @@
 
             <EditText
                 android:id="@+id/input_clubname"
+                android:enabled="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/vector_club"
@@ -137,7 +138,7 @@
                     android:layout_height="wrap_content"
                     android:background="@android:drawable/editbox_background"
                     android:hint="Date"
-                    android:inputType="date" />
+                    android:longClickable="false"/>
             </LinearLayout>
 
             <LinearLayout
@@ -152,9 +153,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+
                     android:background="@android:drawable/editbox_background"
                     android:hint="Start Time"
-                    android:inputType="time"
+                    android:longClickable="false"
                     android:textSize="12sp" />
 
                 <TextView
@@ -165,12 +167,13 @@
 
                 <EditText
                     android:id="@+id/input_end_time"
+
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@android:drawable/editbox_background"
                     android:hint="End Time"
-                    android:inputType="time"
+                    android:longClickable="false"
                     android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>

@@ -103,7 +103,6 @@ public class AddNewEventActivity extends AppCompatActivity {
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_PICK);
                 startActivityForResult(Intent.createChooser(intent, "Select Image"), PICK_IMAGE_REQUEST);
-                finish();
             }
         });
 
@@ -157,8 +156,8 @@ public class AddNewEventActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-
-                final LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
+                //setting layout parameters
+                final LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
                 count++;
                 final LinearLayout.LayoutParams lparams1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 int top = (int) convertDpToPixel(5, getApplicationContext());
@@ -197,6 +196,11 @@ public class AddNewEventActivity extends AppCompatActivity {
                 day.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
                 date.get(count).setLayoutParams(lparams2);
                 date.get(count).setBackground(drawableOriginal);
+
+                date.get(count).setLongClickable(false);
+                startTime.get(count).setLongClickable(false);
+                endTime.get(count).setLongClickable(false);
+
                 startTime.get(count).setBackground(drawableOriginal);
                 endTime.get(count).setBackground(drawableOriginal);
                 startTime.get(count).setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
@@ -230,6 +234,7 @@ public class AddNewEventActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(final View v) {
+                Toast.makeText(AddNewEventActivity.this, "clicked", Toast.LENGTH_SHORT).show();
                 java.util.Calendar mcurrentDate = java.util.Calendar.getInstance();
                 final int mYear = mcurrentDate.get(java.util.Calendar.YEAR);
                 final int mMonth = mcurrentDate.get(java.util.Calendar.MONTH);
