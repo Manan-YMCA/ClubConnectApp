@@ -1,11 +1,15 @@
 package com.manan.dev.clubconnect;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -17,23 +21,29 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -41,16 +51,19 @@ import java.util.Locale;
 public class AddNewEventActivity extends AppCompatActivity {
     String clubName;
     private EditText input_eventname, input_event_venue, input_clubname, input_description, input_date, input_start_time, input_end_time;
-    private ImageView Add_new_date, addPhotosBtn;
+    private ImageView Add_new_date;
     private LinearLayout event_day_layout;
     private LinearLayout uploadedPhotoLL;
-    int count = 0, PICK_IMAGE_REQUEST = 111, imgCount = 0;
+    int count = 0, PICK_IMAGE_REQUEST = 111;
     ArrayList<EditText> date;
     ArrayList<EditText> startTime, endTime;
     ArrayList<Long> dateData, startTimeData, endTimeData;
+    private ArrayList<Uri> imgLocationsData;
+    private ArrayList<String> coordinatorsData;
+    private String eventNameData, eventVenueData, clubNameData, descriptionData;
     private Drawable drawableOriginal;
     private StorageReference firebaseStorage;
-    Uri filePath;
+    private ProgressDialog pd;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -68,7 +81,6 @@ public class AddNewEventActivity extends AppCompatActivity {
         input_start_time = (EditText) findViewById(R.id.input_start_time);
         input_end_time = (EditText) findViewById(R.id.input_end_time);
         Add_new_date = (ImageView) findViewById(R.id.Add_new_date);
-        addPhotosBtn = (ImageView) findViewById(R.id.upload_photos_btn);
         event_day_layout = (LinearLayout) findViewById(R.id.event_day_layout);
         uploadedPhotoLL = (LinearLayout) findViewById(R.id.img_uploaded_ll);
         date = new ArrayList<EditText>();
@@ -77,7 +89,10 @@ public class AddNewEventActivity extends AppCompatActivity {
         dateData = new ArrayList<Long>();
         startTimeData = new ArrayList<Long>();
         endTimeData = new ArrayList<Long>();
+        imgLocationsData = new ArrayList<>();
+        coordinatorsData = new ArrayList<>();
 
+        count = 0;
 
         dateData.add((long) 0);
         startTimeData.add((long) 0);
@@ -93,56 +108,133 @@ public class AddNewEventActivity extends AppCompatActivity {
         endTime.get(count).setFocusable(false);
         drawableOriginal = input_date.getBackground();
 
-        clubName = FirebaseAuth.getInstance().getCurrentUser().getEmail().split("@")[0];
-        input_clubname.setText(clubName);
+        clubNameData = FirebaseAuth.getInstance().getCurrentUser().getEmail().split("@")[0];
+        input_clubname.setText(clubNameData);
 
         Add_new_date.setOnClickListener(newEventAdditionListener());
-        addPhotosBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_PICK);
-                startActivityForResult(Intent.createChooser(intent, "Select Image"), PICK_IMAGE_REQUEST);
-            }
-        });
-
+        pd = new ProgressDialog(this);
+        pd.setMessage("Loading...");
+        pd.setCanceledOnTouchOutside(false);
+        pd.setCancelable(false);
+        pd.setIndeterminate(false);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            filePath = data.getData();
-            try {
-                final Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                StorageReference childRef = firebaseStorage.child(input_eventname.getText().toString() + imgCount + "image.jpg");
-                // To be put on final add event button to avoid useless uploads
-                UploadTask uploadTask = childRef.putFile(filePath);
-                uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Toast.makeText(AddNewEventActivity.this, "Upload successful", Toast.LENGTH_SHORT).show();
-                        //Setting image to ImageView
-                        ImageView imgView = new ImageView(AddNewEventActivity.this);
-                        imgView.setImageBitmap(bitmap);
-                        uploadedPhotoLL.addView(imgView);
-                        imgCount++;
-                        // TODO Add photoLink in database
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(AddNewEventActivity.this, "Upload successful", Toast.LENGTH_SHORT).show();
-                    }
-                });
+            LinearLayout container = (LinearLayout) findViewById(R.id.img_uploaded_ll);
+            Uri localData = data.getData();
+            imgLocationsData.add(localData);
+            final ImageView iv = addNewHolderForImage(container, localData);
 
-            } catch (Exception e) {
+            float finalWidth = 400;
+            try {
+                Bitmap bitmap = null;
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imgLocationsData.get(imgLocationsData.size() - 1));
+                bitmap = Bitmap.createScaledBitmap(bitmap, (int) finalWidth, (int) (finalWidth / bitmap.getWidth() * bitmap.getHeight()),
+                        true);
+                iv.setImageBitmap(bitmap);
+            } catch (IOException e) {
                 e.printStackTrace();
             }
+
         } else {
             Toast.makeText(AddNewEventActivity.this, "Select an image", Toast.LENGTH_SHORT).show();
         }
     }
+
+    private ImageView addNewHolderForImage(final LinearLayout container, final Uri localData) {
+        if (container.getChildCount() == 0)
+            container.setVisibility(View.VISIBLE);
+        final RelativeLayout relativeLayout = new RelativeLayout(this);
+        RelativeLayout.LayoutParams rlLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        //TODO: get from dimens.xml
+        rlLayoutParams.setMargins(0, 10, 0, 0);
+        relativeLayout.setLayoutParams(rlLayoutParams);
+
+        ImageView imageViewData = new ImageView(this);
+        imageViewData.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 450));
+        imageViewData.setCropToPadding(true);
+        imageViewData.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+
+        ImageView imageView = new ImageView(this);
+        RelativeLayout.LayoutParams ivLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        ivLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_END);
+        ivLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+        imageView.setLayoutParams(ivLayoutParams);
+        imageView.setBackgroundColor(Color.argb(80, 140, 140, 140));
+        imageView.setImageDrawable(getResources().getDrawable(R.drawable.vector_clear));
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                imgLocationsData.remove(localData);
+                container.removeView(relativeLayout);
+            }
+        });
+
+        relativeLayout.addView(imageViewData);
+        relativeLayout.addView(imageView);
+
+        container.addView(relativeLayout);
+
+        return imageViewData;
+    }
+
+
+    void uploadImagesToFirebase() {
+        pd.setMax(100);
+        pd.show();
+
+        for (int i = 0; i < imgLocationsData.size(); i++) {
+            String imgName = imgLocationsData.get(i).getLastPathSegment();
+            imgName = imgName.replace('.', '@');
+            int lastIndex = imgName.lastIndexOf('@');
+            String imgExtension = imgName.substring(lastIndex + 1);
+            StorageReference childRef = firebaseStorage.child(input_eventname.getText().toString() + "_" + i + "." + imgExtension);
+
+            // To be put on final add event button to avoid useless uploads
+            UploadTask uploadTask = childRef.putFile(imgLocationsData.get(i));
+            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Toast.makeText(AddNewEventActivity.this, "Upload successful", Toast.LENGTH_SHORT).show();
+                    // TODO Add photoLink in database
+                    taskSnapshot.getDownloadUrl();
+                    pd.hide();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(AddNewEventActivity.this, "Upload successful", Toast.LENGTH_SHORT).show();
+                    pd.hide();
+                }
+            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                    float transferred = taskSnapshot.getBytesTransferred();
+                    float total = taskSnapshot.getTotalByteCount();
+                    pd.setProgress((int) (transferred / total * 100.0 / imgLocationsData.size()));
+                }
+            });
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.add_photos:
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_PICK);
+                startActivityForResult(Intent.createChooser(intent, "Select Image"), PICK_IMAGE_REQUEST);
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -164,11 +256,11 @@ public class AddNewEventActivity extends AppCompatActivity {
 
                 int top = (int) convertDpToPixel(5, getApplicationContext());
                 int left = (int) convertDpToPixel(50, getApplicationContext());
-                lparams1.setMargins(left, top, 0,0);
+                lparams1.setMargins(left, top, 0, 0);
 
                 final LinearLayout.LayoutParams lparams2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 int width = (int) convertDpToPixel(10, getApplicationContext());
-                lparams2.setMargins(width, 0,0,0);
+                lparams2.setMargins(width, 0, 0, 0);
 
                 //Log.d("countChecker", Integer.toString(count));
                 dateData.add((long) 0);
@@ -193,7 +285,7 @@ public class AddNewEventActivity extends AppCompatActivity {
 
                 TextView day = new TextView(AddNewEventActivity.this);
                 TextView textView = new TextView(AddNewEventActivity.this);
-                day.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.vector_date, 0,0,0);
+                day.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.vector_date, 0, 0, 0);
                 textView.setText("TO");
                 String dayText = "DAY" + " " + (count + 1);
                 day.setText(dayText);
@@ -308,5 +400,50 @@ public class AddNewEventActivity extends AppCompatActivity {
         float px = dp * ((float) metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
         return px;
     }
+
+    @Override
+    public void onBackPressed() {
+        fillData();
+        boolean isUntouched = (eventVenueData.equals("") &&
+                eventNameData.equals("") &&
+                descriptionData.equals("") &&
+                coordinatorsData.size() == 0 &&
+                imgLocationsData.size() == 0 &&
+                dateData.size() == 1 &&
+                startTimeData.size() == 1 &&
+                endTimeData.size() == 1 &&
+                dateData.get(0) == 0 &&
+                startTimeData.get(0) == 0 &&
+                endTimeData.get(0) == 0
+        );
+        if (isUntouched) {
+            finish();
+        } else {
+            showDialogBoxToExit();
+        }
+    }
+
+    private void showDialogBoxToExit() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Do you really want to exit?")
+                .setPositiveButton("No", null)
+                .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // delete the task on abnormal exit.
+                        AddNewEventActivity.this.finish();
+                    }
+                });
+        builder.create();
+        builder.show();
+    }
+
+
+    private void fillData() {
+        eventNameData = input_eventname.getText().toString().trim();
+        eventVenueData = input_event_venue.getText().toString().trim();
+        clubNameData = input_clubname.getText().toString().trim();
+        descriptionData = input_description.getText().toString().trim();
+    }
+
 
 }
