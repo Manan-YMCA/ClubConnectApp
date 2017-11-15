@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_camera"
+            android:icon="@drawable/vector_home"
+            android:title="Home" />
+        <item
+            android:id="@+id/nav_gallery"
+            android:icon="@drawable/vector_coordinator"
+            android:title="Profile" />
+        <item
+            android:id="@+id/nav_slideshow"
+            android:icon="@drawable/vector_star"
+            android:title="Starred Events" />
+        <item
+            android:id="@+id/nav_manage"
+            android:icon="@drawable/vector_name"
+            android:title="About" />
+    </group>
+
+    <item android:title="More About App">
+
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Share" />
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Report a Bug" />
+            <item
+                android:id="@+id/nav_dev"
+                android:icon="@drawable/vector_club"
+                android:title="Developers" />
+        </menu>
+    </item>
+
+</menu>

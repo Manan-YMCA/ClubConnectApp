@@ -5,4 +5,10 @@
     <string name="date">Date</string>
     <string name="start_time">Start Time</string>
     <string name="end_time">End Time</string>
+    <string name="title_activity_dashboard_user">DashboardUserActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 </resources>
