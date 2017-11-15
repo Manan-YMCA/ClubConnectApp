@@ -172,6 +172,7 @@ public class AddNewEventActivity extends AppCompatActivity {
                 endTimeData.add((long) 0);
 
                 RelativeLayout rlayout = layoutreturner(count);
+                Toast.makeText(AddNewEventActivity.this, "layout returned", Toast.LENGTH_SHORT).show();
 
                 event_day_layout.addView(rlayout);
 
@@ -180,24 +181,27 @@ public class AddNewEventActivity extends AppCompatActivity {
 
     }
 
-    @SuppressLint("ResourceType")
     @RequiresApi(api = Build.VERSION_CODES.N)
+    @SuppressLint("ResourceType")
     RelativeLayout layoutreturner(int count){
         RelativeLayout rLayout = new RelativeLayout(AddNewEventActivity.this);
         rLayout.setBackground(getResources().getDrawable(R.drawable.border_textview));
+        Resources r = getResources();
+        int fifteen = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, r.getDisplayMetrics());
+        int five = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5 , r.getDisplayMetrics());
+        int sixty = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 60, r.getDisplayMetrics());
+        int zero = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0, r.getDisplayMetrics());
 
         //params for relative layout
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-        int rLayoutMargins = (int) convertDpToPixel(15, getApplicationContext());
-        layoutParams.setMargins(rLayoutMargins, rLayoutMargins, rLayoutMargins, rLayoutMargins);
-        int paddingValue = (int) convertDpToPixel(5, getApplicationContext());
-        rLayout.setPadding(paddingValue, paddingValue, paddingValue, paddingValue);
+        layoutParams.setMargins(fifteen, fifteen, fifteen, fifteen);
+        rLayout.setPadding(five, five, five, five);
         rLayout.setLayoutParams(layoutParams);
 
 
         //creating layout params for textView
-        RelativeLayout.LayoutParams lparams1 = new RelativeLayout.LayoutParams((int) convertDpToPixel(60, getApplicationContext()), RelativeLayout.LayoutParams.WRAP_CONTENT);
-        lparams1.setMargins(0, 0, (int) convertDpToPixel(5, getApplicationContext()), 0);
+        RelativeLayout.LayoutParams lparams1 = new RelativeLayout.LayoutParams(sixty, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        lparams1.setMargins(0, 0, five, 0);
 
         //creating layout params for date editText
         RelativeLayout.LayoutParams lparams2 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -229,8 +233,8 @@ public class AddNewEventActivity extends AppCompatActivity {
         String dayText = "Day" + " " + (count + 1);
         day.setText(dayText);
         day.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
-        int textViewPadding = (int) convertDpToPixel(5, getApplicationContext());
-        day.setPadding(textViewPadding, textViewPadding, textViewPadding, textViewPadding);
+
+        day.setPadding(five, five, five, five);
         day.setLayoutParams(lparams1);
 
         //creating a linear layout
@@ -238,7 +242,7 @@ public class AddNewEventActivity extends AppCompatActivity {
         lLayout.setOrientation(LinearLayout.HORIZONTAL);
         RelativeLayout.LayoutParams lLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.MATCH_PARENT);
-        lLayoutParams.setMargins(0, (int)convertDpToPixel(5, getApplicationContext()), 0, 0);
+        lLayoutParams.setMargins(0, five, 0, 0);
         lLayoutParams.addRule(RelativeLayout.BELOW, date.get(count).getId());
         lLayoutParams.addRule(RelativeLayout.ALIGN_START, date.get(count).getId());
         lLayout.setLayoutParams(lLayoutParams);
@@ -252,7 +256,7 @@ public class AddNewEventActivity extends AppCompatActivity {
 
 
         //formatting the date editText
-        date.get(count).setPadding(textViewPadding, textViewPadding, textViewPadding, textViewPadding);
+        date.get(count).setPadding(five, five, five, five);
         lparams2.addRule(RelativeLayout.RIGHT_OF, day.getId());
         date.get(count).setLayoutParams(lparams2);
 
@@ -264,6 +268,7 @@ public class AddNewEventActivity extends AppCompatActivity {
         //setting text sizes of the edittext boxes
         startTime.get(count).setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
         endTime.get(count).setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+
 
         //adding on click listeners to edittext boxes
         date.get(count).setOnClickListener(createOnClickListenerDate(count));
@@ -358,13 +363,6 @@ public class AddNewEventActivity extends AppCompatActivity {
                 mTimePicker.show();
             }
         };
-    }
-
-    public static float convertDpToPixel(float dp, Context context) {
-        Resources resources = context.getResources();
-        DisplayMetrics metrics = resources.getDisplayMetrics();
-        float px = dp * ((float) metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
-        return px;
     }
 
 }
