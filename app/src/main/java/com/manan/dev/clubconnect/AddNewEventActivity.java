@@ -42,7 +42,8 @@ public class AddNewEventActivity extends AppCompatActivity {
     String clubName;
     private EditText input_eventname, input_event_venue, input_clubname, input_description, input_date, input_start_time, input_end_time;
     private ImageView Add_new_date, addPhotosBtn;
-    private LinearLayout event_day_layout, uploadedPhotoLL;
+    private LinearLayout event_day_layout;
+    private LinearLayout uploadedPhotoLL;
     int count = 0, PICK_IMAGE_REQUEST = 111, imgCount = 0;
     ArrayList<EditText> date;
     ArrayList<EditText> startTime, endTime;
@@ -160,9 +161,11 @@ public class AddNewEventActivity extends AppCompatActivity {
                 final LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
                 count++;
                 final LinearLayout.LayoutParams lparams1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
                 int top = (int) convertDpToPixel(5, getApplicationContext());
                 int left = (int) convertDpToPixel(50, getApplicationContext());
                 lparams1.setMargins(left, top, 0,0);
+
                 final LinearLayout.LayoutParams lparams2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 int width = (int) convertDpToPixel(10, getApplicationContext());
                 lparams2.setMargins(width, 0,0,0);
@@ -171,13 +174,14 @@ public class AddNewEventActivity extends AppCompatActivity {
                 dateData.add((long) 0);
                 startTimeData.add((long) 0);
                 endTimeData.add((long) 0);
+
                 date.add(new EditText(AddNewEventActivity.this));
                 startTime.add(new EditText(AddNewEventActivity.this));
                 endTime.add(new EditText(AddNewEventActivity.this));
+
                 date.get(count).setWidth((int) convertDpToPixel(200, getApplicationContext()));
                 startTime.get(count).setWidth((int) convertDpToPixel(140, getApplicationContext()));
                 endTime.get(count).setWidth((int) convertDpToPixel(140, getApplicationContext()));
-
                 startTime.get(count).setHint(R.string.start_time);
                 date.get(count).setHint(R.string.date);
                 endTime.get(count).setHint(R.string.end_time);
@@ -194,6 +198,7 @@ public class AddNewEventActivity extends AppCompatActivity {
                 String dayText = "DAY" + " " + (count + 1);
                 day.setText(dayText);
                 day.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+
                 date.get(count).setLayoutParams(lparams2);
                 date.get(count).setBackground(drawableOriginal);
 
@@ -205,6 +210,7 @@ public class AddNewEventActivity extends AppCompatActivity {
                 endTime.get(count).setBackground(drawableOriginal);
                 startTime.get(count).setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
                 endTime.get(count).setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+
                 layout1.addView(day);
                 layout1.addView(date.get(count));
                 layout1.setLayoutParams(lparams);

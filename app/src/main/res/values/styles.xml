@@ -8,6 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
 
     </style>
+
     <style name="CodeFont" parent="Theme.AppCompat.DayNight.NoActionBar">
 
         <item name="android:windowActionBar">false</item>>

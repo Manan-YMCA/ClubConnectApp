@@ -9,7 +9,8 @@
         android:id="@+id/add_new_event_ll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="10dp"
+        android:layout_margin="12dp"
+        android:layout_marginTop="5dp"
         android:orientation="vertical">
 
         <android.support.design.widget.TextInputLayout
@@ -22,9 +23,10 @@
                 android:id="@+id/input_eventname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/vector_name"
+                android:backgroundTint="#FAFAFA"
                 android:hint="Event Name"
-                android:inputType="textCapSentences" />
+                android:inputType="textCapSentences"
+                android:textSize="15sp" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -36,10 +38,10 @@
                 android:id="@+id/input_event_venu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/vector_venue"
-
+                android:backgroundTint="#FAFAFA"
                 android:hint="Event Venue"
-                android:inputType="textCapSentences" />
+                android:inputType="textCapSentences"
+                android:textSize="15sp" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -49,12 +51,13 @@
 
             <EditText
                 android:id="@+id/input_clubname"
-                android:enabled="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/vector_club"
+                android:backgroundTint="#FAFAFA"
+                android:enabled="false"
                 android:hint="Club Name"
-                android:inputType="textCapSentences" />
+                android:inputType="textCapSentences"
+                android:textSize="15sp" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -68,26 +71,25 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:drawableStart="@drawable/vector_description"
-            android:background="@drawable/border_textview"
+            android:backgroundTint="#FAFAFA"
             android:gravity="top|left"
             android:hint="Description"
             android:inputType="textMultiLine"
-            android:minLines="5"
             android:padding="5dp"
-            android:scrollbarAlwaysDrawHorizontalTrack="true" />
+            android:scrollbarAlwaysDrawHorizontalTrack="true"
+            android:textSize="15sp" />
 
         <!--</android.support.design.widget.TextInputLayout>-->
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="2dp"
+            android:layout_marginLeft="5dp"
             android:layout_marginRight="3dp"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal">
 
             <TextView
-                android:drawableLeft="@drawable/vector_duration"
                 android:id="@+id/input_starttime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -95,7 +97,7 @@
                 android:paddingRight="20dp"
                 android:paddingTop="10dp"
                 android:text="Duration"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
 
             <ImageView
                 android:id="@+id/Add_new_date"
@@ -108,107 +110,105 @@
         </RelativeLayout>
 
         <LinearLayout
-            android:id="@+id/event_day_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="15dp"
-            android:background="@drawable/border_textview"
-            android:orientation="vertical"
-            android:padding="5dp"
-
-            android:paddingLeft="50dp">
-
-            <LinearLayout
+            android:layout_height="wrap_content"
+            android:id="@+id/event_day_layout"
+            android:orientation="vertical">
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:layout_margin="15dp"
+                android:background="@drawable/border_textview"
+                android:orientation="vertical"
+                android:padding="5dp"
+                android:paddingLeft="50dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="60dp"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="5dp"
-                    android:paddingRight="5dp"
-                    android:text="DAY 1"
-                    android:drawableLeft="@drawable/vector_date"
-                    android:textSize="15sp" />
+                    android:padding="5dp"
+                    android:text="Day 1"
+                    android:textSize="15sp"
+                    android:id="@+id/tv_date_label"/>
 
                 <EditText
+                    android:layout_toRightOf="@+id/tv_date_label"
                     android:id="@+id/input_date"
-                    android:layout_width="200dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:drawable/editbox_background"
                     android:hint="Date"
-                    android:longClickable="false"/>
-            </LinearLayout>
+                    android:padding="5dp"
+                    android:longClickable="false" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="50dp"
-                android:layout_marginTop="5dp"
-                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_alignStart="@+id/input_date"
+                    android:layout_below="@+id/input_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/input_start_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    <EditText
+                        android:id="@+id/input_start_time"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@android:drawable/editbox_background"
+                        android:hint="Start Time"
+                        android:longClickable="false"
+                        android:textSize="12sp" />
 
-                    android:background="@android:drawable/editbox_background"
-                    android:hint="Start Time"
-                    android:longClickable="false"
-                    android:textSize="12sp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TO"
+                        android:textSize="15dp"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="TO"
-                    android:textSize="15dp" />
+                    <EditText
+                        android:id="@+id/input_end_time"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@android:drawable/editbox_background"
+                        android:hint="End Time"
+                        android:longClickable="false"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </RelativeLayout>
 
-                <EditText
-                    android:id="@+id/input_end_time"
 
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@android:drawable/editbox_background"
-                    android:hint="End Time"
-                    android:longClickable="false"
-                    android:textSize="12sp" />
-            </LinearLayout>
         </LinearLayout>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="5dp"
             android:layout_marginTop="20dp"
             android:orientation="horizontal">
 
             <TextView
-                android:drawableLeft="@drawable/vector_coordinator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="2dp"
+                android:backgroundTint="#FAFAFA"
                 android:text="Co-ordinator"
-                android:textSize="20sp" />
+                android:textSize="15sp" />
 
             <AutoCompleteTextView
                 android:id="@+id/coordinator_name"
-                android:layout_width="150dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
-                android:hint="Names" />
+                android:backgroundTint="#fff"
+                android:hint="Names"
+                android:paddingLeft="10dp"
+                android:singleLine="true"
+                android:textSize="15sp" />
 
         </LinearLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Upload Photos"
-            android:textSize="20sp"
-            android:drawableLeft="@drawable/vector_photo"/>
 
         <ImageView
             android:id="@+id/upload_photos_btn"
@@ -216,12 +216,15 @@
             android:layout_height="64dp"
             android:layout_gravity="center"
             android:layout_margin="8dp"
-            android:src="@drawable/vector_add" />
+            android:src="@drawable/vector_add"
+            android:visibility="gone" />
+
         <LinearLayout
             android:id="@+id/img_uploaded_ll"
             android:layout_width="wrap_content"
+            android:layout_height="64dp"
             android:orientation="vertical"
-            android:layout_height="64dp"/>
+            android:visibility="gone" />
     </LinearLayout>
 
 </ScrollView>

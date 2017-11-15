@@ -73,15 +73,15 @@
         android:textColorHint="#eee" />
 
     <android.support.design.widget.TextInputLayout
+        android:id="@+id/passwordAdminly"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/ll_adminzone2"
+        android:hint=" "
+        android:textColorHint="#fff"
         app:errorEnabled="true"
         app:passwordToggleEnabled="true"
-        android:textColorHint="#fff"
-        app:passwordToggleTint="#FFF"
-        android:hint=" "
-        android:id="@+id/passwordAdminly">
+        app:passwordToggleTint="#FFF">
 
 
         <EditText
@@ -152,7 +152,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:background="#60d84B35"
         android:gravity="center"
         android:padding="16dp"
         android:text="Back to Login Screen"

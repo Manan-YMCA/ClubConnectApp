@@ -17,7 +17,6 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
             android:layout_margin="20dp"
@@ -40,27 +39,14 @@
         android:id="@+id/details"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_above="@id/user_know"
+        android:layout_above="@id/login_button"
         android:layout_centerHorizontal="true"
         android:layout_margin="4dp"
+        android:paddingBottom="22dp"
         android:text="Event Details in the Campus! Now get all the information related to events on a single platform!"
         android:textAlignment="center"
         android:textColor="#ffffff"
         android:textSize="12dp"
-
-        />
-
-    <TextView
-        android:id="@+id/user_know"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/login_button"
-
-        android:layout_centerHorizontal="true"
-        android:fontFamily="sans-serif-condensed"
-        android:text="New User?"
-        android:textColor="#ffffff"
-        android:textSize="18dp"
 
         />
 
@@ -93,7 +79,6 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:padding="16dp"
-        android:background="#60336D98"
         android:text="Are you an Admin? Tap Here!"
         android:textColor="@android:color/white"
         android:textSize="20sp" />
