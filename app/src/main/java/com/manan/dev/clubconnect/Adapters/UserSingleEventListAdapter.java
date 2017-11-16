@@ -1,6 +1,7 @@
 package com.manan.dev.clubconnect.Adapters;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import com.manan.dev.clubconnect.Models.UserSingleEventList;
 import com.manan.dev.clubconnect.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -39,7 +41,18 @@ public class UserSingleEventListAdapter extends RecyclerView.Adapter<UserSingleE
     public void onBindViewHolder(ViewHolder holder, int position) {
 
         UserSingleEventList u = userSingleEventLists.get(position);
-            
+
+        Picasso.with(c).load(u.getEventPoster()).fit().into(holder.posterUserEventClubList);
+        holder.timeUserEventClubList.setText(u.getEventTime());
+        holder.dateUserEventClubList.setText(u.getEventDate());
+
+        // Put a onClick on this to Intent it to UserSingleEventDesActivity
+        holder.userClubEventListCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
     }
 
@@ -52,10 +65,12 @@ public class UserSingleEventListAdapter extends RecyclerView.Adapter<UserSingleE
 
         ImageView posterUserEventClubList;
         TextView dateUserEventClubList,timeUserEventClubList;
+        CardView userClubEventListCardView;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
+            userClubEventListCardView = (CardView) itemView.findViewById(R.id.cv_single_event_list);
             posterUserEventClubList = (ImageView) itemView.findViewById(R.id.poster_club_event);
             dateUserEventClubList = (TextView) itemView.findViewById(R.id.date_club_event);
             timeUserEventClubList = (TextView) itemView.findViewById(R.id.time_club_event);

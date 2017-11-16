@@ -52,7 +52,7 @@
             android:name=".AddNewEventActivity"
             android:label="Create New Event"
             android:parentActivityName=".AdminDashboardActivity" />
-        <activity android:name=".User.UserClubEventList"></activity>
+        <activity android:name=".User.UserClubEventListActivity"></activity>
     </application>
 
 </manifest>
