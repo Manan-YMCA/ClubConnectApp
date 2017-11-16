@@ -12,40 +12,54 @@ import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.manan.dev.clubconnect.Models.Coordinator;
 import com.manan.dev.clubconnect.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class CoordinatorAdapter extends ArrayAdapter {
+public class CoordinatorAdapter extends ArrayAdapter<Coordinator> {
 
-    Context context;
-    private ArrayList<String> coordinatorList;
-    int resource;
+    private Context context;
+    //private final  ArrayList<String> coordinatorNames;
+    private int resource;
+    private ArrayList<Coordinator> items;//, suggestions;
+    private ArrayList<Coordinator> itemsAll;
+    private ArrayList<Coordinator> suggestions;
 
-    public CoordinatorAdapter(@NonNull Context context, int resource, String[] coordiList) {
-        super(context, resource, coordiList);
+
+    public CoordinatorAdapter(Context context, int resource, int tvResId, ArrayList<Coordinator> coordiList) {
+        super(context, resource, tvResId, coordiList);
         this.context = context;
         this.resource = resource;
-        this.coordinatorList = new ArrayList<>();
-        for(int i=0;coordiList[i]!=null;i++){
-            coordinatorList.add(coordiList[i]);
-            Log.d("aap",coordinatorList.get(i));
-        }
+        this.items = coordiList;
+        this.itemsAll = (ArrayList<Coordinator>) items.clone();
+        this.suggestions = new ArrayList<>();
+
+        //suggestions = new ArrayList<>();
+    }
+
+    public void updateList(ArrayList<Coordinator> items)
+    {
+        this.items = items;
+        this.itemsAll = (ArrayList<Coordinator>) items.clone();
+        suggestions.clear();
+        notifyDataSetChanged();
     }
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View view = convertView;
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            assert inflater != null;
             view = inflater.inflate(resource, parent, false);
         }
-
-        String name = coordinatorList.get(position);
-        if (name != null) {
+        Coordinator coordinator = items.get(position);
+        if (coordinator != null) {
             TextView lblName = (TextView) view.findViewById(R.id.coordinator_item_name);
-            ImageView imgView = (ImageView) view.findViewById(R.id.cancel_button);
+            ImageView imgView = (ImageView) view.findViewById(R.id.cancel_coordinator);
             imgView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -53,7 +67,7 @@ public class CoordinatorAdapter extends ArrayAdapter {
                 }
             });
             if (lblName != null)
-                lblName.setText(name);
+                lblName.setText(coordinator.getName());
         }
         return view;
     }
@@ -61,7 +75,41 @@ public class CoordinatorAdapter extends ArrayAdapter {
     @NonNull
     @Override
     public Filter getFilter() {
-        return super.getFilter();
+        return nameFilter;
     }
 
+    private Filter nameFilter = new Filter() {
+        @Override
+        public String convertResultToString(Object resultValue) {
+            return ((Coordinator)(resultValue)).getName();
+        }
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            if(constraint != null) {
+                suggestions.clear();
+                for (Coordinator coordinator : itemsAll) {
+                    if(coordinator.getName().toLowerCase().startsWith(constraint.toString().toLowerCase())){
+                        suggestions.add(coordinator);
+                    }
+                }
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = suggestions;
+                filterResults.count = suggestions.size();
+                return filterResults;
+            } else {
+                return new FilterResults();
+            }
+        }
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            ArrayList<Coordinator> filteredList = (ArrayList<Coordinator>) results.values;
+            if(results != null && results.count > 0) {
+                clear();
+                for (Coordinator c : filteredList) {
+                    add(c);
+                }
+                notifyDataSetChanged();
+            }
+        }
+    };
 }

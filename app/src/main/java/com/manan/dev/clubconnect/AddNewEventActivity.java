@@ -19,14 +19,18 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
-import android.util.DisplayMetrics;
+import android.text.InputType;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -36,14 +40,20 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.facebook.login.LoginManager;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.manan.dev.clubconnect.Adapters.CoordinatorAdapter;
+import com.manan.dev.clubconnect.Models.Coordinator;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -53,19 +63,26 @@ import java.util.Locale;
 public class AddNewEventActivity extends AppCompatActivity {
     String clubName;
     private EditText input_eventname, input_event_venue, input_clubname, input_description, input_date, input_start_time, input_end_time;
+    private AutoCompleteTextView input_event_cooordinator;
     private ImageView Add_new_date;
     private LinearLayout event_day_layout;
     private LinearLayout uploadedPhotoLL;
+    private LinearLayout containerCoordinators;
     int count = 0, PICK_IMAGE_REQUEST = 111;
     ArrayList<EditText> date;
     ArrayList<EditText> startTime, endTime;
     ArrayList<Long> dateData, startTimeData, endTimeData;
     private ArrayList<Uri> imgLocationsData;
-    private ArrayList<String> coordinatorsData;
+    private ArrayList<Coordinator> coordinatorsAll;
+    private ArrayList<Coordinator> coordinatorsData;
     private String eventNameData, eventVenueData, clubNameData, descriptionData;
     private Drawable drawableOriginal;
     private StorageReference firebaseStorage;
     private ProgressDialog pd;
+
+    private ChildEventListener mChildEventListener;
+    private DatabaseReference mDatabaseReference;
+    private CoordinatorAdapter coordinatorAdapter;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -85,14 +102,52 @@ public class AddNewEventActivity extends AppCompatActivity {
         Add_new_date = (ImageView) findViewById(R.id.Add_new_date);
         event_day_layout = (LinearLayout) findViewById(R.id.event_day_layout);
         uploadedPhotoLL = (LinearLayout) findViewById(R.id.img_uploaded_ll);
-        date = new ArrayList<EditText>();
-        startTime = new ArrayList<EditText>();
-        endTime = new ArrayList<EditText>();
-        dateData = new ArrayList<Long>();
-        startTimeData = new ArrayList<Long>();
-        endTimeData = new ArrayList<Long>();
-        imgLocationsData = new ArrayList<>();
+        containerCoordinators = (LinearLayout) findViewById(R.id.ll_add_coordinators);
+        input_event_cooordinator = (AutoCompleteTextView) findViewById(R.id.coordinator_name);
         coordinatorsData = new ArrayList<>();
+        coordinatorsAll = new ArrayList<>();
+
+        //coordinatorsAll.add(new Coordinator("Kushank", "k@g.com", null, null));
+        //coordinatorsAll.add(new Coordinator("Saini", "s@g.com", null, null));
+        //coordinatorsAll.add(new Coordinator("Naman", "n@g.com", null, null));
+        coordinatorAdapter = new CoordinatorAdapter(
+                this,
+                R.layout.coordinator_item_view,
+                R.id.coordinator_item_name,
+                coordinatorsAll
+        );
+
+        input_event_cooordinator.setAdapter(coordinatorAdapter);
+        input_event_cooordinator.setThreshold(1);
+        input_event_cooordinator.setInputType(InputType.TYPE_CLASS_TEXT);
+        input_event_cooordinator.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                input_event_cooordinator.showDropDown();
+            }
+        });
+        input_event_cooordinator.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Coordinator coordinator = (Coordinator) adapterView.getAdapter().getItem(i);
+                coordinatorsData.add(coordinator);
+                LinearLayout v = (LinearLayout) LayoutInflater.from(AddNewEventActivity.this).inflate(R.layout.add_coordinator_tv_item, null, false);
+                ((TextView) v.findViewById(R.id.tvUserName)).setText(coordinator.getName());
+                ((TextView) v.findViewById(R.id.tvUserId)).setText(coordinator.getEmail());
+                containerCoordinators.addView(v);
+                input_event_cooordinator.setText("", false);
+                hideKeyboard();
+            }
+        });
+
+        date = new ArrayList<>();
+        startTime = new ArrayList<>();
+        endTime = new ArrayList<>();
+        dateData = new ArrayList<>();
+        startTimeData = new ArrayList<>();
+        endTimeData = new ArrayList<>();
+        imgLocationsData = new ArrayList<>();
+        coordinatorsAll = new ArrayList<>();
 
         count = 0;
 
@@ -119,6 +174,10 @@ public class AddNewEventActivity extends AppCompatActivity {
         pd.setCanceledOnTouchOutside(false);
         pd.setCancelable(false);
         pd.setIndeterminate(false);
+
+        clubNameData = FirebaseAuth.getInstance().getCurrentUser().getEmail().split("@")[0];
+
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("coordinators").child(clubNameData);
     }
 
     @Override
@@ -457,7 +516,7 @@ public class AddNewEventActivity extends AppCompatActivity {
         boolean isUntouched = (eventVenueData.equals("") &&
                 eventNameData.equals("") &&
                 descriptionData.equals("") &&
-                coordinatorsData.size() == 0 &&
+                coordinatorsAll.size() == 0 &&
                 imgLocationsData.size() == 0 &&
                 dateData.size() == 1 &&
                 startTimeData.size() == 1 &&
@@ -493,6 +552,94 @@ public class AddNewEventActivity extends AppCompatActivity {
         eventVenueData = input_event_venue.getText().toString().trim();
         clubNameData = input_clubname.getText().toString().trim();
         descriptionData = input_description.getText().toString().trim();
+    }
+
+    void hideKeyboard() {
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            assert imm != null;
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        detachDatabaseReadListener();
+        coordinatorsAll.clear();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        attachDatabaseReadListener();
+        updateList();
+    }
+
+    private void detachDatabaseReadListener() {
+        if (mChildEventListener != null) {
+            mDatabaseReference.removeEventListener(mChildEventListener);
+            mChildEventListener = null;
+        }
+    }
+
+    private void attachDatabaseReadListener() {
+        if (mChildEventListener == null) {
+            mChildEventListener = new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    try {
+                        coordinatorsAll.add(dataSnapshot.getValue(Coordinator.class));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    updateList();
+                }
+
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                    try {
+                        Coordinator coodinator = dataSnapshot.getValue(Coordinator.class);
+                        for(Coordinator c : coordinatorsAll)
+                            if(c.getEmail().equals(coodinator.getEmail())) {
+                                coordinatorsAll.remove(c);
+                                break;
+                            }
+                        coordinatorsAll.add(coodinator);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    updateList();
+                }
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                }
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            };
+            mDatabaseReference.addChildEventListener(mChildEventListener);
+        }
+    }
+
+    private void updateList() {
+        coordinatorAdapter = new CoordinatorAdapter(
+                this,
+                R.layout.coordinator_item_view,
+                R.id.coordinator_item_name,
+                coordinatorsAll
+        );
+        input_event_cooordinator.setAdapter(coordinatorAdapter);
     }
 
 }
