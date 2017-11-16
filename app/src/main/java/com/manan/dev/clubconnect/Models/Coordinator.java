@@ -1,10 +1,12 @@
 package com.manan.dev.clubconnect.Models;
 
+import android.support.annotation.NonNull;
+
 /**
  * Created by naman on 11/4/2017.
  */
 
-public class Coordinator {
+public class Coordinator implements Comparable<Coordinator>{
     String name,email,phone, photo;
 
     public Coordinator() {
@@ -22,6 +24,8 @@ public class Coordinator {
         this.email = email;
         this.phone = phone;
     }
+
+
 
     public String getName() {
         return name;
@@ -53,5 +57,10 @@ public class Coordinator {
 
     public void setPhoto(String photo) {
         this.photo = photo;
+    }
+
+    @Override
+    public int compareTo(@NonNull Coordinator coordinator) {
+        return this.getName().compareTo(coordinator.getName());
     }
 }

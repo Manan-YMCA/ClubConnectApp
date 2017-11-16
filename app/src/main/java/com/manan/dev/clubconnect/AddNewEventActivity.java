@@ -60,6 +60,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import static java.util.Collections.sort;
+
 public class AddNewEventActivity extends AppCompatActivity {
     String clubName;
     private EditText input_eventname, input_event_venue, input_clubname, input_description, input_date, input_start_time, input_end_time;
@@ -633,6 +635,7 @@ public class AddNewEventActivity extends AppCompatActivity {
     }
 
     private void updateList() {
+        sort(coordinatorsAll);
         coordinatorAdapter = new CoordinatorAdapter(
                 this,
                 R.layout.coordinator_item_view,

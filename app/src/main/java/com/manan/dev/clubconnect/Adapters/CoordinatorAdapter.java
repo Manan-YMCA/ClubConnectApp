@@ -11,9 +11,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.manan.dev.clubconnect.Models.Coordinator;
 import com.manan.dev.clubconnect.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,14 +62,9 @@ public class CoordinatorAdapter extends ArrayAdapter<Coordinator> {
         if (coordinator != null) {
             TextView lblName = (TextView) view.findViewById(R.id.coordinator_item_name);
             ImageView imgView = (ImageView) view.findViewById(R.id.cancel_coordinator);
-            imgView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // removeCoordinatorfromEvent();
-                }
-            });
-            if (lblName != null)
-                lblName.setText(coordinator.getName());
+            lblName.setText(coordinator.getName());
+            Log.d("getView",coordinator.getPhoto());
+            Picasso.with(context).load(coordinator.getPhoto()).resize(50,50).centerCrop().into(imgView);
         }
         return view;
     }
