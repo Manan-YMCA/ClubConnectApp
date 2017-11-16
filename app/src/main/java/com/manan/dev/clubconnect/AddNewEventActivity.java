@@ -5,14 +5,13 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -27,7 +26,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
@@ -44,13 +42,13 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
@@ -68,12 +66,12 @@ import java.util.Locale;
 import static java.util.Collections.sort;
 
 public class AddNewEventActivity extends AppCompatActivity {
-    String clubName;
-    private EditText input_eventname, input_event_venue, input_clubname, input_description, input_date, input_start_time, input_end_time;
+    private EditText input_eventname;
+    private EditText input_event_venue;
+    private EditText input_clubname;
+    private EditText input_description;
     private AutoCompleteTextView input_event_cooordinator;
-    private ImageView Add_new_date;
     private LinearLayout event_day_layout;
-    private LinearLayout uploadedPhotoLL;
     private LinearLayout containerCoordinators;
     int count = 0, PICK_IMAGE_REQUEST = 111;
     ArrayList<EditText> date;
@@ -84,7 +82,6 @@ public class AddNewEventActivity extends AppCompatActivity {
     //private ArrayList<Coordinator> coordinatorsData;
     //private String eventNameData, eventVenueData, clubNameData, descriptionData;
     private Event event;
-    private Drawable drawableOriginal;
     private StorageReference firebaseStorage;
     private ProgressDialog pd;
 
@@ -101,16 +98,17 @@ public class AddNewEventActivity extends AppCompatActivity {
 
         firebaseStorage = FirebaseStorage.getInstance().getReference();
 
+        ImageView add_new_date = (ImageView) findViewById(R.id.Add_new_date);
+        EditText input_date = (EditText) findViewById(R.id.input_date);
+        EditText input_start_time = (EditText) findViewById(R.id.input_start_time);
+        EditText input_end_time = (EditText) findViewById(R.id.input_end_time);
+
+
         input_eventname = (EditText) findViewById(R.id.input_eventname);
         input_event_venue = (EditText) findViewById(R.id.input_event_venu);
         input_clubname = (EditText) findViewById(R.id.input_clubname);
         input_description = (EditText) findViewById(R.id.input_description);
-        input_date = (EditText) findViewById(R.id.input_date);
-        input_start_time = (EditText) findViewById(R.id.input_start_time);
-        input_end_time = (EditText) findViewById(R.id.input_end_time);
-        Add_new_date = (ImageView) findViewById(R.id.Add_new_date);
         event_day_layout = (LinearLayout) findViewById(R.id.event_day_layout);
-        uploadedPhotoLL = (LinearLayout) findViewById(R.id.img_uploaded_ll);
         containerCoordinators = (LinearLayout) findViewById(R.id.ll_add_coordinators);
         input_event_cooordinator = (AutoCompleteTextView) findViewById(R.id.coordinator_name);
         event = new Event();
@@ -143,9 +141,9 @@ public class AddNewEventActivity extends AppCompatActivity {
         input_event_cooordinator.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                final Coordinator coordinator = (Coordinator) coordinatorsAll.get(i);
+                final Coordinator coordinator = coordinatorsAll.get(i);
                 event.coordinatorID.add(coordinator.getEmail());
-                final LinearLayout v = (LinearLayout) LayoutInflater.from(AddNewEventActivity.this).inflate(R.layout.add_coordinator_tv_item, null, false);
+                @SuppressLint("InflateParams") final LinearLayout v = (LinearLayout) LayoutInflater.from(AddNewEventActivity.this).inflate(R.layout.add_coordinator_tv_item, null, false);
                 ((TextView) v.findViewById(R.id.tvUserName)).setText(coordinator.getName());
                 ((TextView) v.findViewById(R.id.tvUserId)).setText(coordinator.getPhone());
                 v.findViewById(R.id.removeCoordinator).setOnClickListener(new View.OnClickListener() {
@@ -184,19 +182,20 @@ public class AddNewEventActivity extends AppCompatActivity {
         startTime.get(count).setFocusable(false);
         date.get(count).setFocusable(false);
         endTime.get(count).setFocusable(false);
-        drawableOriginal = input_date.getBackground();
 
-        clubNameData = FirebaseAuth.getInstance().getCurrentUser().getEmail().split("@")[0];
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        assert user != null;
+        String userEmail = user.getEmail();
+        assert userEmail != null;
+        clubNameData = userEmail.split("@")[0];
+
         input_clubname.setText(clubNameData);
 
-        Add_new_date.setOnClickListener(newEventAdditionListener());
+        add_new_date.setOnClickListener(newEventAdditionListener());
         pd = new ProgressDialog(this);
-        pd.setMessage("Loading...");
+        pd.setMessage("Please Wait...");
         pd.setCanceledOnTouchOutside(false);
         pd.setCancelable(false);
-        pd.setIndeterminate(false);
-
-        clubNameData = FirebaseAuth.getInstance().getCurrentUser().getEmail().split("@")[0];
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("coordinators").child(clubNameData);
     }
@@ -211,7 +210,7 @@ public class AddNewEventActivity extends AppCompatActivity {
 
             float finalWidth = 400;
             try {
-                Bitmap bitmap = null;
+                Bitmap bitmap;
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imgLocationsData.get(imgLocationsData.size() - 1));
                 bitmap = Bitmap.createScaledBitmap(bitmap, (int) finalWidth, (int) (finalWidth / bitmap.getWidth() * bitmap.getHeight()),
                         true);
@@ -230,8 +229,6 @@ public class AddNewEventActivity extends AppCompatActivity {
             container.setVisibility(View.VISIBLE);
         final RelativeLayout relativeLayout = new RelativeLayout(this);
         RelativeLayout.LayoutParams rlLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        //TODO: get from dimens.xml
-//        rlLayoutParams.setMargins(0, 10, 0, 10);
         relativeLayout.setLayoutParams(rlLayoutParams);
         relativeLayout.setPadding(0, (int) getResources().getDimension(R.dimen.ten), 0, 0);
 
@@ -265,28 +262,23 @@ public class AddNewEventActivity extends AppCompatActivity {
     }
 
     void uploadEvent() {
+        pd.setIndeterminate(false);
+        pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        pd.setMax(100);
         pd.show();
         event.setEventName(input_eventname.getText().toString());
         event.setEventDesc(input_description.getText().toString());
         event.setEventVenue(input_event_venue.getText().toString());
-        final ArrayList<StorageTask<UploadTask.TaskSnapshot>> promises = uploadImagesToFirebase();
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                boolean alluploaded = true;
-                for (int i = 0; i < promises.size(); i++) {
-                    while (!promises.get(i).isComplete()) ;
-                    if(!promises.get(i).isSuccessful())
-                        alluploaded=false;
-                }
-                if(alluploaded)
-                    uploadEventData();
-            }
-        };
-        thread.start();
+        new ImageUpload(uploadImagesToFirebase()).execute();
+
     }
 
     private void uploadEventData() {
+        pd.setIndeterminate(true);
+        pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        pd.setProgress(0);
+        pd.show();
+
         FirebaseDatabase.getInstance().getReference().child("events").child(clubNameData).push().setValue(event).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -300,10 +292,8 @@ public class AddNewEventActivity extends AppCompatActivity {
     }
 
     ArrayList<StorageTask<UploadTask.TaskSnapshot>> uploadImagesToFirebase() {
-        ArrayList<StorageTask<UploadTask.TaskSnapshot>> promises = new ArrayList<>();
 
-        pd.setMax(100);
-        pd.show();
+        ArrayList<StorageTask<UploadTask.TaskSnapshot>> promises = new ArrayList<>();
 
         for (int i = 0; i < imgLocationsData.size(); i++) {
             String imgName = imgLocationsData.get(i).getLastPathSegment();
@@ -317,26 +307,19 @@ public class AddNewEventActivity extends AppCompatActivity {
             StorageTask<UploadTask.TaskSnapshot> promise = uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(AddNewEventActivity.this, "Upload successful", Toast.LENGTH_SHORT).show();
-                    try {
-                        event.photoID.posters.add(taskSnapshot.getDownloadUrl().toString());
-                    } catch (Exception e) {
-                        Toast.makeText(AddNewEventActivity.this, "Upload Error!", Toast.LENGTH_SHORT).show();
-                    }
-                    pd.hide();
+                    Toast.makeText(AddNewEventActivity.this, "Image Upload successful", Toast.LENGTH_SHORT).show();
+                    Uri uri = taskSnapshot.getDownloadUrl();
+                    assert uri != null;
+                    event.photoID.posters.add(uri.toString());
+
+                    int cur = pd.getProgress();
+
+                    pd.setProgress((int) (cur + 100.0 / imgLocationsData.size()));
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(AddNewEventActivity.this, "Upload successful", Toast.LENGTH_SHORT).show();
-                    pd.hide();
-                }
-            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                    float transferred = taskSnapshot.getBytesTransferred();
-                    float total = taskSnapshot.getTotalByteCount();
-                    pd.setProgress((int) (transferred / total * 100.0 / imgLocationsData.size()));
+                    Toast.makeText(AddNewEventActivity.this, "Image Upload failed", Toast.LENGTH_SHORT).show();
                 }
             });
             promises.add(promise);
@@ -390,7 +373,7 @@ public class AddNewEventActivity extends AppCompatActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    @SuppressLint("ResourceType")
+    @SuppressLint({"ResourceType", "SetTextI18n"})
     LinearLayout layoutreturner(int count) {
         LinearLayout rLayout = new LinearLayout(AddNewEventActivity.this);
         rLayout.setBackground(getResources().getDrawable(R.drawable.border_textview));
@@ -398,8 +381,8 @@ public class AddNewEventActivity extends AppCompatActivity {
         rLayout.setOrientation(LinearLayout.HORIZONTAL);
         int fifteen = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, r.getDisplayMetrics());
         int five = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, r.getDisplayMetrics());
-        int sixty = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 60, r.getDisplayMetrics());
-        int zero = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0, r.getDisplayMetrics());
+        //int sixty = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 60, r.getDisplayMetrics());
+        //int zero = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0, r.getDisplayMetrics());
 
         //params for main layout
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
@@ -553,7 +536,7 @@ public class AddNewEventActivity extends AppCompatActivity {
                 TimePickerDialog mTimePicker = new TimePickerDialog(AddNewEventActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        String displayTime = String.format("%02d:%02d", hourOfDay, minute);
+                        String displayTime = String.format(Locale.ENGLISH,"%02d:%02d", hourOfDay, minute);
                         if (isStart)
                             startTime.get(i).setText(displayTime);
                         else
@@ -615,6 +598,7 @@ public class AddNewEventActivity extends AppCompatActivity {
         event.setEventDesc(input_description.getText().toString().trim());
     }
 
+    /*
     void hideKeyboard() {
         View view = this.getCurrentFocus();
         if (view != null) {
@@ -623,6 +607,7 @@ public class AddNewEventActivity extends AppCompatActivity {
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
+    */
 
     @Override
     protected void onPause() {
@@ -662,11 +647,13 @@ public class AddNewEventActivity extends AppCompatActivity {
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                     try {
                         Coordinator coodinator = dataSnapshot.getValue(Coordinator.class);
-                        for (Coordinator c : coordinatorsAll)
+                        for (Coordinator c : coordinatorsAll) {
+                            assert coodinator != null;
                             if (c.getEmail().equals(coodinator.getEmail())) {
                                 coordinatorsAll.remove(c);
                                 break;
                             }
+                        }
                         coordinatorsAll.add(coodinator);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -704,4 +691,39 @@ public class AddNewEventActivity extends AppCompatActivity {
         input_event_cooordinator.setAdapter(coordinatorAdapter);
     }
 
+
+    @SuppressLint("StaticFieldLeak")
+    private class ImageUpload extends AsyncTask<Void, Void, Void> {
+        final ArrayList<StorageTask<UploadTask.TaskSnapshot>> promises;
+        boolean alluploaded;
+
+        ImageUpload(ArrayList<StorageTask<UploadTask.TaskSnapshot>> storageTasks) {
+            promises = storageTasks;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            for (int i = 0; i < promises.size(); i++) {
+                while (!promises.get(i).isComplete());
+                if(!promises.get(i).isSuccessful())
+                    alluploaded=false;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            pd.hide();
+            Toast.makeText(AddNewEventActivity.this, "Image Upload Complete!", Toast.LENGTH_SHORT).show();
+            if(alluploaded) {
+                uploadEventData();
+            }
+        }
+
+        @Override
+        protected void onPreExecute() {
+            alluploaded = true;
+        }
+    }
 }
