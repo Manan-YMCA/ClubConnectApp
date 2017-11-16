@@ -44,7 +44,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".AdminDashboardActivity" />
-        <activity android:name=".UserDashboardActivity" />
         <activity
             android:name=".AdminZoneActivity"
             android:theme="@style/CodeFont" />
@@ -52,7 +51,11 @@
             android:name=".AddNewEventActivity"
             android:label="Create New Event"
             android:parentActivityName=".AdminDashboardActivity" />
-        <activity android:name=".User.UserClubEventListActivity"></activity>
+        <activity android:name=".User.UserClubEventList" />
+        <activity
+            android:name=".DashboardUserActivity"
+            android:label="@string/title_activity_dashboard_user"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

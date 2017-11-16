@@ -115,68 +115,71 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="15dp"
                 android:background="@drawable/border_textview"
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 android:padding="5dp">
 
                 <TextView
                     android:id="@+id/tv_date_label"
-                    android:layout_width="60dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="5dp"
-                    android:padding="5dp"
+                    android:layout_gravity="center_vertical"
+                    android:padding="15dp"
                     android:text="Day 1"
                     android:textSize="15sp" />
 
-                <EditText
-                    android:id="@+id/input_date"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/tv_date_label"
-                    android:background="@android:drawable/editbox_background"
-                    android:hint="Date"
-                    android:longClickable="false"
-                    android:padding="@dimen/editTextPadding" />
-
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_alignStart="@+id/input_date"
-                    android:layout_below="@+id/input_date"
-                    android:layout_marginTop="5dp"
-                    android:orientation="horizontal">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
                     <EditText
-                        android:id="@+id/input_start_time"
-                        android:layout_width="0dp"
+                        android:id="@+id/input_date"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:background="@android:drawable/editbox_background"
-                        android:hint="Start Time"
+                        android:hint="Date"
                         android:longClickable="false"
-                        android:textSize="12sp" />
+                        android:padding="@dimen/editTextPadding" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="TO"
-                        android:textSize="@dimen/fifteen" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="5dp"
+                        android:orientation="horizontal">
 
-                    <EditText
-                        android:id="@+id/input_end_time"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@android:drawable/editbox_background"
-                        android:hint="End Time"
-                        android:longClickable="false"
-                        android:textSize="12sp" />
+                        <EditText
+                            android:id="@+id/input_start_time"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@android:drawable/editbox_background"
+                            android:hint="Start Time"
+                            android:longClickable="false"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="TO"
+                            android:textSize="@dimen/fifteen" />
+
+                        <EditText
+                            android:id="@+id/input_end_time"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@android:drawable/editbox_background"
+                            android:hint="End Time"
+                            android:longClickable="false"
+                            android:textSize="12sp" />
+                    </LinearLayout>
                 </LinearLayout>
-            </RelativeLayout>
+            </LinearLayout>
 
 
         </LinearLayout>
@@ -224,9 +227,9 @@
             android:id="@+id/img_uploaded_ll"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginBottom="20dp"
             android:orientation="vertical"
             android:padding="10dp"
-            android:layout_marginBottom="20dp"
             android:visibility="gone">
 
         </LinearLayout>

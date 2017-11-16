@@ -2,27 +2,21 @@ package com.manan.dev.clubconnect;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
-import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -138,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
     void LogInStub(String s) {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null && currentUser.getProviders().get(0).equals("facebook.com")) {
-            startActivity(new Intent(MainActivity.this, UserDashboardActivity.class));
+            startActivity(new Intent(MainActivity.this, DashboardUserActivity.class));
             //finish();
         } else if (currentUser != null) {
             Toast.makeText(MainActivity.this, "Switching to Dashboard!", Toast.LENGTH_SHORT).show();
