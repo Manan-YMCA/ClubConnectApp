@@ -49,9 +49,8 @@
             android:theme="@style/CodeFont" />
         <activity
             android:name=".AddNewEventActivity"
-            android:label="Create New Event"
-            android:parentActivityName=".AdminDashboardActivity" />
-        <activity android:name=".User.UserClubEventList" />
+            android:label="Create New Event" />
+        <activity android:name=".User.UserClubEventListActivity" />
         <activity
             android:name=".DashboardUserActivity"
             android:label="@string/title_activity_dashboard_user"

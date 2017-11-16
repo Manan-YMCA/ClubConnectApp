@@ -11,12 +11,14 @@
         android:layout_height="match_parent"
         android:layout_margin="12dp"
         android:layout_marginTop="5dp"
+        android:paddingBottom="20dp"
         android:orientation="vertical">
+
         <LinearLayout
-            android:focusable="true"
-            android:focusableInTouchMode="true"
             android:layout_width="0px"
-            android:layout_height="0px"/>
+            android:layout_height="0px"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/input_layout_eventname"
@@ -31,9 +33,9 @@
                 android:backgroundTint="#FAFAFA"
                 android:hint="Event Name"
                 android:inputType="textCapSentences"
-                android:textSize="15sp"
+                android:nextFocusLeft="@id/input_eventname"
                 android:nextFocusUp="@id/input_eventname"
-                android:nextFocusLeft="@id/input_eventname"/>
+                android:textSize="15sp" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -48,7 +50,9 @@
                 android:backgroundTint="#FAFAFA"
                 android:hint="Event Venue"
                 android:inputType="textCapSentences"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:nextFocusRight="@+id/input_description"
+                android:nextFocusDown="@+id/input_description"/>
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -64,7 +68,8 @@
                 android:enabled="false"
                 android:hint="Club Name"
                 android:inputType="textCapSentences"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -191,43 +196,33 @@
 
         </LinearLayout>
 
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:backgroundTint="#FAFAFA"
+            android:padding="10dp"
+            android:text="Co-ordinators"
+            android:textSize="15sp" />
+
         <LinearLayout
+            android:id="@+id/ll_add_coordinators"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
-            android:layout_marginLeft="3dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="2dp"
-                android:backgroundTint="#FAFAFA"
-                android:text="Co-ordinators"
-                android:textSize="15sp"
-                android:padding="10dp"/>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:id="@+id/ll_add_coordinators"
-                >
-
-                <AutoCompleteTextView
-                    android:id="@+id/coordinator_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="#fff"
-                    android:hint="Names"
-                    android:singleLine="true"
-                    android:textSize="15sp"
-                    android:layout_marginLeft="15dp"/>
-            </LinearLayout>
+            android:orientation="vertical">
         </LinearLayout>
+
+        <AutoCompleteTextView
+            android:id="@+id/coordinator_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:backgroundTint="#aaa"
+            android:hint="Names"
+            android:singleLine="true"
+            android:textSize="15sp" />
+
 
         <ImageView
             android:id="@+id/upload_photos_btn"

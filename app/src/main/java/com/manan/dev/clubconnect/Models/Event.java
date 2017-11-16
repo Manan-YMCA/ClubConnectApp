@@ -1,23 +1,28 @@
 package com.manan.dev.clubconnect.Models;
 
+import java.util.ArrayList;
+
 /**
  * Created by naman on 11/4/2017.
  */
 
 public class Event {
-    String eventName,eventDesc,eventCoordnators,photoLink;
-    long startTime,endTime;
+    public String eventName,eventDesc,eventVenue;
+    public ArrayList<String> coordinatorID;
+    public Photos photoID;
+    public ArrayList<TimeInterval> days;
 
     public Event() {
+        photoID = new Photos();
     }
 
-    public Event(String eventName, String eventDesc, String eventCoordnators, String photoLink, long startTime, long endTime) {
+    public Event(String eventName, String eventDesc, String eventVenue, ArrayList<String> coordinatorID, Photos photoID, ArrayList<TimeInterval> days) {
         this.eventName = eventName;
         this.eventDesc = eventDesc;
-        this.eventCoordnators = eventCoordnators;
-        this.photoLink = photoLink;
-        this.startTime = startTime;
-        this.endTime = endTime;
+        this.eventVenue = eventVenue;
+        this.coordinatorID = coordinatorID;
+        this.photoID = photoID;
+        this.days = days;
     }
 
     public String getEventName() {
@@ -36,35 +41,35 @@ public class Event {
         this.eventDesc = eventDesc;
     }
 
-    public String getEventCoordnators() {
-        return eventCoordnators;
+    public String getEventVenue() {
+        return eventVenue;
     }
 
-    public void setEventCoordnators(String eventCoordnators) {
-        this.eventCoordnators = eventCoordnators;
+    public void setEventVenue(String eventVenue) {
+        this.eventVenue = eventVenue;
     }
 
-    public String getPhotoLink() {
-        return photoLink;
+    public ArrayList<String> getCoordinatorID() {
+        return coordinatorID;
     }
 
-    public void setPhotoLink(String photoLink) {
-        this.photoLink = photoLink;
+    public void setCoordinatorID(ArrayList<String> coordinatorID) {
+        this.coordinatorID = coordinatorID;
     }
 
-    public long getStartTime() {
-        return startTime;
+    public Photos getPhotoID() {
+        return photoID;
     }
 
-    public void setStartTime(long startTime) {
-        this.startTime = startTime;
+    public void setPhotoID(Photos photoID) {
+        this.photoID = photoID;
     }
 
-    public long getEndTime() {
-        return endTime;
+    public ArrayList<TimeInterval> getDays() {
+        return days;
     }
 
-    public void setEndTime(long endTime) {
-        this.endTime = endTime;
+    public void setDays(ArrayList<TimeInterval> days) {
+        this.days = days;
     }
 }
