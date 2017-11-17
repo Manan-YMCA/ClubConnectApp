@@ -13,27 +13,56 @@
         android:layout_height="wrap_content"
         android:padding="0dp"
         android:background="?android:selectableItemBackground"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        >
 
         <ImageView
             android:id="@+id/itemImage"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="150dp"
+            android:layout_height="110dp"
             android:layout_gravity="center_horizontal"
-            android:scaleType="fitCenter"
-            android:src="@drawable/vector_logout" />
+            android:scaleType="centerCrop"
+            android:src="@drawable/login_back" />
 
 
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/itemImage"
-            android:gravity="center"
-            android:padding="5dp"
             android:text="Sample title"
+            android:paddingLeft="5dp"
             android:textColor="@android:color/black"
             android:textSize="18sp" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+        <TextView
+            android:id="@+id/tv_dateTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="25 Nov"
+            android:layout_weight="1"
+            android:textColor="#a9a8a8"
+            android:layout_marginLeft="5dp"
+            android:paddingBottom="5dp"
+            android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/tv_clubname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:text="clubName"
+                android:layout_weight="1"
+                android:layout_marginRight="5dp"
+                android:textColor="#a9a8a8"
+                android:paddingBottom="5dp"
+                android:textSize="14sp" />
+        </LinearLayout>
+
 
 
     </LinearLayout>

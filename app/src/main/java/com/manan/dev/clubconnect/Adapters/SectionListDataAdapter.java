@@ -61,6 +61,7 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
         protected TextView tvTitle;
 
         protected ImageView itemImage;
+        protected  TextView dateTimeTextView;
 
 
         public SingleItemRowHolder(View view) {
@@ -68,6 +69,7 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
 
             this.tvTitle = (TextView) view.findViewById(R.id.tvTitle);
             this.itemImage = (ImageView) view.findViewById(R.id.itemImage);
+            this.dateTimeTextView=(TextView) view.findViewById(R.id.tv_clubname) ;
 
 
             view.setOnClickListener(new View.OnClickListener() {

@@ -181,7 +181,15 @@ public class DashboardUserActivity extends AppCompatActivity
             allSampleData.add(dm);
 
         SectionDataModel fm  = new SectionDataModel();
+        fm.setHeaderTitle("Upcoming Events");
+        ArrayList<SingleItemModel> singItem = new ArrayList<SingleItemModel>();
+        for (int j = 0; j <= 5; j++) {
+            singleItem.add(new SingleItemModel("Item " + j, "URL " + j));
+        }
 
+        fm.setAllItemsInSection(singleItem);
+
+        allSampleData.add(fm);
 
     }
 }
