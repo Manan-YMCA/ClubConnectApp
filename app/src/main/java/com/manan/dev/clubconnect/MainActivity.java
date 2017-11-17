@@ -21,11 +21,13 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -37,15 +39,24 @@ public class MainActivity extends AppCompatActivity {
     AnimationDrawable anim;
     private ProgressDialog pd;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    static boolean offline = true;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if(offline)
+        {
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            offline=false;
+        }
+
         setContentView(R.layout.activity_main);
         containeer = (RelativeLayout) findViewById(R.id.container);
         TransitionDrawable trans = (TransitionDrawable) containeer.getBackground();
         trans.startTransition(3000);
+
         //setTheme(android.R.style.Theme_Black_NoTitleBar_Fullscreen);
 
         if (getIntent().getBooleanExtra("EXIT", false)) {
