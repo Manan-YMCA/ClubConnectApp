@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
@@ -26,6 +27,7 @@ public class DashboardUserActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private FirebaseAuth mAuth;
     private ImageView fbImageView;
+    private TextView tvfbName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,13 +36,21 @@ public class DashboardUserActivity extends AppCompatActivity
         setContentView(R.layout.activity_dashboard_user);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        fbImageView = (ImageView) findViewById(R.id.fbImageView);
+        fbImageView = (ImageView) ((NavigationView)findViewById(R.id.nav_view)).getHeaderView(0).findViewById(R.id.fbImageView);
+        tvfbName = (TextView) ((NavigationView)findViewById(R.id.nav_view)).getHeaderView(0).findViewById(R.id.tvfbName);
         try {
-            Picasso.with(DashboardUserActivity.this).load(mAuth.getCurrentUser().getPhotoUrl()).resize(50,50).centerCrop().into(fbImageView);
+            Picasso.with(DashboardUserActivity.this)
+                    .load(mAuth.getCurrentUser()
+                            .getPhotoUrl()).resize((int)getResources()
+                    .getDimension(R.dimen.t50),(int)getResources().getDimension(R.dimen.t50))
+                    .centerCrop()
+                    .transform(new CircleTransform())
+                    .into(fbImageView);
+            tvfbName.setText(mAuth.getCurrentUser().getDisplayName());
         }
         catch (Exception e){
-            Log.d("imageurl", mAuth.getCurrentUser().getPhotoUrl().toString());
-            Toast.makeText(DashboardUserActivity.this, mAuth.getCurrentUser().getPhotoUrl().toString(), Toast.LENGTH_SHORT).show();
+            Log.d("imageurl", e.toString());
+            Toast.makeText(DashboardUserActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -62,7 +72,7 @@ public class DashboardUserActivity extends AppCompatActivity
         }
     }
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.dashboard_user, menu);
@@ -83,6 +93,7 @@ public class DashboardUserActivity extends AppCompatActivity
 
         return super.onOptionsItemSelected(item);
     }
+    */
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override

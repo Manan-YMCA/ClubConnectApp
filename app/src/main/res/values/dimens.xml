@@ -12,4 +12,6 @@
     <dimen name="nav_header_height">176dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="ten">10dp</dimen>
+    <dimen name="t50">250dp</dimen>
+    <dimen name="dp80">80dp</dimen>
 </resources>
