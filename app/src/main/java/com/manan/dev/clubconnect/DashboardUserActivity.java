@@ -3,6 +3,7 @@ package com.manan.dev.clubconnect;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,19 +13,35 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
+import com.google.firebase.auth.FirebaseAuth;
 import com.manan.dev.clubconnect.R;
+import com.squareup.picasso.Picasso;
 
 public class DashboardUserActivity extends AppCompatActivity
+
         implements NavigationView.OnNavigationItemSelectedListener {
+    private FirebaseAuth mAuth;
+    private ImageView fbImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mAuth = FirebaseAuth.getInstance();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard_user);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        fbImageView = (ImageView) findViewById(R.id.fbImageView);
+        try {
+            Picasso.with(DashboardUserActivity.this).load(mAuth.getCurrentUser().getPhotoUrl()).resize(50,50).centerCrop().into(fbImageView);
+        }
+        catch (Exception e){
+            Log.d("imageurl", mAuth.getCurrentUser().getPhotoUrl().toString());
+            Toast.makeText(DashboardUserActivity.this, mAuth.getCurrentUser().getPhotoUrl().toString(), Toast.LENGTH_SHORT).show();
+        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -83,7 +100,16 @@ public class DashboardUserActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_share) {
 
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_logout) {
+                                try {
+                                    mAuth.signOut();
+                                    LoginManager.getInstance().logOut();
+                                } catch (Exception e){
+                                    e.printStackTrace();
+                                }
+                                finish();
+                                return true;
+
 
         }
 

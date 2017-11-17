@@ -20,6 +20,10 @@
             android:id="@+id/nav_manage"
             android:icon="@drawable/vector_name"
             android:title="About" />
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/vector_logout"
+            android:title="Logout" />
     </group>
 
     <item android:title="More About App">

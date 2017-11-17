@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
         containeer = (RelativeLayout) findViewById(R.id.container);
-
         TransitionDrawable trans = (TransitionDrawable) containeer.getBackground();
         trans.startTransition(3000);
         //setTheme(android.R.style.Theme_Black_NoTitleBar_Fullscreen);
@@ -77,8 +76,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Log.d(TAG, "facebook:onSuccess:" + loginResult);
+                
                 //String accessToken = loginResult.getAccessToken().getToken();
-
                 // save accessToken to SharedPreference
                 //saveAccessToken(accessToken);
                 handleFacebookAccessToken(loginResult.getAccessToken());
