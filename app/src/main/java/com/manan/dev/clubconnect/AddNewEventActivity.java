@@ -151,15 +151,11 @@ public class AddNewEventActivity extends AppCompatActivity {
                     public void onClick(View v1) {
                         containerCoordinators.removeView(v);
                         event.coordinatorID.remove(coordinator.getEmail());
-                        coordinatorsAll.add(coordinator);
-                        updateList();
                     }
                 });
                 Picasso.with(AddNewEventActivity.this).load(coordinator.getPhoto()).resize(200, 200).centerCrop().transform(new CircleTransform()).into((ImageView) v.findViewById(R.id.ivUserIcon));
                 containerCoordinators.addView(v);
-                input_event_cooordinator.setText("", false);
-                coordinatorsAll.remove(coordinator);
-                updateList();
+                input_event_cooordinator.setText(" ", true);
                 //hideKeyboard();
             }
         });
@@ -282,8 +278,10 @@ public class AddNewEventActivity extends AppCompatActivity {
         FirebaseDatabase.getInstance().getReference().child("events").child(clubNameData).push().setValue(event).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful())
-                    Toast.makeText(AddNewEventActivity.this, "Project complete",Toast.LENGTH_SHORT).show();
+                if(task.isSuccessful()) {
+                    Toast.makeText(AddNewEventActivity.this, "Project complete", Toast.LENGTH_SHORT).show();
+                    AddNewEventActivity.this.finish();
+                }
                 else
                     Toast.makeText(AddNewEventActivity.this, "Project Failed",Toast.LENGTH_SHORT).show();
                 pd.hide();
@@ -562,7 +560,7 @@ public class AddNewEventActivity extends AppCompatActivity {
         boolean isUntouched = (event.getEventVenue().equals("") &&
                 event.getEventName().equals("") &&
                 event.getEventDesc().equals("") &&
-                coordinatorsAll.size() == 0 &&
+                event.coordinatorID.size() == 0 &&
                 imgLocationsData.size() == 0 &&
                 event.days.size() == 1 &&
                 event.days.get(0).getDate() == 0 &&
@@ -620,7 +618,7 @@ public class AddNewEventActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         attachDatabaseReadListener();
-        updateList();
+        //updateList();
     }
 
     private void detachDatabaseReadListener() {

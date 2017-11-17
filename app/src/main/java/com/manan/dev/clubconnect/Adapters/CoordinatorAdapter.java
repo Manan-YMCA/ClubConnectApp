@@ -18,6 +18,8 @@ import com.manan.dev.clubconnect.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class CoordinatorAdapter extends ArrayAdapter<Coordinator> {
@@ -85,7 +87,7 @@ public class CoordinatorAdapter extends ArrayAdapter<Coordinator> {
             if(constraint != null) {
                 suggestions.clear();
                 for (Coordinator coordinator : itemsAll) {
-                    if(coordinator.getName().toLowerCase().startsWith(constraint.toString().toLowerCase())){
+                    if(coordinator.getName().toLowerCase().startsWith(constraint.toString().toLowerCase().trim())){
                         suggestions.add(coordinator);
                     }
                 }
@@ -94,7 +96,11 @@ public class CoordinatorAdapter extends ArrayAdapter<Coordinator> {
                 filterResults.count = suggestions.size();
                 return filterResults;
             } else {
-                return new FilterResults();
+                Collections.copy(suggestions,itemsAll);
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = suggestions;
+                filterResults.count = suggestions.size();
+                return filterResults;
             }
         }
         @Override
