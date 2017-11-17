@@ -3,6 +3,8 @@ package com.manan.dev.clubconnect;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -19,8 +21,13 @@ import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
+import com.manan.dev.clubconnect.Adapters.RecyclerViewDataAdapter;
+import com.manan.dev.clubconnect.Models.SectionDataModel;
+import com.manan.dev.clubconnect.Models.SingleItemModel;
 import com.manan.dev.clubconnect.R;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 public class DashboardUserActivity extends AppCompatActivity
 
@@ -28,30 +35,57 @@ public class DashboardUserActivity extends AppCompatActivity
     private FirebaseAuth mAuth;
     private ImageView fbImageView;
     private TextView tvfbName;
+    private Toolbar toolbar;
+
+
+    ArrayList<SectionDataModel> allSampleData;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mAuth = FirebaseAuth.getInstance();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard_user);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        fbImageView = (ImageView) ((NavigationView)findViewById(R.id.nav_view)).getHeaderView(0).findViewById(R.id.fbImageView);
-        tvfbName = (TextView) ((NavigationView)findViewById(R.id.nav_view)).getHeaderView(0).findViewById(R.id.tvfbName);
+
+        allSampleData = new ArrayList<SectionDataModel>();
+
+
+        createDummyData();
+
+
+        RecyclerView my_recycler_view = (RecyclerView) findViewById(R.id.my_recycler_view);
+
+        my_recycler_view.setHasFixedSize(true);
+
+        RecyclerViewDataAdapter adapter = new RecyclerViewDataAdapter(this, allSampleData);
+
+        my_recycler_view.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+
+        my_recycler_view.setAdapter(adapter);
+
+
+        //Fb Image  and  name fetching Code
+        fbImageView = (ImageView) ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0).findViewById(R.id.fbImageView);
+        tvfbName = (TextView) ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0).findViewById(R.id.tvfbName);
         try {
             Picasso.with(DashboardUserActivity.this)
                     .load(mAuth.getCurrentUser()
-                            .getPhotoUrl()).resize((int)getResources()
-                    .getDimension(R.dimen.t50),(int)getResources().getDimension(R.dimen.t50))
+                            .getPhotoUrl()).resize((int) getResources()
+                    .getDimension(R.dimen.t50), (int) getResources().getDimension(R.dimen.t50))
                     .centerCrop()
                     .transform(new CircleTransform())
                     .into(fbImageView);
             tvfbName.setText(mAuth.getCurrentUser().getDisplayName());
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             Log.d("imageurl", e.toString());
             Toast.makeText(DashboardUserActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
         }
+
+
+        //drawer Layout Code
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -112,20 +146,42 @@ public class DashboardUserActivity extends AppCompatActivity
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_logout) {
-                                try {
-                                    mAuth.signOut();
-                                    LoginManager.getInstance().logOut();
-                                } catch (Exception e){
-                                    e.printStackTrace();
-                                }
-                                finish();
-                                return true;
+            try {
+                mAuth.signOut();
+                LoginManager.getInstance().logOut();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            finish();
+            return true;
 
 
         }
 
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void createDummyData() {
+
+
+            SectionDataModel dm  = new SectionDataModel();
+
+            dm.setHeaderTitle("Clubs");
+
+            ArrayList<SingleItemModel> singleItem = new ArrayList<SingleItemModel>();
+            for (int j = 0; j <= 5; j++) {
+                singleItem.add(new SingleItemModel("Item " + j, "URL " + j));
+            }
+
+            dm.setAllItemsInSection(singleItem);
+
+            allSampleData.add(dm);
+
+        SectionDataModel fm  = new SectionDataModel();
+
+
     }
 }
