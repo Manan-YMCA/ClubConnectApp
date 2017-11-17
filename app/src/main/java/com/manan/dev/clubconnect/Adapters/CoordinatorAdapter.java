@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.manan.dev.clubconnect.CircleTransform;
 import com.manan.dev.clubconnect.Models.Coordinator;
 import com.manan.dev.clubconnect.R;
 import com.squareup.picasso.Picasso;
@@ -66,7 +67,7 @@ public class CoordinatorAdapter extends ArrayAdapter<Coordinator> {
             ImageView imgView = (ImageView) view.findViewById(R.id.cancel_coordinator);
             lblName.setText(coordinator.getName());
             Log.d("getView",coordinator.getPhoto());
-            Picasso.with(context).load(coordinator.getPhoto()).resize(50,50).centerCrop().into(imgView);
+            Picasso.with(context).load(coordinator.getPhoto()).resize(50,50).centerCrop().transform(new CircleTransform()).into(imgView);
         }
         return view;
     }

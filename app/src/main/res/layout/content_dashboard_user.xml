@@ -8,4 +8,7 @@
     tools:context="com.manan.dev.clubconnect.DashboardUserActivity"
     tools:showIn="@layout/app_bar_dashboard_user">
 
+
+   
+
 </android.support.constraint.ConstraintLayout>
