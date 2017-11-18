@@ -11,7 +11,6 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/details"
         android:orientation="vertical"
-        android:weightSum="6"
         >
 
         <ImageView
@@ -19,20 +18,21 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
-            android:layout_margin="20dp"
+            android:layout_marginRight="5dp"
             android:layout_weight="4"
-            android:src="@drawable/back_login" />
+            android:scaleType="fitCenter"
+            android:src="@drawable/front_cover" />
 
-        <ImageView
-            android:id="@+id/logo"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/heading"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center"
-            android:layout_marginBottom="13dp"
-            android:layout_weight="1"
-            android:src="@drawable/name_logo" />
+        <!--<ImageView-->
+            <!--android:id="@+id/logo"-->
+            <!--android:layout_width="300dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_above="@+id/heading"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:layout_marginBottom="13dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:src="@drawable/name_logo" />-->
     </LinearLayout>
 
     <TextView

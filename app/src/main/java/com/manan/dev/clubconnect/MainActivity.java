@@ -55,7 +55,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         containeer = (RelativeLayout) findViewById(R.id.container);
         TransitionDrawable trans = (TransitionDrawable) containeer.getBackground();
-        trans.startTransition(3000);
+            trans.startTransition(8000);
+
+
 
         //setTheme(android.R.style.Theme_Black_NoTitleBar_Fullscreen);
 

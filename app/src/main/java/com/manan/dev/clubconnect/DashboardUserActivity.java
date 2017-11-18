@@ -1,5 +1,6 @@
 package com.manan.dev.clubconnect;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -78,6 +79,8 @@ public class DashboardUserActivity extends AppCompatActivity
                     .transform(new CircleTransform())
                     .into(fbImageView);
             tvfbName.setText(mAuth.getCurrentUser().getDisplayName());
+            //String urll=mAuth.getCurrentUser().getPhotoUrl().toString();
+            //Toast.makeText(DashboardUserActivity.this,urll,Toast.LENGTH_LONG).show();
         } catch (Exception e) {
             Log.d("imageurl", e.toString());
             Toast.makeText(DashboardUserActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
@@ -173,7 +176,8 @@ public class DashboardUserActivity extends AppCompatActivity
 
         ArrayList<SingleItemModel> bookmarkedEvents = new ArrayList<SingleItemModel>();
         for (int j = 0; j <= 5; j++) {
-            bookmarkedEvents.add(new SingleItemModel("id"+j, "eventName"+j, "url+'j", "clubname"+j, 123+j, 123+j));
+            String urll=mAuth.getCurrentUser().getPhotoUrl().toString();
+            bookmarkedEvents.add(new SingleItemModel("id"+j, "eventName"+j, urll, "clubname"+j, 123+j, 123+j));
         }
 
         dm.setAllItemsInSection(bookmarkedEvents);

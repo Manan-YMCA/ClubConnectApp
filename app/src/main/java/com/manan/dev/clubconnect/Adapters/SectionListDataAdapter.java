@@ -10,9 +10,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.manan.dev.clubconnect.EventDetailsActivity;
 import com.manan.dev.clubconnect.Models.SingleItemModel;
 import com.manan.dev.clubconnect.R;
+import com.manan.dev.clubconnect.User.EventsDetailsActivity;
 
 import java.util.ArrayList;
 
@@ -49,12 +49,7 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
 
 
 
-       /* Glide.with(mContext)
-                .load(feedItem.getImageURL())
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .centerCrop()
-                .error(R.drawable.bg)
-                .into(feedListRowHolder.thumbView);*/
+
     }
 
     @Override
@@ -78,14 +73,14 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
             this.itemImage = (ImageView) view.findViewById(R.id.itemImage);
             this.dateTimeTextView=(TextView) view.findViewById(R.id.tv_dateTime);
             this.tvClubName = (TextView) view.findViewById(R.id.tv_clubname);
-
+//
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
                     int position  = getLayoutPosition();
                     Toast.makeText(mContext, itemsList.get(position).getEventId(), Toast.LENGTH_LONG).show();
-                    mContext.startActivity(new Intent(mContext, EventDetailsActivity.class).putExtra("eventToken", itemsList.get(position).getEventId()));
+                    mContext.startActivity(new Intent(mContext, EventsDetailsActivity.class).putExtra("eventToken", itemsList.get(position).getEventId()));
 
                 }
             });
