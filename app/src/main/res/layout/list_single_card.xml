@@ -10,7 +10,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:padding="0dp"
         android:background="?android:selectableItemBackground"
         android:orientation="vertical"
@@ -39,16 +39,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-        <TextView
-            android:id="@+id/tv_dateTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="25 Nov"
-            android:layout_weight="1"
-            android:textColor="#a9a8a8"
-            android:layout_marginLeft="5dp"
-            android:paddingBottom="5dp"
-            android:textSize="14sp"/>
+            <TextView
+                android:id="@+id/tv_dateTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="25 Nov"
+                android:layout_weight="1"
+                android:textColor="#a9a8a8"
+                android:layout_marginLeft="5dp"
+                android:layout_marginBottom="@dimen/five"
+                android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/tv_clubname"
@@ -59,7 +59,7 @@
                 android:layout_weight="1"
                 android:layout_marginRight="5dp"
                 android:textColor="#a9a8a8"
-                android:paddingBottom="5dp"
+                android:layout_marginBottom="@dimen/five"
                 android:textSize="14sp" />
         </LinearLayout>
 

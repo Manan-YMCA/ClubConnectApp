@@ -40,7 +40,10 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
 
         SingleItemModel singleItem = itemsList.get(i);
 
-        holder.tvTitle.setText(singleItem.getName());
+        holder.tvTitle.setText(singleItem.getEventName());
+        holder.dateTimeTextView.setText(Long.toString(singleItem.getEventDate()) + "," + Long.toString(singleItem.getEventTime()));
+        holder.tvClubName.setText(singleItem.getClubName());
+
 
 
        /* Glide.with(mContext)
@@ -62,6 +65,7 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
 
         protected ImageView itemImage;
         protected  TextView dateTimeTextView;
+        protected TextView tvClubName;
 
 
         public SingleItemRowHolder(View view) {
@@ -69,7 +73,8 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
 
             this.tvTitle = (TextView) view.findViewById(R.id.tvTitle);
             this.itemImage = (ImageView) view.findViewById(R.id.itemImage);
-            this.dateTimeTextView=(TextView) view.findViewById(R.id.tv_clubname) ;
+            this.dateTimeTextView=(TextView) view.findViewById(R.id.tv_dateTime);
+            this.tvClubName = (TextView) view.findViewById(R.id.tv_clubname);
 
 
             view.setOnClickListener(new View.OnClickListener() {

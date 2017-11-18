@@ -36,9 +36,10 @@ public class DashboardUserActivity extends AppCompatActivity
     private ImageView fbImageView;
     private TextView tvfbName;
     private Toolbar toolbar;
+    private DrawerLayout drawer;
 
 
-    ArrayList<SectionDataModel> allSampleData;
+    ArrayList<SectionDataModel> eventListForRecyclerView;
 
 
     @Override
@@ -49,8 +50,7 @@ public class DashboardUserActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        allSampleData = new ArrayList<SectionDataModel>();
-
+        eventListForRecyclerView = new ArrayList<SectionDataModel>();
 
         createDummyData();
 
@@ -59,7 +59,7 @@ public class DashboardUserActivity extends AppCompatActivity
 
         my_recycler_view.setHasFixedSize(true);
 
-        RecyclerViewDataAdapter adapter = new RecyclerViewDataAdapter(this, allSampleData);
+        RecyclerViewDataAdapter adapter = new RecyclerViewDataAdapter(this, eventListForRecyclerView);
 
         my_recycler_view.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
@@ -86,9 +86,9 @@ public class DashboardUserActivity extends AppCompatActivity
 
         //drawer Layout Code
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                DashboardUserActivity.this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -98,10 +98,10 @@ public class DashboardUserActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
+            drawer.closeDrawer(GravityCompat.START, true);
+        }
+        if(!drawer.isDrawerOpen(GravityCompat.START)) {
             super.onBackPressed();
         }
     }
@@ -167,29 +167,26 @@ public class DashboardUserActivity extends AppCompatActivity
     public void createDummyData() {
 
 
-            SectionDataModel dm  = new SectionDataModel();
+        SectionDataModel dm  = new SectionDataModel();
 
-            dm.setHeaderTitle("Clubs");
+        dm.setHeaderTitle("Bookmarked Events");
 
-            ArrayList<SingleItemModel> singleItem = new ArrayList<SingleItemModel>();
-            for (int j = 0; j <= 5; j++) {
-                singleItem.add(new SingleItemModel("Item " + j, "URL " + j));
-            }
-
-            dm.setAllItemsInSection(singleItem);
-
-            allSampleData.add(dm);
-
-        SectionDataModel fm  = new SectionDataModel();
-        fm.setHeaderTitle("Upcoming Events");
-        ArrayList<SingleItemModel> singItem = new ArrayList<SingleItemModel>();
+        ArrayList<SingleItemModel> bookmarkedEvents = new ArrayList<SingleItemModel>();
         for (int j = 0; j <= 5; j++) {
-            singleItem.add(new SingleItemModel("Item " + j, "URL " + j));
+            bookmarkedEvents.add(new SingleItemModel("id"+j, "eventName"+j, "url+'j", "clubname"+j, 123+j, 123+j));
         }
 
-        fm.setAllItemsInSection(singleItem);
+        dm.setAllItemsInSection(bookmarkedEvents);
+        eventListForRecyclerView.add(dm);
 
-        allSampleData.add(fm);
+        ArrayList<SingleItemModel> upcomingEvents = new ArrayList<>();
+        SectionDataModel fm  = new SectionDataModel();
+        fm.setHeaderTitle("Upcoming Events");
+        for (int j = 0; j <= 5; j++) {
+            upcomingEvents.add(new SingleItemModel("id"+j, "eventName"+j, "url+'j", "clubname"+j, 123+j, 123+j));
+        }
 
+        fm.setAllItemsInSection(upcomingEvents);
+        eventListForRecyclerView.add(fm);
     }
 }

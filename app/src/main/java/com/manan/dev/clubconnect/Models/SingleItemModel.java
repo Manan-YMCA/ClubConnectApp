@@ -5,44 +5,70 @@ package com.manan.dev.clubconnect.Models;
  */
 
 public class SingleItemModel {
-    private String name;
-    private String url;
-    private String description;
+    private String eventName;
+    private String imageUrl;
+    private String clubName;
+    private String eventId;
+    private long eventDate;
+    private long eventTime;
 
+    public SingleItemModel(String eventId, String eventName, String imageUrl, String clubName, long eventDate, long eventTime) {
+        this.eventName = eventName;
+        this.imageUrl = imageUrl;
+        this.clubName = clubName;
+        this.eventId = eventId;
+        this.eventDate = eventDate;
+        this.eventTime = eventTime;
+    }
 
     public SingleItemModel() {
     }
 
-    public SingleItemModel(String name, String url) {
-        this.name = name;
-        this.url = url;
+    public String getEventName() {
+        return eventName;
     }
 
-
-    public String getUrl() {
-        return url;
+    public void setEventName(String eventName) {
+        this.eventName = eventName;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public String getName() {
-        return name;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getClubName() {
+        return clubName;
     }
 
-    public String getDescription() {
-        return description;
+    public void setClubName(String clubName) {
+        this.clubName = clubName;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public String getEventId() {
+        return eventId;
     }
 
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
+    }
 
+    public Long getEventDate() {
+        return eventDate;
+    }
 
+    public void setEventDate(Long eventDate) {
+        this.eventDate = eventDate;
+    }
+
+    public long getEventTime() {
+        return eventTime;
+    }
+
+    public void setEventTime(long eventTime) {
+        this.eventTime = eventTime;
+    }
 }
