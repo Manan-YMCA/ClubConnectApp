@@ -1,6 +1,7 @@
 package com.manan.dev.clubconnect.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.manan.dev.clubconnect.EventDetailsActivity;
 import com.manan.dev.clubconnect.Models.SingleItemModel;
 import com.manan.dev.clubconnect.R;
 
@@ -22,6 +24,7 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
 
     private ArrayList<SingleItemModel> itemsList;
     private Context mContext;
+    SingleItemModel singleItem;
 
     public SectionListDataAdapter(Context context, ArrayList<SingleItemModel> itemsList) {
         this.itemsList = itemsList;
@@ -38,7 +41,7 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
     @Override
     public void onBindViewHolder(SingleItemRowHolder holder, int i) {
 
-        SingleItemModel singleItem = itemsList.get(i);
+        singleItem = itemsList.get(i);
 
         holder.tvTitle.setText(singleItem.getEventName());
         holder.dateTimeTextView.setText(Long.toString(singleItem.getEventDate()) + "," + Long.toString(singleItem.getEventTime()));
@@ -76,13 +79,13 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
             this.dateTimeTextView=(TextView) view.findViewById(R.id.tv_dateTime);
             this.tvClubName = (TextView) view.findViewById(R.id.tv_clubname);
 
-
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-
-                    Toast.makeText(v.getContext(), tvTitle.getText(), Toast.LENGTH_SHORT).show();
+                    int position  = getLayoutPosition();
+                    Toast.makeText(mContext, itemsList.get(position).getEventId(), Toast.LENGTH_LONG).show();
+                    mContext.startActivity(new Intent(mContext, EventDetailsActivity.class).putExtra("eventToken", itemsList.get(position).getEventId()));
 
                 }
             });

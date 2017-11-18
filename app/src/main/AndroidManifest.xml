@@ -50,12 +50,13 @@
         <activity
             android:name=".AddNewEventActivity"
             android:label="Create New Event"
-            android:parentActivityName=".AdminDashboardActivity"/>
+            android:parentActivityName=".AdminDashboardActivity" />
         <activity android:name=".User.UserClubEventListActivity" />
         <activity
             android:name=".DashboardUserActivity"
             android:label="@string/title_activity_dashboard_user"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".EventDetailsActivity"></activity>
     </application>
 
 </manifest>
