@@ -338,22 +338,7 @@ public class AddNewEventActivity extends AppCompatActivity {
                 uploadEvent();
                 return true;
             case android.R.id.home:
-                fillData();
-                boolean isUntouched = (event.getEventVenue().equals("") &&
-                        event.getEventName().equals("") &&
-                        event.getEventDesc().equals("") &&
-                        event.coordinatorID.size() == 0 &&
-                        imgLocationsData.size() == 0 &&
-                        event.days.size() == 1 &&
-                        event.days.get(0).getDate() == 0 &&
-                        event.days.get(0).getStartTime() == 0 &&
-                        event.days.get(0).getEndTime() == 0
-                );
-                if (isUntouched) {
-                    finish();
-                } else {
-                    showDialogBoxToExit();
-                }
+                onBackPressed();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

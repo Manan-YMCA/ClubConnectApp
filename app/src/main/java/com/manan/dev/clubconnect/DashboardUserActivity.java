@@ -7,6 +7,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -22,13 +23,22 @@ import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.manan.dev.clubconnect.Adapters.RecyclerViewDataAdapter;
+import com.manan.dev.clubconnect.Models.Event;
 import com.manan.dev.clubconnect.Models.SectionDataModel;
 import com.manan.dev.clubconnect.Models.SingleItemModel;
 import com.manan.dev.clubconnect.R;
 import com.squareup.picasso.Picasso;
 
+import java.security.spec.ECField;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DashboardUserActivity extends AppCompatActivity
 
@@ -38,33 +48,43 @@ public class DashboardUserActivity extends AppCompatActivity
     private TextView tvfbName;
     private Toolbar toolbar;
     private DrawerLayout drawer;
-
+    private DatabaseReference mDatabaseReference;
+    private ChildEventListener mChildEventListener;
+    private Map<String, ArrayList<Pair<String, Event>>> eventsMap;
+    private String clubName;
+    private Event event;
+    private SectionDataModel allEvents;
+    private ArrayList<SingleItemModel> allEventsItem;
+    private RecyclerView my_recycler_view;
 
     ArrayList<SectionDataModel> eventListForRecyclerView;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        mAuth = FirebaseAuth.getInstance();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard_user);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         eventListForRecyclerView = new ArrayList<SectionDataModel>();
+        mAuth = FirebaseAuth.getInstance();
+        //createDummyData();
+        event = new Event();
+        eventsMap = new HashMap<>();
+        allEvents = new SectionDataModel();
+        allEvents.setHeaderTitle("All Events");
+        allEventsItem = new ArrayList<>();
 
-        createDummyData();
-
-
-        RecyclerView my_recycler_view = (RecyclerView) findViewById(R.id.my_recycler_view);
+        my_recycler_view = (RecyclerView) findViewById(R.id.my_recycler_view);
 
         my_recycler_view.setHasFixedSize(true);
 
-        RecyclerViewDataAdapter adapter = new RecyclerViewDataAdapter(this, eventListForRecyclerView);
+        //RecyclerViewDataAdapter adapter = new RecyclerViewDataAdapter(this, eventListForRecyclerView);
 
         my_recycler_view.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
-        my_recycler_view.setAdapter(adapter);
+        //my_recycler_view.setAdapter(adapter);
+
 
 
         //Fb Image  and  name fetching Code
@@ -97,6 +117,118 @@ public class DashboardUserActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("events");
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        attachDatabaseListener();
+        try {
+
+            for(Map.Entry<String, ArrayList<Pair<String, Event>>> entry : eventsMap.entrySet()){
+                Toast.makeText(DashboardUserActivity.this, entry.getKey(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(DashboardUserActivity.this, Integer.toString(entry.getValue().size()), Toast.LENGTH_SHORT).show();
+                ArrayList<Pair<String, Event>> clublist = eventsMap.get(entry.getKey());
+                for(int i = 0; i < clublist.size(); i++){
+                    Toast.makeText(DashboardUserActivity.this, clublist.get(i).first, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DashboardUserActivity.this, clublist.get(i).second.eventName, Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+        catch (Exception e){
+            Toast.makeText(DashboardUserActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        detatchDatabaseListener();
+        eventsMap.clear();
+        allEventsItem.clear();
+        eventListForRecyclerView.clear();
+    }
+
+    private void detatchDatabaseListener() {
+        if(mChildEventListener != null){
+            mDatabaseReference.removeEventListener(mChildEventListener);
+            mChildEventListener = null;
+        }
+    }
+
+    private void attachDatabaseListener() {
+        if(mChildEventListener == null){
+            mChildEventListener = new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    try{
+                        clubName = dataSnapshot.getKey();
+                        for(DataSnapshot data : dataSnapshot.getChildren()){
+                            if(!eventsMap.containsKey(clubName)){
+                                eventsMap.put(clubName, new ArrayList<Pair<String, Event>>());
+                            }
+                            eventsMap.get(clubName).add(new Pair<String, Event>(data.getKey(), data.getValue(Event.class)));
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    updateList();
+                }
+
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                }
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                }
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            };
+            mDatabaseReference.addChildEventListener(mChildEventListener);
+        }
+    }
+
+    private void updateList() {
+        try{
+            for(Map.Entry<String, ArrayList<Pair<String, Event>>> entry : eventsMap.entrySet()) {
+                ArrayList<Pair<String, Event>> clublist = eventsMap.get(entry.getKey());
+                for(int i = 0; i < clublist.size(); i++){
+                    SingleItemModel model = new SingleItemModel();
+                    Event eventItem = clublist.get(i).second;
+                    model.setClubName(entry.getKey());
+                    model.setEventId(clublist.get(i).first);
+                    model.setEventName(eventItem.getEventName());
+                    model.setEventDate(eventItem.getDays().get(0).getDate());
+                    model.setEventTime(eventItem.getDays().get(0).getStartTime());
+                    if(eventItem.getPhotoID().getPosters().size() > 0)
+                        model.setImageUrl(eventItem.getPhotoID().getPosters().get(0));
+                    else
+                        model.setImageUrl(null);
+                    allEventsItem.add(model);
+                }
+            }
+            Toast.makeText(DashboardUserActivity.this, Integer.toString(allEventsItem.size()), Toast.LENGTH_SHORT).show();
+            allEvents.setAllItemsInSection(allEventsItem);
+            eventListForRecyclerView.add(allEvents);
+            RecyclerViewDataAdapter adapter = new RecyclerViewDataAdapter(this, eventListForRecyclerView);
+            my_recycler_view.setAdapter(adapter);
+        }catch (Exception e){
+            Toast.makeText(DashboardUserActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(DashboardUserActivity.this, Integer.toString(allEventsItem.size()), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -167,7 +299,7 @@ public class DashboardUserActivity extends AppCompatActivity
         return true;
     }
 
-    public void createDummyData() {
+    /*public void createDummyData() {
 
 
         SectionDataModel dm  = new SectionDataModel();
@@ -192,5 +324,5 @@ public class DashboardUserActivity extends AppCompatActivity
 
         fm.setAllItemsInSection(upcomingEvents);
         eventListForRecyclerView.add(fm);
-    }
+    }*/
 }
