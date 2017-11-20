@@ -272,7 +272,7 @@ public class AddNewEventActivity extends AppCompatActivity {
 
     private void uploadEventData() {
         pd.setIndeterminate(true);
-        pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        //pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         pd.setProgress(0);
         pd.show();
 
@@ -712,8 +712,8 @@ public class AddNewEventActivity extends AppCompatActivity {
                 while (!promises.get(i).isComplete());
                 if(!promises.get(i).isSuccessful())
                     alluploaded=false;
-                Log.d("inBackGround", event.photoID.getPosters().get(i));
             }
+            while(event.getPhotoID().getPosters().size()!=promises.size());
             return null;
         }
 

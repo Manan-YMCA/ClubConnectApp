@@ -34,10 +34,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.manan.dev.clubconnect.Adapters.RecyclerViewDataAdapter;
 import com.manan.dev.clubconnect.Models.Event;
+import com.manan.dev.clubconnect.Models.Photos;
 import com.manan.dev.clubconnect.Models.SectionDataModel;
-import com.manan.dev.clubconnect.Models.SingleItemModel;
+import com.manan.dev.clubconnect.Models.TimeInterval;
 import com.squareup.picasso.Picasso;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -58,7 +60,7 @@ public class DashboardUserActivity extends AppCompatActivity
     private String clubName;
     private Event event;
     private SectionDataModel allEvents;
-    private ArrayList<SingleItemModel> allEventsItem;
+    private ArrayList<Event> allEventsItem;
     private RecyclerView my_recycler_view;
 
     ArrayList<SectionDataModel> eventListForRecyclerView;
@@ -229,20 +231,31 @@ public class DashboardUserActivity extends AppCompatActivity
             for(Map.Entry<String, ArrayList<Pair<String, Event>>> entry : eventsMap.entrySet()) {
                 ArrayList<Pair<String, Event>> clublist = eventsMap.get(entry.getKey());
                 for(int i = 0; i < clublist.size(); i++){
-                    SingleItemModel model = new SingleItemModel();
+                    Event model = new Event();
                     Event eventItem = clublist.get(i).second;
                     model.setClubName(entry.getKey());
                     model.setEventId(clublist.get(i).first);
                     model.setEventName(eventItem.getEventName());
-                    model.setEventDate(eventItem.getDays().get(0).getDate());
-                    model.setEventTime(eventItem.getDays().get(0).getStartTime());
+                    ArrayList<TimeInterval> dayTime = new ArrayList<>();
+                    TimeInterval tInterval = new TimeInterval();
+                    tInterval.setDate(eventItem.getDays().get(0).getDate());
+                    tInterval.setEndTime(eventItem.getDays().get(0).getEndTime());
+                    tInterval.setStartTime(eventItem.getDays().get(0).getStartTime());
+                    dayTime.add(tInterval);
+                    model.setDays(dayTime);
 
                     if(eventItem.getPhotoID() != null &&
                             eventItem.getPhotoID().getPosters() != null &&
-                            eventItem.getPhotoID().getPosters().size() > 0)
-                        model.setImageUrl(eventItem.getPhotoID().getPosters().get(0));
+                            eventItem.getPhotoID().getPosters().size() > 0) {
+                        ArrayList<String> poster = new ArrayList<>();
+                        poster.add(eventItem.getPhotoID().getPosters().get(0));
+                        Photos ph= new Photos();
+                        ph.setPosters(poster);
+                        model.setPhotoID(ph);
+
+                    }
                     else
-                        model.setImageUrl(null);
+                        model.setPhotoID(null);
                     allEventsItem.add(model);
                 }
             }
@@ -329,30 +342,4 @@ public class DashboardUserActivity extends AppCompatActivity
         return true;
     }
 
-    /*public void createDummyData() {
-
-
-        SectionDataModel dm  = new SectionDataModel();
-
-        dm.setHeaderTitle("Bookmarked Events");
-
-        ArrayList<SingleItemModel> bookmarkedEvents = new ArrayList<SingleItemModel>();
-        for (int j = 0; j <= 5; j++) {
-            String urll=mAuth.getCurrentUser().getPhotoUrl().toString();
-            bookmarkedEvents.add(new SingleItemModel("id"+j, "eventName"+j, urll, "clubname"+j, 123+j, 123+j));
-        }
-
-        dm.setAllItemsInSection(bookmarkedEvents);
-        eventListForRecyclerView.add(dm);
-
-        ArrayList<SingleItemModel> upcomingEvents = new ArrayList<>();
-        SectionDataModel fm  = new SectionDataModel();
-        fm.setHeaderTitle("Upcoming Events");
-        for (int j = 0; j <= 5; j++) {
-            upcomingEvents.add(new SingleItemModel("id"+j, "eventName"+j, "url+'j", "clubname"+j, 123+j, 123+j));
-        }
-
-        fm.setAllItemsInSection(upcomingEvents);
-        eventListForRecyclerView.add(fm);
-    }*/
 }
