@@ -9,12 +9,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
+import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.provider.CalendarContract;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -40,8 +39,6 @@ import com.manan.dev.clubconnect.Adapters.UserSingleEventListAdapter;
 import com.manan.dev.clubconnect.CircleTransform;
 import com.manan.dev.clubconnect.Models.Coordinator;
 import com.manan.dev.clubconnect.Models.Event;
-import com.manan.dev.clubconnect.Models.Event;
-import com.manan.dev.clubconnect.Models.TimeInterval;
 import com.manan.dev.clubconnect.R;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -52,8 +49,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-
-import java.util.ArrayList;
 
 public class EventsDetailsActivity extends AppCompatActivity {
 
@@ -110,8 +105,7 @@ public class EventsDetailsActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Hello Yatin Sir,Kushank sir,kachroo", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                addEventToCalender();
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -124,25 +118,26 @@ public class EventsDetailsActivity extends AppCompatActivity {
         pd.setMessage("Please Wait...");
         pd.setCanceledOnTouchOutside(false);
         pd.setCancelable(false);
-
+//        Toast.makeText(EventsDetailsActivity.this, Integer.toString(curEvent.getPhotoID().getPosters().size()), Toast.LENGTH_SHORT).show();
     }
 
     private void addEventToCalender(){
-        long date = event.getDays().get(0).getDate();
-        long startTime = event.getDays().get(0).getStartTime();
-        long endTime = event.getDays().get(0).getEndTime();
+        long date = curEvent.getDays().get(0).getDate();
+        long startTime = curEvent.getDays().get(0).getStartTime();
+        long endTime = curEvent.getDays().get(0).getEndTime();
+
 
         Intent intent = new Intent(Intent.ACTION_INSERT)
                 .setData(CalendarContract.EventsEntity.CONTENT_URI)
                 .setType("vnd.android.cursor.item/event")
-                .putExtra(CalendarContract.EventDays.STARTDAY, date)
-                .putExtra(CalendarContract.EventDays.ENDDAY, date)
-                .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, startTime)
-                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endTime)
-                .putExtra(CalendarContract.EventsEntity.TITLE, event.eventName)
+                //.putExtra(CalendarContract.EventDays.STARTDAY, date)
+                //.putExtra(CalendarContract.EventDays.ENDDAY, date)
+                .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, startTime + date)
+                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endTime + date)
+                .putExtra(CalendarContract.EventsEntity.TITLE, curEvent.eventName)
                 .putExtra(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT)
                 .putExtra(CalendarContract.Reminders.MINUTES,5);
-
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         startActivity(intent);
     }

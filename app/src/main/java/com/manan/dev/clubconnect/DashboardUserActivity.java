@@ -33,7 +33,6 @@ import com.manan.dev.clubconnect.Models.SectionDataModel;
 import com.manan.dev.clubconnect.Models.TimeInterval;
 import com.squareup.picasso.Picasso;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -86,7 +85,6 @@ public class DashboardUserActivity extends AppCompatActivity
         my_recycler_view.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
         //my_recycler_view.setAdapter(adapter);
-
 
 
         //Fb Image  and  name fetching Code
@@ -145,27 +143,27 @@ public class DashboardUserActivity extends AppCompatActivity
     }
 
     private void detatchDatabaseListener() {
-        if(mChildEventListener != null){
+        if (mChildEventListener != null) {
             mDatabaseReference.removeEventListener(mChildEventListener);
             mChildEventListener = null;
         }
     }
 
     private void attachDatabaseListener() {
-        if(mChildEventListener == null){
+        if (mChildEventListener == null) {
             mChildEventListener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    try{
+                    try {
                         Log.d("onAdded", dataSnapshot.toString());
                         clubName = dataSnapshot.getKey();
-                        if(!eventsMap.containsKey(clubName)){
+                        if (!eventsMap.containsKey(clubName)) {
                             eventsMap.put(clubName, new ArrayList<Pair<String, Event>>());
                         }
-                        for(DataSnapshot data : dataSnapshot.getChildren()){
+                        for (DataSnapshot data : dataSnapshot.getChildren()) {
                             eventsMap.get(clubName).add(new Pair<String, Event>(data.getKey(), data.getValue(Event.class)));
                         }
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                     updateList();
@@ -173,14 +171,14 @@ public class DashboardUserActivity extends AppCompatActivity
 
                 @Override
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                    try{
+                    try {
                         Log.d("onAdded", dataSnapshot.toString());
                         clubName = dataSnapshot.getKey();
                         eventsMap.put(clubName, new ArrayList<Pair<String, Event>>());
-                        for(DataSnapshot data : dataSnapshot.getChildren()){
+                        for (DataSnapshot data : dataSnapshot.getChildren()) {
                             eventsMap.get(clubName).add(new Pair<String, Event>(data.getKey(), data.getValue(Event.class)));
                         }
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                     updateList();
@@ -207,14 +205,14 @@ public class DashboardUserActivity extends AppCompatActivity
     }
 
     private void updateList() {
-        try{
+        try {
             allEventsItem.clear();
             eventListForRecyclerView.clear();
 
-            for(Map.Entry<String, ArrayList<Pair<String, Event>>> entry : eventsMap.entrySet()) {
+            for (Map.Entry<String, ArrayList<Pair<String, Event>>> entry : eventsMap.entrySet()) {
                 pb.setVisibility(View.GONE);
                 ArrayList<Pair<String, Event>> clublist = eventsMap.get(entry.getKey());
-                for(int i = 0; i < clublist.size(); i++){
+                for (int i = 0; i < clublist.size(); i++) {
                     Event model = new Event();
                     Event eventItem = clublist.get(i).second;
                     model.setClubName(entry.getKey());
@@ -228,17 +226,16 @@ public class DashboardUserActivity extends AppCompatActivity
                     dayTime.add(tInterval);
                     model.setDays(dayTime);
 
-                    if(eventItem.getPhotoID() != null &&
+                    if (eventItem.getPhotoID() != null &&
                             eventItem.getPhotoID().getPosters() != null &&
                             eventItem.getPhotoID().getPosters().size() > 0) {
                         ArrayList<String> poster = new ArrayList<>();
                         poster.add(eventItem.getPhotoID().getPosters().get(0));
-                        Photos ph= new Photos();
+                        Photos ph = new Photos();
                         ph.setPosters(poster);
                         model.setPhotoID(ph);
 
-                    }
-                    else
+                    } else
                         model.setPhotoID(null);
                     allEventsItem.add(model);
                 }
@@ -248,7 +245,7 @@ public class DashboardUserActivity extends AppCompatActivity
             allEvents.setAllItemsInSection(allEventsItem);
             eventListForRecyclerView.add(allEvents);
             adapter.notifyDataSetChanged();
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.d("updateListEx", e.getMessage());
             Toast.makeText(DashboardUserActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             Toast.makeText(DashboardUserActivity.this, Integer.toString(allEventsItem.size()), Toast.LENGTH_SHORT).show();
@@ -260,7 +257,7 @@ public class DashboardUserActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START, true);
         }
-        if(!drawer.isDrawerOpen(GravityCompat.START)) {
+        if (!drawer.isDrawerOpen(GravityCompat.START)) {
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("EXIT", true);

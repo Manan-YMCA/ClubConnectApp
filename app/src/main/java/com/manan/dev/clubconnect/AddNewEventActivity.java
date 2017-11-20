@@ -279,12 +279,11 @@ public class AddNewEventActivity extends AppCompatActivity {
         FirebaseDatabase.getInstance().getReference().child("events").child(clubNameData).push().setValue(event).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()) {
+                if (task.isSuccessful()) {
                     Toast.makeText(AddNewEventActivity.this, "Project complete", Toast.LENGTH_SHORT).show();
                     pd.dismiss();
                     AddNewEventActivity.this.finish();
-                }
-                else {
+                } else {
                     Toast.makeText(AddNewEventActivity.this, "Project Failed", Toast.LENGTH_SHORT).show();
                     pd.hide();
                 }
@@ -540,7 +539,7 @@ public class AddNewEventActivity extends AppCompatActivity {
                 TimePickerDialog mTimePicker = new TimePickerDialog(AddNewEventActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        String displayTime = String.format(Locale.ENGLISH,"%02d:%02d", hourOfDay, minute);
+                        String displayTime = String.format(Locale.ENGLISH, "%02d:%02d", hourOfDay, minute);
                         if (isStart)
                             startTime.get(i).setText(displayTime);
                         else
@@ -709,11 +708,11 @@ public class AddNewEventActivity extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
 
             for (int i = 0; i < promises.size(); i++) {
-                while (!promises.get(i).isComplete());
-                if(!promises.get(i).isSuccessful())
-                    alluploaded=false;
+                while (!promises.get(i).isComplete()) ;
+                if (!promises.get(i).isSuccessful())
+                    alluploaded = false;
             }
-            while(event.getPhotoID().getPosters().size()!=promises.size());
+            while (event.getPhotoID().getPosters().size() != promises.size()) ;
             return null;
         }
 
@@ -721,7 +720,7 @@ public class AddNewEventActivity extends AppCompatActivity {
         protected void onPostExecute(Void result) {
             pd.hide();
             Toast.makeText(AddNewEventActivity.this, "Image Upload Complete!", Toast.LENGTH_SHORT).show();
-            if(alluploaded) {
+            if (alluploaded) {
                 uploadEventData();
             }
         }

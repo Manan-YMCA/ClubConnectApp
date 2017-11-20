@@ -2,12 +2,9 @@ package com.manan.dev.clubconnect;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -30,7 +27,8 @@ public class AdminZoneActivity extends AppCompatActivity {
     TextView backToLoginScreen;
     private ImageView ivShowPassword;
     private ProgressDialog pd;
-RelativeLayout rlAdminzone;
+    RelativeLayout rlAdminzone;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +61,7 @@ RelativeLayout rlAdminzone;
         passwordAdminEditText = (EditText) findViewById(R.id.passwordAdmin);
 
         loginAsAdminBtn = (Button) findViewById(R.id.loginAsAdminbtn);
-       // signUpAsAdminBtn = (Button) findViewById(R.id.signUpAsAdminbtn);
+        // signUpAsAdminBtn = (Button) findViewById(R.id.signUpAsAdminbtn);
         backToLoginScreen = (TextView) findViewById(R.id.back_to_login);
 
         usernameAdminEditText.setText("manan");
@@ -103,7 +101,7 @@ RelativeLayout rlAdminzone;
     }
 
     private void attemptAdminSignUp() {
-        String username = usernameAdminEditText.getText().toString()+"@ymca.com";
+        String username = usernameAdminEditText.getText().toString() + "@ymca.com";
         String password = passwordAdminEditText.getText().toString();
         if (username.isEmpty()) {
             Toast.makeText(this, "Enter Username", Toast.LENGTH_SHORT).show();
@@ -133,7 +131,7 @@ RelativeLayout rlAdminzone;
     }
 
     private void attemptAdminSignIn() {
-        String username = usernameAdminEditText.getText().toString()+"@ymca.com";
+        String username = usernameAdminEditText.getText().toString() + "@ymca.com";
         String password = passwordAdminEditText.getText().toString();
         if (username.isEmpty()) {
             Toast.makeText(this, "Enter Username", Toast.LENGTH_SHORT).show();
