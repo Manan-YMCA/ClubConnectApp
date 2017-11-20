@@ -84,5 +84,12 @@
         android:layout_below="@+id/hsv_clubs_name"
         android:scrollbars="none" />
 
+    <ProgressBar
+        android:id="@+id/pb"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"/>
+
 
 </RelativeLayout>

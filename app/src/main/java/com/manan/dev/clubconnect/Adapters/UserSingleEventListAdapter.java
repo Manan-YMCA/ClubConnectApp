@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.manan.dev.clubconnect.Models.Event;
 import com.manan.dev.clubconnect.R;
+import com.manan.dev.clubconnect.User.EventsDetailsActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -22,6 +23,9 @@ import java.util.ArrayList;
  */
 
 public class UserSingleEventListAdapter extends RecyclerView.Adapter<UserSingleEventListAdapter.ViewHolder>{
+
+    public static final String CLUB_NAME = "ClubName";
+    public static final String EVENT_ID = "EventId";
 
     ArrayList<Event> userSingleEventLists = new ArrayList<>();
     Context context;
@@ -54,10 +58,10 @@ public class UserSingleEventListAdapter extends RecyclerView.Adapter<UserSingleE
             @Override
             public void onClick(View v) {
 
-                Intent singleEventDetailIntent = new Intent();
+                Intent singleEventDetailIntent = new Intent(context, EventsDetailsActivity.class);
                 Bundle singleEventDetailBundle = new Bundle();
-                singleEventDetailBundle.putString("Club Name",event.clubName);
-                singleEventDetailBundle.putString("Event ID",event.eventId);
+                singleEventDetailBundle.putString(CLUB_NAME,event.clubName);
+                singleEventDetailBundle.putString(EVENT_ID,event.eventId);
                 singleEventDetailIntent.putExtras(singleEventDetailBundle);
 
             }

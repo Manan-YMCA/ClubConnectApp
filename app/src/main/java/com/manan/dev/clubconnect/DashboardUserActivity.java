@@ -1,15 +1,7 @@
 package com.manan.dev.clubconnect;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.util.Pair;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -21,7 +13,9 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.Pair;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,6 +57,7 @@ public class DashboardUserActivity extends AppCompatActivity
 
     ArrayList<SectionDataModel> eventListForRecyclerView;
     private RecyclerViewDataAdapter adapter;
+    private ProgressBar pb;
 
 
     @Override
@@ -95,6 +90,8 @@ public class DashboardUserActivity extends AppCompatActivity
         //Fb Image  and  name fetching Code
         fbImageView = (ImageView) ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0).findViewById(R.id.fbImageView);
         tvfbName = (TextView) ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0).findViewById(R.id.tvfbName);
+        pb = (ProgressBar) findViewById(R.id.pb);
+
         try {
             Picasso.with(DashboardUserActivity.this)
                     .load(mAuth.getCurrentUser()
@@ -122,6 +119,7 @@ public class DashboardUserActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("events");
 
         adapter = new RecyclerViewDataAdapter(this, eventListForRecyclerView);
@@ -133,21 +131,6 @@ public class DashboardUserActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         attachDatabaseListener();
-        try {
-
-            for(Map.Entry<String, ArrayList<Pair<String, Event>>> entry : eventsMap.entrySet()){
-                Toast.makeText(DashboardUserActivity.this, entry.getKey(), Toast.LENGTH_SHORT).show();
-                Toast.makeText(DashboardUserActivity.this, Integer.toString(entry.getValue().size()), Toast.LENGTH_SHORT).show();
-                ArrayList<Pair<String, Event>> clublist = eventsMap.get(entry.getKey());
-                for(int i = 0; i < clublist.size(); i++){
-                    Toast.makeText(DashboardUserActivity.this, clublist.get(i).first, Toast.LENGTH_SHORT).show();
-                    Toast.makeText(DashboardUserActivity.this, clublist.get(i).second.eventName, Toast.LENGTH_LONG).show();
-                }
-            }
-        }
-        catch (Exception e){
-            Toast.makeText(DashboardUserActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
-        }
     }
 
     @Override
@@ -227,6 +210,7 @@ public class DashboardUserActivity extends AppCompatActivity
             eventListForRecyclerView.clear();
 
             for(Map.Entry<String, ArrayList<Pair<String, Event>>> entry : eventsMap.entrySet()) {
+                pb.setVisibility(View.GONE);
                 ArrayList<Pair<String, Event>> clublist = eventsMap.get(entry.getKey());
                 for(int i = 0; i < clublist.size(); i++){
                     SingleItemModel model = new SingleItemModel();

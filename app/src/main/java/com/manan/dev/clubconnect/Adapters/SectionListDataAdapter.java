@@ -2,6 +2,7 @@ package com.manan.dev.clubconnect.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,9 @@ import com.manan.dev.clubconnect.User.EventsDetailsActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
+import static com.manan.dev.clubconnect.Adapters.UserSingleEventListAdapter.CLUB_NAME;
+import static com.manan.dev.clubconnect.Adapters.UserSingleEventListAdapter.EVENT_ID;
 
 /**
  * Created by shubhamsharma on 17/11/17.
@@ -81,7 +85,13 @@ Picasso.with(mContext).load(singleItem.getImageUrl()).resize(150, 110).centerCro
 
                     int position  = getLayoutPosition();
                     Toast.makeText(mContext, itemsList.get(position).getEventId(), Toast.LENGTH_LONG).show();
-                    mContext.startActivity(new Intent(mContext, EventsDetailsActivity.class).putExtra("eventToken", itemsList.get(position).getEventId()));
+                    Intent singleEventDetailIntent = new Intent(mContext, EventsDetailsActivity.class);
+                    Bundle singleEventDetailBundle = new Bundle();
+                    singleEventDetailBundle.putString(CLUB_NAME,itemsList.get(position).getClubName());
+                    singleEventDetailBundle.putString(EVENT_ID,itemsList.get(position).getEventId());
+                    singleEventDetailIntent.putExtras(singleEventDetailBundle);
+                    mContext.startActivity(singleEventDetailIntent);
+//                    mContext.startActivity(new Intent(mContext, EventsDetailsActivity.class).putExtra("eventToken", itemsList.get(position).getEventId()));
 
                 }
             });
