@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.manan.dev.clubconnect.Models.SingleItemModel;
+import com.manan.dev.clubconnect.Models.Event;
 import com.manan.dev.clubconnect.R;
 import com.manan.dev.clubconnect.User.EventsDetailsActivity;
 import com.squareup.picasso.Picasso;
@@ -27,11 +27,11 @@ import static com.manan.dev.clubconnect.Adapters.UserSingleEventListAdapter.EVEN
 
 public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListDataAdapter.SingleItemRowHolder> {
 
-    private ArrayList<SingleItemModel> itemsList;
+    private ArrayList<Event> itemsList;
     private Context mContext;
-    SingleItemModel singleItem;
+    Event singleItem;
 
-    public SectionListDataAdapter(Context context, ArrayList<SingleItemModel> itemsList) {
+    public SectionListDataAdapter(Context context, ArrayList<Event> itemsList) {
         this.itemsList = itemsList;
         this.mContext = context;
     }
@@ -49,12 +49,12 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
         singleItem = itemsList.get(i);
 
         holder.tvTitle.setText(singleItem.getEventName());
-        holder.dateTimeTextView.setText(Long.toString(singleItem.getEventDate()) + "," + Long.toString(singleItem.getEventTime()));
+        holder.dateTimeTextView.setText(Long.toString(singleItem.getDays().get(0).getDate()) + "," + Long.toString(singleItem.getDays().get(0).getStartTime()));
         holder.tvClubName.setText(singleItem.getClubName());
 
 
 
-Picasso.with(mContext).load(singleItem.getImageUrl()).resize(150, 110).centerCrop().into(holder.itemImage);
+Picasso.with(mContext).load(singleItem.getPhotoID().getPosters().get(0)).resize(150, 110).centerCrop().into(holder.itemImage);
     }
 
     @Override

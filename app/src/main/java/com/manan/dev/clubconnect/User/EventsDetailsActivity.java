@@ -12,6 +12,7 @@ import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.provider.CalendarContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -39,6 +40,8 @@ import com.manan.dev.clubconnect.Adapters.UserSingleEventListAdapter;
 import com.manan.dev.clubconnect.CircleTransform;
 import com.manan.dev.clubconnect.Models.Coordinator;
 import com.manan.dev.clubconnect.Models.Event;
+import com.manan.dev.clubconnect.Models.Event;
+import com.manan.dev.clubconnect.Models.TimeInterval;
 import com.manan.dev.clubconnect.R;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -49,6 +52,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
+import java.util.ArrayList;
 
 public class EventsDetailsActivity extends AppCompatActivity {
 
@@ -101,7 +106,7 @@ public class EventsDetailsActivity extends AppCompatActivity {
         //eventDetailsToken = (TextView) findViewById(R.id.event_details_);
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+   FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -120,6 +125,26 @@ public class EventsDetailsActivity extends AppCompatActivity {
         pd.setCanceledOnTouchOutside(false);
         pd.setCancelable(false);
 
+    }
+
+    private void addEventToCalender(){
+        long date = event.getDays().get(0).getDate();
+        long startTime = event.getDays().get(0).getStartTime();
+        long endTime = event.getDays().get(0).getEndTime();
+
+        Intent intent = new Intent(Intent.ACTION_INSERT)
+                .setData(CalendarContract.EventsEntity.CONTENT_URI)
+                .setType("vnd.android.cursor.item/event")
+                .putExtra(CalendarContract.EventDays.STARTDAY, date)
+                .putExtra(CalendarContract.EventDays.ENDDAY, date)
+                .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, startTime)
+                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endTime)
+                .putExtra(CalendarContract.EventsEntity.TITLE, event.eventName)
+                .putExtra(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT)
+                .putExtra(CalendarContract.Reminders.MINUTES,5);
+
+
+        startActivity(intent);
     }
 
     @Override
