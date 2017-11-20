@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,15 +8,81 @@
     tools:context="com.manan.dev.clubconnect.DashboardUserActivity"
     tools:showIn="@layout/app_bar_dashboard_user">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:id="@+id/tvFaltu"
+        android:text="Clubs" />
 
+    <HorizontalScrollView
+        android:layout_below="@+id/tvFaltu"
+        android:scrollbars="none"
+        android:id="@+id/hsv_clubs_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/border_coords_name"
+                android:gravity="center_horizontal"
+                android:padding="10dp"
+                android:text="Manan" />
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/border_coords_name"
+                android:gravity="center_horizontal"
+                android:padding="10dp"
+                android:text="Samarpan" />
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/border_coords_name"
+                android:gravity="center_horizontal"
+                android:padding="10dp"
+                android:text="Srijan" />
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/border_coords_name"
+                android:gravity="center_horizontal"
+                android:padding="10dp"
+                android:text="Vividha" />
+
+            <TextView
+
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/border_coords_name"
+                android:gravity="center_horizontal"
+                android:padding="10dp"
+                android:text="Dhun-Dhun" />
+        </LinearLayout>
+    </HorizontalScrollView>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/my_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/hsv_clubs_name"
         android:scrollbars="none" />
 
 
-
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>

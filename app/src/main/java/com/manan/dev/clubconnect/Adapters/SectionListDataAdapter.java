@@ -47,8 +47,10 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
         holder.tvTitle.setText(singleItem.getEventName());
         holder.dateTimeTextView.setText(Long.toString(singleItem.getEventDate()) + "," + Long.toString(singleItem.getEventTime()));
         holder.tvClubName.setText(singleItem.getClubName());
-        Picasso.with(mContext).load(singleItem.getImageUrl()).resize(150, 110).centerCrop().into(holder.itemImage);
 
+
+
+Picasso.with(mContext).load(singleItem.getImageUrl()).resize(150, 110).centerCrop().into(holder.itemImage);
     }
 
     @Override

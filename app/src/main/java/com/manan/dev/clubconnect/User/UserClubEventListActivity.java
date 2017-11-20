@@ -6,7 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.manan.dev.clubconnect.Adapters.UserSingleEventListAdapter;
-import com.manan.dev.clubconnect.Models.UserSingleEventList;
+import com.manan.dev.clubconnect.Models.Event;
 import com.manan.dev.clubconnect.R;
 
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class UserClubEventListActivity extends AppCompatActivity {
 
     RecyclerView userSingleEventListRV;
-    ArrayList<UserSingleEventList> userSingleEventListArrayList = new ArrayList<>();
+    ArrayList<Event> userSingleEventListArrayList = new ArrayList<>();
     UserSingleEventListAdapter userSingleEventListAdapter;
 
     @Override
@@ -24,11 +24,8 @@ public class UserClubEventListActivity extends AppCompatActivity {
 
         userSingleEventListRV = (RecyclerView) findViewById(R.id.rv_user_club_list);
 
-
-
         //Add all the database from Firebase to the ArrayList here!!
-
-
+        
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         userSingleEventListRV.setLayoutManager(layoutManager);
