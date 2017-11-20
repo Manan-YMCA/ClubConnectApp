@@ -19,6 +19,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -280,11 +281,13 @@ public class AddNewEventActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()) {
                     Toast.makeText(AddNewEventActivity.this, "Project complete", Toast.LENGTH_SHORT).show();
+                    pd.dismiss();
                     AddNewEventActivity.this.finish();
                 }
-                else
-                    Toast.makeText(AddNewEventActivity.this, "Project Failed",Toast.LENGTH_SHORT).show();
-                pd.hide();
+                else {
+                    Toast.makeText(AddNewEventActivity.this, "Project Failed", Toast.LENGTH_SHORT).show();
+                    pd.hide();
+                }
             }
         });
     }
@@ -709,6 +712,7 @@ public class AddNewEventActivity extends AppCompatActivity {
                 while (!promises.get(i).isComplete());
                 if(!promises.get(i).isSuccessful())
                     alluploaded=false;
+                Log.d("inBackGround", event.photoID.getPosters().get(i));
             }
             return null;
         }

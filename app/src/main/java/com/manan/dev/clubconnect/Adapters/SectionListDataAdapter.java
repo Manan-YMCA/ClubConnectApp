@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.manan.dev.clubconnect.Models.SingleItemModel;
 import com.manan.dev.clubconnect.R;
 import com.manan.dev.clubconnect.User.EventsDetailsActivity;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -46,9 +47,7 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
         holder.tvTitle.setText(singleItem.getEventName());
         holder.dateTimeTextView.setText(Long.toString(singleItem.getEventDate()) + "," + Long.toString(singleItem.getEventTime()));
         holder.tvClubName.setText(singleItem.getClubName());
-
-
-
+        Picasso.with(mContext).load(singleItem.getImageUrl()).resize(150, 110).centerCrop().into(holder.itemImage);
 
     }
 

@@ -1,10 +1,12 @@
 package com.manan.dev.clubconnect.Models;
 
+import android.support.annotation.NonNull;
+
 /**
  * Created by shubhamsharma on 17/11/17.
  */
 
-public class SingleItemModel {
+public class SingleItemModel implements Comparable<SingleItemModel>{
     private String eventName;
     private String imageUrl;
     private String clubName;
@@ -56,7 +58,7 @@ public class SingleItemModel {
         this.eventId = eventId;
     }
 
-    public Long getEventDate() {
+    public long getEventDate() {
         return eventDate;
     }
 
@@ -70,5 +72,13 @@ public class SingleItemModel {
 
     public void setEventTime(long eventTime) {
         this.eventTime = eventTime;
+    }
+
+    @Override
+    public int compareTo(@NonNull SingleItemModel o) {
+        if(this.getEventDate() != o.getEventDate())
+            return (int) (this.getEventDate() - o.getEventDate());
+        else
+            return (int) (this.getEventTime() - o.getEventTime());
     }
 }

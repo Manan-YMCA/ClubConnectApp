@@ -1,27 +1,48 @@
 package com.manan.dev.clubconnect.Models;
 
+import android.support.annotation.NonNull;
+
 import java.util.ArrayList;
 
 /**
  * Created by naman on 11/4/2017.
  */
 
-public class Event {
+public class Event implements Comparable<Event>{
     public String eventName,eventDesc,eventVenue;
     public ArrayList<String> coordinatorID;
     public Photos photoID;
+    public String clubName, eventId;
     public ArrayList<TimeInterval> days;
+
+    public String getClubName() {
+        return clubName;
+    }
+
+    public void setClubName(String clubName) {
+        this.clubName = clubName;
+    }
+
+    public String getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
+    }
 
     public Event() {
         photoID = new Photos();
     }
 
-    public Event(String eventName, String eventDesc, String eventVenue, ArrayList<String> coordinatorID, Photos photoID, ArrayList<TimeInterval> days) {
+    public Event(String eventName, String eventDesc, String eventVenue, ArrayList<String> coordinatorID, Photos photoID, String clubName, String eventId, ArrayList<TimeInterval> days) {
         this.eventName = eventName;
         this.eventDesc = eventDesc;
         this.eventVenue = eventVenue;
         this.coordinatorID = coordinatorID;
         this.photoID = photoID;
+        this.clubName = clubName;
+        this.eventId = eventId;
         this.days = days;
     }
 
@@ -71,5 +92,13 @@ public class Event {
 
     public void setDays(ArrayList<TimeInterval> days) {
         this.days = days;
+    }
+
+    @Override
+    public int compareTo(@NonNull Event o) {
+        if(this.getDays().get(0).date != o.getDays().get(0).date)
+            return (int) (this.getDays().get(0).date - o.getDays().get(0).date);
+        else
+            return (int) (this.getDays().get(0).getStartTime() - o.getDays().get(0).getStartTime());
     }
 }
