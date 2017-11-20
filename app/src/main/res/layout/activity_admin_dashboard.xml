@@ -4,21 +4,66 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.manan.dev.clubconnect.UserDashboardActivity">
+    android:layout_centerInParent="true"
+
+
+    tools:context="com.manan.dev.clubconnect.AdminDashboardActivity">
+<ImageView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:src="@drawable/back_admin_dashboard"
+    android:scaleType="centerCrop"/>
+ <ImageView
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:src="@drawable/welcome_text"
+     android:layout_marginLeft="10dp"
+     android:layout_marginTop="5dp"
+     android:layout_marginRight="10dp"
+     android:id="@+id/welcome_text_admin_dash"/>
+
+
+
 
     <TextView
-        android:text="Admin Dashboard"
-        android:textSize="36sp"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:layout_width="300dp"
+        android:id="@+id/info_admin"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="8dp"
+        android:layout_below="@+id/welcome_text_admin_dash"
+        android:text="Welcome to Club Connect Admin Zone !\n Here you can create events,\nmanipulate them and send\nall the required information to\nthe user and the attendees!" />
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/info_admin"
+        android:id="@+id/ll_admin">
+    <TextView
+        android:layout_width="250dp"
+        android:textSize="24sp"
+        android:layout_marginLeft="8dp"
+        android:fontFamily="sans-serif-condensed"
+        android:layout_marginTop="20dp"
+        android:textColor="#219ae1"
+        android:layout_height="wrap_content"
+        android:text="Happy Event Managing! "
+        android:layout_below="@id/info_admin"
+        />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/add_new_event_fab"
+
+        android:src="@drawable/arrow" />
+    </LinearLayout>>
 <android.support.design.widget.FloatingActionButton
     android:id="@+id/add_new_event_fab"
-    android:layout_centerHorizontal="true"
-    android:layout_alignParentBottom="true"
+    android:layout_alignParentRight="true"
+android:layout_alignParentBottom="true"
     android:layout_margin="28dp"
     android:src="@drawable/ic_add_white"
-    android:layout_width="64dp"
-    android:layout_height="64dp" />
+    android:layout_width="164dp"
+    android:layout_height="164dp" />
 </RelativeLayout>
