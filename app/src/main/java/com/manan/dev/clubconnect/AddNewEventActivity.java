@@ -62,7 +62,9 @@ import com.squareup.picasso.Picasso;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import static java.util.Collections.sort;
 
@@ -195,6 +197,9 @@ public class AddNewEventActivity extends AppCompatActivity {
         pd.setCancelable(false);
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("coordinators").child(clubNameData);
+
+        Toast.makeText(AddNewEventActivity.this, ""+TimeZone.getDefault().getRawOffset(),Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
@@ -544,11 +549,18 @@ public class AddNewEventActivity extends AppCompatActivity {
                             startTime.get(i).setText(displayTime);
                         else
                             endTime.get(i).setText(displayTime);
-                        int time = hourOfDay * 60 * 60 + minute * 60;
+
+                        //Calendar cal = Calendar.getInstance();
+                        //cal.setTimeInMillis(0);
+                        //cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                        //cal.set(Calendar.MINUTE, minute);
+
+                        Toast.makeText(AddNewEventActivity.this, ""+TimeZone.getDefault().getRawOffset(),Toast.LENGTH_SHORT).show();
+                        long time = 1000L*(hourOfDay*60*60 + minute*60) - TimeZone.getDefault().getRawOffset();
                         if (isStart)
-                            event.days.get(i).setStartTime((long) (time * 1000));
+                            event.days.get(i).setStartTime(time);
                         else
-                            event.days.get(i).setEndTime((long) (time * 1000));
+                            event.days.get(i).setEndTime(time);
                     }
                 }, mHour, mMinute, true);
 
