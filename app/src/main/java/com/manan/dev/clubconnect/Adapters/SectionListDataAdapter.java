@@ -16,7 +16,10 @@ import com.manan.dev.clubconnect.R;
 import com.manan.dev.clubconnect.User.EventsDetailsActivity;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 
 import static com.manan.dev.clubconnect.Adapters.UserSingleEventListAdapter.CLUB_NAME;
 import static com.manan.dev.clubconnect.Adapters.UserSingleEventListAdapter.EVENT_ID;
@@ -49,7 +52,15 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
         singleItem = itemsList.get(i);
 
         holder.tvTitle.setText(singleItem.getEventName());
-        holder.dateTimeTextView.setText(Long.toString(singleItem.getDays().get(0).getDate()) + "," + Long.toString(singleItem.getDays().get(0).getStartTime()));
+
+        Calendar cal1 = Calendar.getInstance();
+        SimpleDateFormat sdf1;
+        String formattedDate1;
+        cal1.setTimeInMillis(singleItem.getDays().get(0).getDate() + singleItem.getDays().get(0).getStartTime());
+        sdf1 = new SimpleDateFormat("dd MMM, HH:mm", Locale.US);
+        formattedDate1 = sdf1.format(cal1.getTime());
+        holder.dateTimeTextView.setText(formattedDate1);
+
         holder.tvClubName.setText(singleItem.getClubName());
 
 Picasso.with(mContext).load(singleItem.getPhotoID().getPosters().get(0)).resize(150, 110).centerCrop().into(holder.itemImage);

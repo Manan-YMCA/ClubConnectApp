@@ -296,13 +296,27 @@ public class DashboardUserActivity extends AppCompatActivity
 
         if (id == R.id.nav_camera) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_profile) {
 
         } else if (id == R.id.nav_slideshow) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_about) {
+
+
 
         } else if (id == R.id.nav_share) {
+
+            String msg = "Try this awesome app which will make you aware of all the events in campus!";
+            shareTextMessage(msg);
+            return true;
+
+        } else if(id == R.id.nav_send){
+            String to = "shubhamkachroo@yahoo.co.in";
+            String subject = "Bug Reported - Club Connect ";
+            String msg = "I found a bug!\n";
+
+            sendEmailBug(to,subject,msg);
+            return true;
 
         } else if (id == R.id.nav_logout) {
             try {
@@ -321,6 +335,26 @@ public class DashboardUserActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void sendEmailBug(String to, String subject, String msg) {
+        Intent email = new Intent(Intent.ACTION_SEND);
+
+        email.putExtra(Intent.EXTRA_EMAIL, new String[]{ to});
+        email.putExtra(Intent.EXTRA_SUBJECT, subject);
+        email.putExtra(Intent.EXTRA_TEXT, msg);
+
+        //need this to prompt email client only
+        email.setType("message/rfc822");
+
+        startActivity(Intent.createChooser(email, "Choose an Email client :"));
+    }
+
+    private void shareTextMessage(String msg) {
+        Intent i = new Intent(Intent.ACTION_SEND);
+        i.setType("text/plain");
+        i.putExtra(Intent.EXTRA_TEXT,msg);
+        startActivity(i);
     }
 
 }

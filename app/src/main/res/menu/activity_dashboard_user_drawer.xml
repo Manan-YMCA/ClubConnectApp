@@ -9,7 +9,7 @@
             android:icon="@drawable/vector_home"
             android:title="Home" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_profile"
             android:icon="@drawable/vector_coordinator"
             android:title="Profile" />
         <item
@@ -17,7 +17,7 @@
             android:icon="@drawable/vector_star"
             android:title="Starred Events" />
         <item
-            android:id="@+id/nav_manage"
+            android:id="@+id/nav_about"
             android:icon="@drawable/vector_name"
             android:title="About" />
         <item

@@ -44,6 +44,8 @@
         android:src="@drawable/vector_date"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end"
+        android:backgroundTint="#ddd"
+        app:borderWidth="0dp"
         app:srcCompat="@android:drawable/ic_dialog_email" />
 
 

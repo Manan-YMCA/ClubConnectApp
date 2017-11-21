@@ -39,6 +39,7 @@ import com.manan.dev.clubconnect.Adapters.UserSingleEventListAdapter;
 import com.manan.dev.clubconnect.CircleTransform;
 import com.manan.dev.clubconnect.Models.Coordinator;
 import com.manan.dev.clubconnect.Models.Event;
+import com.manan.dev.clubconnect.Models.TimeInterval;
 import com.manan.dev.clubconnect.R;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -101,7 +102,7 @@ public class EventsDetailsActivity extends AppCompatActivity {
         //eventDetailsToken = (TextView) findViewById(R.id.event_details_);
 
 
-   FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -121,7 +122,7 @@ public class EventsDetailsActivity extends AppCompatActivity {
 //        Toast.makeText(EventsDetailsActivity.this, Integer.toString(curEvent.getPhotoID().getPosters().size()), Toast.LENGTH_SHORT).show();
     }
 
-    private void addEventToCalender(){
+    private void addEventToCalender() {
         long date = curEvent.getDays().get(0).getDate();
         long startTime = curEvent.getDays().get(0).getStartTime();
         long endTime = curEvent.getDays().get(0).getEndTime();
@@ -136,7 +137,7 @@ public class EventsDetailsActivity extends AppCompatActivity {
                 .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endTime + date)
                 .putExtra(CalendarContract.EventsEntity.TITLE, curEvent.eventName)
                 .putExtra(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT)
-                .putExtra(CalendarContract.Reminders.MINUTES,5);
+                .putExtra(CalendarContract.Reminders.MINUTES, 5);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         startActivity(intent);
@@ -283,6 +284,37 @@ public class EventsDetailsActivity extends AppCompatActivity {
             sdf = new SimpleDateFormat("HH:mm", Locale.US);
             formattedDate = sdf.format(cal.getTime());
             tvTime.setText(formattedDate);
+
+            LinearLayout llContainer = (LinearLayout) findViewById(R.id.ll_timmings_all);
+            llContainer.removeAllViews();
+
+            for (TimeInterval ti : curEvent.getDays()) {
+                LinearLayout ll = (LinearLayout) LayoutInflater.from(EventsDetailsActivity.this).inflate(R.layout.user_single_event_item_timmings, null, false);
+
+                TextView tvDateTimmings = (TextView) ll.findViewById(R.id.tv_date);
+                TextView tvTimeTimmings = (TextView) ll.findViewById(R.id.tv_duration);
+
+                Calendar cal1 = Calendar.getInstance();
+                Calendar cal2 = Calendar.getInstance();
+                SimpleDateFormat sdf1,sdf2;
+                String formattedDate1;
+
+                cal1.setTimeInMillis(ti.getDate());
+                sdf1 = new SimpleDateFormat("EEEE, dd MMMM", Locale.US);
+               // sdf2 = new SimpleDateFormat("EEEE");
+                //formattedDate1 = sdf2.format(cal1.getTime())+ ", "+sdf1.format(cal1.getTime());
+                formattedDate1 = sdf1.format(cal1.getTime());
+                tvDateTimmings.setText(formattedDate1);
+
+                cal1.setTimeInMillis(ti.getStartTime());
+                cal2.setTimeInMillis(ti.getEndTime());
+                sdf1 = new SimpleDateFormat("HH:mm", Locale.US);
+                sdf2 = new SimpleDateFormat("HH:mm", Locale.US);
+                formattedDate1 = sdf1.format(cal1.getTime())+ " - " + sdf2.format(cal2.getTime());
+                tvTimeTimmings.setText(formattedDate1);
+
+                llContainer.addView(ll);
+            }
         }
 
         if (curEvent.getEventVenue() != null)
@@ -292,13 +324,13 @@ public class EventsDetailsActivity extends AppCompatActivity {
 
         if (curEvent.photoID != null && curEvent.photoID.posters != null) {
             findViewById(R.id.cv_posters).setVisibility(View.VISIBLE);
-            for (int i=0; i<curEvent.photoID.posters.size(); i++) {
+            for (int i = 0; i < curEvent.photoID.posters.size(); i++) {
                 final String url = curEvent.photoID.posters.get(i);
                 ImageView iv = new ImageView(this);
                 iv.setLayoutParams(new LinearLayout.LayoutParams(300, 300));
-                iv.setPadding(0, 0, (int) EventsDetailsActivity.this.getResources().getDimension(R.dimen.dp30), 0);
+                iv.setPadding(0, 0, (int) EventsDetailsActivity.this.getResources().getDimension(R.dimen.dp10), 0);
                 iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                final int finalI = i+1;
+                final int finalI = i + 1;
                 iv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -306,11 +338,11 @@ public class EventsDetailsActivity extends AppCompatActivity {
                         pd.show();
                         //File localFile = null;
                         try {
-                            final File file = new File( Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),curEvent.getEventName()+"_" +finalI +".jpg");
+                            final File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), curEvent.getEventName() + "_" + finalI + ".jpg");
                             httpsReference.getFile(file).addOnCompleteListener(new OnCompleteListener<FileDownloadTask.TaskSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<FileDownloadTask.TaskSnapshot> task) {
-                                    if(task.isSuccessful()) {
+                                    if (task.isSuccessful()) {
                                         Uri path = Uri.fromFile(file);
 
                                         //Get File MIME type

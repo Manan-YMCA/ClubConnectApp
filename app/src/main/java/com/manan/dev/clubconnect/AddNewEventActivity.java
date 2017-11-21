@@ -19,7 +19,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -59,10 +58,10 @@ import com.manan.dev.clubconnect.Models.Event;
 import com.manan.dev.clubconnect.Models.TimeInterval;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -198,7 +197,7 @@ public class AddNewEventActivity extends AppCompatActivity {
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("coordinators").child(clubNameData);
 
-        Toast.makeText(AddNewEventActivity.this, ""+TimeZone.getDefault().getRawOffset(),Toast.LENGTH_SHORT).show();
+        Toast.makeText(AddNewEventActivity.this, "" + TimeZone.getDefault().getRawOffset(), Toast.LENGTH_SHORT).show();
 
     }
 
@@ -302,32 +301,45 @@ public class AddNewEventActivity extends AppCompatActivity {
 
         for (int i = 0; i < imgLocationsData.size(); i++) {
             String imgName = imgLocationsData.get(i).getLastPathSegment();
-            imgName = imgName.replace('.', '@');
-            int lastIndex = imgName.lastIndexOf('@');
-            String imgExtension = imgName.substring(lastIndex + 1);
-            StorageReference childRef = firebaseStorage.child(input_eventname.getText().toString() + "_" + i + "." + imgExtension);
 
-            // To be put on final add event button to avoid useless uploads
-            UploadTask uploadTask = childRef.putFile(imgLocationsData.get(i));
-            StorageTask<UploadTask.TaskSnapshot> promise = uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(AddNewEventActivity.this, "Image Upload successful", Toast.LENGTH_SHORT).show();
-                    Uri uri = taskSnapshot.getDownloadUrl();
-                    assert uri != null;
-                    event.photoID.posters.add(uri.toString());
+            Bitmap bmp = null;
+            try {
+                bmp = MediaStore.Images.Media.getBitmap(AddNewEventActivity.this.getContentResolver(), imgLocationsData.get(i));
+                bmp = Bitmap.createScaledBitmap(bmp, 500, (int) ((float) bmp.getHeight() / bmp.getWidth() * 500), true);
 
-                    int cur = pd.getProgress();
+                ByteArrayOutputStream boas = new ByteArrayOutputStream();
+                bmp.compress(Bitmap.CompressFormat.JPEG, 100, boas);
 
-                    pd.setProgress((int) (cur + 100.0 / imgLocationsData.size()));
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(AddNewEventActivity.this, "Image Upload failed", Toast.LENGTH_SHORT).show();
-                }
-            });
-            promises.add(promise);
+                imgName = imgName.replace('.', '@');
+                int lastIndex = imgName.lastIndexOf('@');
+                String imgExtension = imgName.substring(lastIndex + 1);
+                StorageReference childRef = firebaseStorage.child(input_eventname.getText().toString() + "_" + i + "." + imgExtension);
+
+                // To be put on final add event button to avoid useless uploads
+                UploadTask uploadTask = childRef.putBytes(boas.toByteArray());
+                StorageTask<UploadTask.TaskSnapshot> promise = uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Toast.makeText(AddNewEventActivity.this, "Image Upload successful", Toast.LENGTH_SHORT).show();
+                        Uri uri = taskSnapshot.getDownloadUrl();
+                        assert uri != null;
+                        event.photoID.posters.add(uri.toString());
+
+                        int cur = pd.getProgress();
+
+                        pd.setProgress((int) (cur + 100.0 / imgLocationsData.size()));
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(AddNewEventActivity.this, "Image Upload failed", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                promises.add(promise);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         }
         return promises;
     }
@@ -555,8 +567,8 @@ public class AddNewEventActivity extends AppCompatActivity {
                         //cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
                         //cal.set(Calendar.MINUTE, minute);
 
-                        Toast.makeText(AddNewEventActivity.this, ""+TimeZone.getDefault().getRawOffset(),Toast.LENGTH_SHORT).show();
-                        long time = 1000L*(hourOfDay*60*60 + minute*60) - TimeZone.getDefault().getRawOffset();
+                        Toast.makeText(AddNewEventActivity.this, "" + TimeZone.getDefault().getRawOffset(), Toast.LENGTH_SHORT).show();
+                        long time = 1000L * (hourOfDay * 60 * 60 + minute * 60) - TimeZone.getDefault().getRawOffset();
                         if (isStart)
                             event.days.get(i).setStartTime(time);
                         else
