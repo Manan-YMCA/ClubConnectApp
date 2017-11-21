@@ -413,6 +413,8 @@ public class EventsDetailsActivity extends AppCompatActivity {
     private void updateList() {
         llCoordinators.removeAllViews();
 
+        if(curEvent==null) return;
+
         if (curEvent.getCoordinatorID() == null)
             return;
 

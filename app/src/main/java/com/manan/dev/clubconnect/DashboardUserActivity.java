@@ -31,17 +31,20 @@ import com.manan.dev.clubconnect.Models.Event;
 import com.manan.dev.clubconnect.Models.Photos;
 import com.manan.dev.clubconnect.Models.SectionDataModel;
 import com.manan.dev.clubconnect.Models.TimeInterval;
+import com.manan.dev.clubconnect.User.UserClubEventListActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.manan.dev.clubconnect.Adapters.UserSingleEventListAdapter.CLUB_NAME;
 import static java.util.Collections.sort;
 
 public class DashboardUserActivity extends AppCompatActivity
 
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
     private FirebaseAuth mAuth;
     private ImageView fbImageView;
     private TextView tvfbName;
@@ -52,8 +55,12 @@ public class DashboardUserActivity extends AppCompatActivity
     private Map<String, ArrayList<Pair<String, Event>>> eventsMap;
     private String clubName;
     private Event event;
-    private SectionDataModel allEvents;
-    private ArrayList<Event> allEventsItem;
+    //private SectionDataModel allEvents;
+    //private ArrayList<Event> allEventsItem;
+    private SectionDataModel preEvents;
+    private ArrayList<Event> preEventsItem;
+    private SectionDataModel curEvents;
+    private ArrayList<Event> curEventsItem;
     private RecyclerView my_recycler_view;
 
     ArrayList<SectionDataModel> eventListForRecyclerView;
@@ -62,7 +69,7 @@ public class DashboardUserActivity extends AppCompatActivity
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard_user);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -72,9 +79,13 @@ public class DashboardUserActivity extends AppCompatActivity
         //createDummyData();
         event = new Event();
         eventsMap = new HashMap<>();
-        allEvents = new SectionDataModel();
-        allEvents.setHeaderTitle("All Events");
-        allEventsItem = new ArrayList<>();
+        preEvents = new SectionDataModel();
+        preEvents.setHeaderTitle("Past Events");
+        preEventsItem = new ArrayList<>();
+
+        curEvents = new SectionDataModel();
+        curEvents.setHeaderTitle("Future Events");
+        curEventsItem = new ArrayList<>();
 
         my_recycler_view = (RecyclerView) findViewById(R.id.my_recycler_view);
 
@@ -91,6 +102,8 @@ public class DashboardUserActivity extends AppCompatActivity
         fbImageView = (ImageView) ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0).findViewById(R.id.fbImageView);
         tvfbName = (TextView) ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0).findViewById(R.id.tvfbName);
         pb = (ProgressBar) findViewById(R.id.pb);
+
+        setClickListeners();
 
         try {
             Picasso.with(DashboardUserActivity.this)
@@ -126,6 +139,14 @@ public class DashboardUserActivity extends AppCompatActivity
         my_recycler_view.setAdapter(adapter);
     }
 
+    private void setClickListeners() {
+        findViewById(R.id.manan).setOnClickListener(this);
+        findViewById(R.id.srijan).setOnClickListener(this);
+        findViewById(R.id.samarpan).setOnClickListener(this);
+        findViewById(R.id.vividha).setOnClickListener(this);
+        findViewById(R.id.dhundhun).setOnClickListener(this);
+    }
+
 
     @Override
     protected void onResume() {
@@ -138,7 +159,9 @@ public class DashboardUserActivity extends AppCompatActivity
         super.onPause();
         detatchDatabaseListener();
         eventsMap.clear();
-        allEventsItem.clear();
+        preEventsItem.clear();
+        curEventsItem.clear();
+
         eventListForRecyclerView.clear();
     }
 
@@ -206,7 +229,8 @@ public class DashboardUserActivity extends AppCompatActivity
 
     private void updateList() {
         try {
-            allEventsItem.clear();
+            preEventsItem.clear();
+            curEventsItem.clear();
             eventListForRecyclerView.clear();
 
             for (Map.Entry<String, ArrayList<Pair<String, Event>>> entry : eventsMap.entrySet()) {
@@ -237,18 +261,30 @@ public class DashboardUserActivity extends AppCompatActivity
 
                     } else
                         model.setPhotoID(null);
-                    allEventsItem.add(model);
+                    Calendar cal = Calendar.getInstance();
+                    cal.set(Calendar.HOUR_OF_DAY,0);
+                    cal.set(Calendar.MINUTE, 0);
+                    cal.set(Calendar.SECOND, 0);
+                    long curDate = cal.getTimeInMillis();
+                    if(model.getDays().get(0).getDate() < curDate)
+                        preEventsItem.add(model);
+                    else
+                        curEventsItem.add(model);
                 }
             }
-            sort(allEventsItem);
-            Toast.makeText(DashboardUserActivity.this, Integer.toString(allEventsItem.size()), Toast.LENGTH_SHORT).show();
-            allEvents.setAllItemsInSection(allEventsItem);
-            eventListForRecyclerView.add(allEvents);
+            sort(preEventsItem);
+            sort(curEventsItem);
+            //Toast.makeText(DashboardUserActivity.this, Integer.toString(allEventsItem.size()), Toast.LENGTH_SHORT).show();
+            curEvents.setAllItemsInSection(curEventsItem);
+            preEvents.setAllItemsInSection(preEventsItem);
+
+            eventListForRecyclerView.add(curEvents);
+            eventListForRecyclerView.add(preEvents);
             adapter.notifyDataSetChanged();
         } catch (Exception e) {
             Log.d("updateListEx", e.getMessage());
             Toast.makeText(DashboardUserActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-            Toast.makeText(DashboardUserActivity.this, Integer.toString(allEventsItem.size()), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(DashboardUserActivity.this, Integer.toString(allEventsItem.size()), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -357,4 +393,38 @@ public class DashboardUserActivity extends AppCompatActivity
         startActivity(i);
     }
 
+    @Override
+    public void onClick(View v) {
+        Bundle b = new Bundle();
+        Intent i = new Intent(DashboardUserActivity.this, UserClubEventListActivity.class);
+        switch (v.getId())
+        {
+            case R.id.manan:
+                b.putString(CLUB_NAME, "manan");
+                i.putExtras(b);
+                startActivity(i);
+                break;
+            case R.id.vividha:
+                b.putString(CLUB_NAME, "vividha");
+                i.putExtras(b);
+                startActivity(i);
+                break;
+            case R.id.srijan:
+                b.putString(CLUB_NAME, "srijan");
+                i.putExtras(b);
+                startActivity(i);
+                break;
+            case R.id.samarpan:
+                b.putString(CLUB_NAME, "samarpan");
+                i.putExtras(b);
+                startActivity(i);
+                break;
+            case R.id.dhundhun:
+                b.putString(CLUB_NAME, "dhundhun");
+                i.putExtras(b);
+                startActivity(i);
+                break;
+        }
+
+    }
 }

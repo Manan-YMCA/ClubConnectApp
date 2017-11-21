@@ -96,9 +96,9 @@ public class Event implements Comparable<Event>{
 
     @Override
     public int compareTo(@NonNull Event o) {
-        if(this.getDays().get(0).date != o.getDays().get(0).date)
-            return (int) (this.getDays().get(0).date - o.getDays().get(0).date);
+        if((this.getDays().get(0).getStartTime()+this.getDays().get(0).getDate()) > (o.getDays().get(0).getStartTime()+o.getDays().get(0).getDate()))
+            return -1;
         else
-            return (int) (this.getDays().get(0).getStartTime() - o.getDays().get(0).getStartTime());
+            return 1;
     }
 }

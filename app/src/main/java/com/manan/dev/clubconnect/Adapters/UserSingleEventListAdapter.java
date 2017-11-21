@@ -39,16 +39,16 @@ public class UserSingleEventListAdapter extends RecyclerView.Adapter<UserSingleE
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater l = LayoutInflater.from(context);
-        View v = l.inflate(R.layout.activity_user_club_event_list,parent,false);
+        View v = l.inflate(R.layout.user_club_single_event_list,parent,false);
         ViewHolder vh = new ViewHolder(v);
         return vh;
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Event u = userSingleEventLists.get(position);
+        final Event u = userSingleEventLists.get(position);
 
-        Picasso.with(context).load(u.getPhotoID().getPosters().get(0)).fit().into(holder.posterUserEventClubList);
+        Picasso.with(context).load(u.getPhotoID().getPosters().get(0)).into(holder.posterUserEventClubList);
         holder.timeUserEventClubList.setText(Long.toString(u.getDays().get(0).getStartTime()));
         holder.dateUserEventClubList.setText(Long.toString(u.getDays().get(0).getDate()));
 
@@ -60,19 +60,20 @@ public class UserSingleEventListAdapter extends RecyclerView.Adapter<UserSingleE
 
                 Intent singleEventDetailIntent = new Intent(context, EventsDetailsActivity.class);
                 Bundle singleEventDetailBundle = new Bundle();
-                singleEventDetailBundle.putString(CLUB_NAME,event.clubName);
-                singleEventDetailBundle.putString(EVENT_ID,event.eventId);
+                singleEventDetailBundle.putString(CLUB_NAME,u.clubName);
+                singleEventDetailBundle.putString(EVENT_ID,u.eventId);
                 singleEventDetailIntent.putExtras(singleEventDetailBundle);
+                context.startActivity(singleEventDetailIntent);
 
             }
         });
 
     }
-
     @Override
     public int getItemCount() {
-        return userSingleEventLists.size();
+        return (null != userSingleEventLists ? userSingleEventLists.size() : 0);
     }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
