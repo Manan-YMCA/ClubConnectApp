@@ -28,13 +28,16 @@
 
         <Button
             android:id="@+id/btnMore"
-            android:layout_width="wrap_content"
-            android:layout_height="42dp"
+            android:textColor="@android:color/white"
+            android:layout_width="100dp"
+            android:layout_height="32dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:text="more"
-            android:textColor="#FFF" />
+            android:background="@drawable/button_club" />
 
 
     </RelativeLayout>

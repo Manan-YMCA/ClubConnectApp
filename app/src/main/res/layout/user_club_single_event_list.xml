@@ -13,16 +13,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
+       <RelativeLayout
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           >
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="Event Name"
+               android:background="@android:color/white"
+               />
         <ImageView
             android:id="@+id/poster_club_event"
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:scaleType="centerCrop"
             android:src="@drawable/login_back" />
-
+       </RelativeLayout>>
         <LinearLayout
             android:layout_width="match_parent"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
             android:layout_height="wrap_content">
 
             <TextView
@@ -32,6 +43,7 @@
                 android:layout_weight="1"
                 android:drawableLeft="@drawable/vector_date"
                 android:paddingLeft="5dp"
+
                 android:text="Event Date"
                 android:textSize="15sp" />
 

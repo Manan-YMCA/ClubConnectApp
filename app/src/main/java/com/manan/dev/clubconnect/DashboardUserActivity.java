@@ -2,6 +2,7 @@ package com.manan.dev.clubconnect;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -19,7 +20,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.facebook.login.LoginManager;
+import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
+import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -32,6 +37,7 @@ import com.manan.dev.clubconnect.Models.Photos;
 import com.manan.dev.clubconnect.Models.SectionDataModel;
 import com.manan.dev.clubconnect.Models.TimeInterval;
 import com.manan.dev.clubconnect.User.UserClubEventListActivity;
+import com.manan.dev.clubconnect.User.UserProfileActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -333,10 +339,14 @@ public class DashboardUserActivity extends AppCompatActivity
         if (id == R.id.nav_camera) {
             // Handle the camera action
         } else if (id == R.id.nav_profile) {
+            startActivity(new Intent(DashboardUserActivity.this, UserProfileActivity.class));
 
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_about) {
+            String msg = "\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+
+            createDialogBox(msg);
 
 
 
@@ -371,6 +381,31 @@ public class DashboardUserActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void createDialogBox(String msg) {
+        new MaterialStyledDialog.Builder(this)
+                .setTitle("About Us")
+                .setDescription(msg+"\n\n")
+               .withDialogAnimation(true)
+                .setStyle(Style.HEADER_WITH_TITLE)
+                .setTitle("About US")
+                .setPositiveText(R.string.button)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        String to = "sharma.shubham0008@gmail.com";
+                        String subject = "Contact Club Connect";
+                        String msg = "Hey there\n";
+
+                        sendEmailBug(to,subject,msg);
+                    }})
+                .setScrollable(true,20)
+                .setCancelable(true)
+                .show();
+
+
+
     }
 
     private void sendEmailBug(String to, String subject, String msg) {

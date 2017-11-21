@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/venice"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.manan.dev.clubconnect.DashboardUserActivity"
     tools:showIn="@layout/app_bar_dashboard_user">
@@ -37,8 +38,9 @@
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:background="@drawable/border_coords_name"
+                android:background="@drawable/button_club"
                 android:gravity="center_horizontal"
+android:textColor="@android:color/white"
                 android:padding="10dp"
                 android:id="@+id/manan"
                 android:clickable="true"
@@ -47,8 +49,10 @@
             <TextView
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+
                 android:layout_marginLeft="10dp"
-                android:background="@drawable/border_coords_name"
+                android:background="@drawable/button_club"
                 android:gravity="center_horizontal"
                 android:padding="10dp"
                 android:id="@+id/samarpan"
@@ -59,18 +63,22 @@
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:background="@drawable/border_coords_name"
+                android:background="@drawable/button_club"
                 android:gravity="center_horizontal"
                 android:padding="10dp"
                 android:id="@+id/srijan"
+                android:textColor="@android:color/white"
+
                 android:clickable="true"
                 android:text="Srijan" />
 
             <TextView
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+
                 android:layout_marginLeft="10dp"
-                android:background="@drawable/border_coords_name"
+                android:background="@drawable/button_club"
                 android:gravity="center_horizontal"
                 android:padding="10dp"
                 android:id="@+id/vividha"
@@ -82,10 +90,12 @@
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:background="@drawable/border_coords_name"
+                android:background="@drawable/button_club"
                 android:gravity="center_horizontal"
                 android:padding="10dp"
                 android:id="@+id/dhundhun"
+                android:textColor="@android:color/white"
+
                 android:clickable="true"
                 android:text="Dhun-Dhun" />
         </LinearLayout>
