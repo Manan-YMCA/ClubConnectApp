@@ -2,10 +2,12 @@ package com.manan.dev.clubconnect.User;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
@@ -14,6 +16,8 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -37,6 +41,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.manan.dev.clubconnect.Adapters.UserSingleEventListAdapter;
 import com.manan.dev.clubconnect.CircleTransform;
+import com.manan.dev.clubconnect.Manifest;
 import com.manan.dev.clubconnect.Models.Coordinator;
 import com.manan.dev.clubconnect.Models.Event;
 import com.manan.dev.clubconnect.Models.TimeInterval;
@@ -53,6 +58,7 @@ import java.util.Map;
 
 public class EventsDetailsActivity extends AppCompatActivity {
 
+    private static final int MY_PERMISSIONS_REQUEST = 1024;
     //    private TextView eventDetailsToken;
     private String clubName;
     private String eventId;
@@ -106,6 +112,12 @@ public class EventsDetailsActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!permissionGranted(android.Manifest.permission.READ_CALENDAR, android.Manifest.permission.WRITE_CALENDAR)) {
+                    Toast.makeText(EventsDetailsActivity.this, "Read/Write Calendar Access Permission Denied!", Toast.LENGTH_SHORT);
+                    askForPermission(android.Manifest.permission.READ_CALENDAR, android.Manifest.permission.WRITE_CALENDAR);
+                    return;
+                }
+
                 addEventToCalender();
             }
         });
@@ -121,6 +133,7 @@ public class EventsDetailsActivity extends AppCompatActivity {
         pd.setCancelable(false);
 //        Toast.makeText(EventsDetailsActivity.this, Integer.toString(curEvent.getPhotoID().getPosters().size()), Toast.LENGTH_SHORT).show();
     }
+
 
     private void addEventToCalender() {
         long date = curEvent.getDays().get(0).getDate();
@@ -334,6 +347,12 @@ public class EventsDetailsActivity extends AppCompatActivity {
                 iv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if(!permissionGranted(android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                            Toast.makeText(EventsDetailsActivity.this, "Write External Storage Permission Denied!", Toast.LENGTH_SHORT).show();
+                            askForPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE);
+                            return;
+                        }
+
                         StorageReference httpsReference = storage.getReferenceFromUrl(url);
                         pd.show();
                         //File localFile = null;
@@ -410,6 +429,25 @@ public class EventsDetailsActivity extends AppCompatActivity {
         updateList();
     }
 
+    private boolean permissionGranted(String permission, String permission2) {
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.M
+                ||
+                (
+                        ContextCompat.checkSelfPermission(EventsDetailsActivity.this, permission)
+                            == PackageManager.PERMISSION_GRANTED &&
+                        ContextCompat.checkSelfPermission(EventsDetailsActivity.this, permission2)
+                            == PackageManager.PERMISSION_GRANTED
+                )
+                ;
+    }
+
+
+    private void askForPermission(String permission, String permission2) {
+        ActivityCompat.requestPermissions(EventsDetailsActivity.this,
+                new String[]{permission, permission2},
+                MY_PERMISSIONS_REQUEST);
+    }
+
     private void updateList() {
         llCoordinators.removeAllViews();
 
@@ -432,6 +470,25 @@ public class EventsDetailsActivity extends AppCompatActivity {
             Picasso.with(EventsDetailsActivity.this).load(coordinator.getPhoto()).resize(200, 200).centerCrop().transform(new CircleTransform()).into((ImageView) ll.findViewById(R.id.iv_photo));
 
             llCoordinators.addView(ll);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String permissions[], @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                        && grantResults[1] == PackageManager.PERMISSION_GRANTED
+                        ) {
+                    Toast.makeText(EventsDetailsActivity.this, permissions[0] + " and " + permissions[1] +" granted", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(EventsDetailsActivity.this, permissions[0] + " or " + permissions[1] +" denied", Toast.LENGTH_SHORT).show();
+                }
+            }
+            break;
         }
     }
 

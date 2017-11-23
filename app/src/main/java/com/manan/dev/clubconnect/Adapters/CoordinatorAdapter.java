@@ -88,7 +88,7 @@ public class CoordinatorAdapter extends ArrayAdapter<Coordinator> {
             if(constraint != null) {
                 suggestions.clear();
                 for (Coordinator coordinator : itemsAll) {
-                    if(coordinator.getName().toLowerCase().startsWith(constraint.toString().toLowerCase().trim())){
+                    if(coordinator.getName().toLowerCase().contains(constraint.toString().toLowerCase().trim())){
                         suggestions.add(coordinator);
                     }
                 }
