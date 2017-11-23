@@ -4,14 +4,12 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -23,10 +21,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.manan.dev.clubconnect.Models.Coordinator;
-import com.manan.dev.clubconnect.User.UserProfileActivity;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
@@ -46,17 +42,17 @@ public class AddNewCoordinatorActivity extends AppCompatActivity {
     private StorageReference firebaseStorage;
     private ProgressDialog pd;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_coordinator);
+
         coordinator = new Coordinator();
 
         coordName = (EditText) findViewById(R.id.input_coord_name);
         coordEmail = (EditText) findViewById(R.id.et_email);
         coordPhone = (EditText) findViewById(R.id.et_phone);
-        imgCoord = (ImageView)findViewById(R.id.img_coord);
+        imgCoord = (ImageView) findViewById(R.id.img_coord);
         submitCoord = (FloatingActionButton) findViewById(R.id.bt_coord_submit);
         firebaseStorage = FirebaseStorage.getInstance().getReference();
 
@@ -69,6 +65,7 @@ public class AddNewCoordinatorActivity extends AppCompatActivity {
 
         ImageView profilePhoto = (ImageView) findViewById(R.id.img_coord);
         Picasso.with(AddNewCoordinatorActivity.this).load(R.drawable.login_back).transform(new CircleTransform()).into(profilePhoto);
+
         imgCoord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -82,21 +79,42 @@ public class AddNewCoordinatorActivity extends AppCompatActivity {
         submitCoord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                coordinator.setName(coordName.getText().toString());
-                coordinator.setEmail(coordEmail.getText().toString());
-                coordinator.setPhone(coordPhone.getText().toString());
 
-                uploadImage();
+                CreateCoordinator();
 
             }
         });
+    }
 
+    private void CreateCoordinator() {
+        Boolean checker = (!coordName.equals("")&&!coordEmail.equals("")&&!coordPhone.equals("")&&userImage.equals(""));
+
+        if(checker) {
+            pd.show();
+
+            coordinator.setName(coordName.getText().toString());
+            coordinator.setEmail(coordEmail.getText().toString());
+            coordinator.setPhone(coordPhone.getText().toString());
+            uploadImage();
+        }
+        else{
+            if(coordName.equals("")){
+                coordName.setError("Required");
+            }
+            if(coordEmail.equals("")){
+                coordEmail.setError("Required");
+            }
+            if(coordPhone.equals("")){
+                coordPhone.setError("Required");
+            }
+        }
     }
 
     private void uploadImage() {
         Bitmap bmp = null;
         String imgName = userImage.getLastPathSegment();
-        try{
+        try {
+
             bmp = MediaStore.Images.Media.getBitmap(AddNewCoordinatorActivity.this.getContentResolver(), userImage);
             bmp = Bitmap.createScaledBitmap(bmp, 500, (int) ((float) bmp.getHeight() / bmp.getWidth() * 500), true);
 
@@ -121,11 +139,15 @@ public class AddNewCoordinatorActivity extends AppCompatActivity {
                     FirebaseDatabase.getInstance().getReference().child("coordinators").child(clubName).push().setValue(coordinator).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            if(task.isSuccessful()){
-                                Toast.makeText(AddNewCoordinatorActivity.this, "coordinator added", Toast.LENGTH_SHORT).show();
-                            }
-                            else{
+                            if (task.isSuccessful()) {
+                                Toast.makeText(AddNewCoordinatorActivity.this, "Coordinator is added!", Toast.LENGTH_SHORT).show();
+                                pd.dismiss();
+                                Intent i = new Intent(AddNewCoordinatorActivity.this, AdminDashboardActivity.class);
+                                startActivity(i);
+                                //  finish();
+                            } else {
                                 Toast.makeText(AddNewCoordinatorActivity.this, "coordinator add failed", Toast.LENGTH_SHORT).show();
+                                pd.dismiss();
                             }
                         }
                     });
@@ -135,36 +157,34 @@ public class AddNewCoordinatorActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     Toast.makeText(AddNewCoordinatorActivity.this, "Image Upload failed", Toast.LENGTH_SHORT).show();
+                    pd.dismiss();
                 }
             });
-
-
-
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null){
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             userImage = data.getData();
             int finalWidth = 100;
             try {
                 Bitmap bitmap;
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), userImage);
-                bitmap = Bitmap.createScaledBitmap(bitmap, (int) finalWidth, (int) finalWidth,
-                        true);
+                bitmap = Bitmap.createScaledBitmap(bitmap, (int) finalWidth, (int) finalWidth, true);
                 imgCoord.setImageBitmap(bitmap);
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-        else{
+        } else {
             Toast.makeText(AddNewCoordinatorActivity.this, "Upload Image", Toast.LENGTH_SHORT).show();
+            pd.dismiss();
         }
+
     }
+
+
 
 }

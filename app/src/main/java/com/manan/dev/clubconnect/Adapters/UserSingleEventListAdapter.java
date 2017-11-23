@@ -26,7 +26,7 @@ import java.util.Calendar;
  * Created by Shubham on 11/15/2017.
  */
 
-public class UserSingleEventListAdapter extends RecyclerView.Adapter<UserSingleEventListAdapter.ViewHolder>{
+public class UserSingleEventListAdapter extends RecyclerView.Adapter<UserSingleEventListAdapter.ViewHolder> {
 
     public static final String CLUB_NAME = "ClubName";
     public static final String EVENT_ID = "EventId";
@@ -45,7 +45,7 @@ public class UserSingleEventListAdapter extends RecyclerView.Adapter<UserSingleE
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater l = LayoutInflater.from(context);
-        View v = l.inflate(R.layout.user_club_single_event_list,parent,false);
+        View v = l.inflate(R.layout.user_club_single_event_list, parent, false);
         ViewHolder vh = new ViewHolder(v);
         return vh;
     }
@@ -54,13 +54,15 @@ public class UserSingleEventListAdapter extends RecyclerView.Adapter<UserSingleE
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Event u = userSingleEventLists.get(position);
 
-        holder.posterUserEventClubList.setColorFilter(Color.rgb(0xae,0xd0,0xff), PorterDuff.Mode.MULTIPLY);
+        holder.posterUserEventClubList.setColorFilter(Color.rgb(0xae, 0xd0, 0xff), PorterDuff.Mode.MULTIPLY);
         Picasso.with(context).load(u.getPhotoID().getPosters().get(0)).into(holder.posterUserEventClubList);
 
-        String timeDisplay ,dateDisplay;
-        SimpleDateFormat sdf1,sdf2;
+        String timeDisplay, dateDisplay;
+        SimpleDateFormat sdf1, sdf2;
+
 //        long try1 = u.getDays().get(0).getStartTime();
 //        Toast.makeText(context,Long.toString(try1),Toast.LENGTH_SHORT).show();
+
         cal1.setTimeInMillis(u.getDays().get(0).getDate());
         sdf1 = new SimpleDateFormat("EEEE, dd MMM");
         dateDisplay = sdf1.format(cal1.getTime());
@@ -79,8 +81,8 @@ public class UserSingleEventListAdapter extends RecyclerView.Adapter<UserSingleE
 
                 Intent singleEventDetailIntent = new Intent(context, EventsDetailsActivity.class);
                 Bundle singleEventDetailBundle = new Bundle();
-                singleEventDetailBundle.putString(CLUB_NAME,u.clubName);
-                singleEventDetailBundle.putString(EVENT_ID,u.eventId);
+                singleEventDetailBundle.putString(CLUB_NAME, u.clubName);
+                singleEventDetailBundle.putString(EVENT_ID, u.eventId);
                 singleEventDetailIntent.putExtras(singleEventDetailBundle);
                 context.startActivity(singleEventDetailIntent);
 
@@ -88,6 +90,7 @@ public class UserSingleEventListAdapter extends RecyclerView.Adapter<UserSingleE
         });
 
     }
+
     @Override
     public int getItemCount() {
         return (null != userSingleEventLists ? userSingleEventLists.size() : 0);
@@ -97,7 +100,7 @@ public class UserSingleEventListAdapter extends RecyclerView.Adapter<UserSingleE
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         ImageView posterUserEventClubList;
-        TextView dateUserEventClubList,timeUserEventClubList;
+        TextView dateUserEventClubList, timeUserEventClubList;
         CardView userClubEventListCardView;
         TextView eventNameUserClubEventList;
 

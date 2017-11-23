@@ -28,8 +28,8 @@
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/poster_club_event"
-                android:layout_margin="10dp">
+                android:layout_margin="10dp"
+                android:layout_alignBottom="@+id/poster_club_event">
 
                 <ImageView
                     android:id="@+id/iv_back"
@@ -40,13 +40,12 @@
                 <TextView
                     android:id="@+id/tv_event_name"
                     android:layout_width="150dp"
-                    android:gravity="center_horizontal"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
+                    android:gravity="center_horizontal"
                     android:padding="5dp"
                     android:paddingLeft="10dp"
-                    android:text="Code Relay - Linked Lists
-"
+                    android:text="Code Relay - Linked Lists"
                     android:textColor="@android:color/white"
                     android:textSize="17sp" />
             </RelativeLayout>
@@ -55,8 +54,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="15dp"
             android:background="#Ffc"
+            android:paddingBottom="15dp"
             android:paddingTop="15dp">
 
             <TextView

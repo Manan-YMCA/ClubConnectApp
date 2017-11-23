@@ -7,4 +7,5 @@
     <color name="primary">#ba2525</color>
     <color name="primaryFocused">#ae1010</color>
     <color name="primaryPressed">#830202</color>
+    <color name="darkBlack">#000000</color>>
 </resources>

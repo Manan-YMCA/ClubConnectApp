@@ -47,31 +47,6 @@
                 android:textColor="@android:color/white" />
 
             <TextView
-                android:id="@+id/samarpan"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-
-                android:layout_marginLeft="10dp"
-                android:background="@drawable/button_club"
-                android:clickable="true"
-                android:gravity="center_horizontal"
-                android:padding="10dp"
-                android:text="Samarpan"
-                android:textColor="@android:color/white" />
-
-            <TextView
-                android:id="@+id/srijan"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:background="@drawable/button_club"
-                android:clickable="true"
-                android:gravity="center_horizontal"
-                android:padding="10dp"
-                android:text="Srijan"
-                android:textColor="@android:color/white" />
-
-            <TextView
                 android:id="@+id/vividha"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
@@ -96,18 +71,6 @@
                 android:textColor="@android:color/white" />
 
             <TextView
-                android:id="@+id/nataraja"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:background="@drawable/button_club"
-                android:clickable="true"
-                android:gravity="center_horizontal"
-                android:padding="10dp"
-                android:text="Nataraja"
-                android:textColor="@android:color/white" />
-
-            <TextView
                 android:id="@+id/jhalak"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
@@ -117,6 +80,42 @@
                 android:gravity="center_horizontal"
                 android:padding="10dp"
                 android:text="Jhalak"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:id="@+id/samarpan"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/button_club"
+                android:clickable="true"
+                android:gravity="center_horizontal"
+                android:padding="10dp"
+                android:text="Samarpan"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:id="@+id/srijan"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/button_club"
+                android:clickable="true"
+                android:gravity="center_horizontal"
+                android:padding="10dp"
+                android:text="Srijan"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:id="@+id/nataraja"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/button_club"
+                android:clickable="true"
+                android:gravity="center_horizontal"
+                android:padding="10dp"
+                android:text="Nataraja"
                 android:textColor="@android:color/white" />
 
             <TextView
@@ -142,6 +141,7 @@
                 android:padding="10dp"
                 android:text="MechNext"
                 android:textColor="@android:color/white" />
+
             <TextView
                 android:id="@+id/taranum"
                 android:layout_width="100dp"
@@ -153,7 +153,6 @@
                 android:padding="10dp"
                 android:text="Taranum"
                 android:textColor="@android:color/white" />
-
 
         </LinearLayout>
     </HorizontalScrollView>
@@ -171,6 +170,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true" />
-
 
 </RelativeLayout>

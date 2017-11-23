@@ -242,7 +242,6 @@ public class AddNewEventActivity extends AppCompatActivity {
         imageViewData.setCropToPadding(true);
         imageViewData.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
-
         ImageView imageView = new ImageView(this);
         RelativeLayout.LayoutParams ivLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         ivLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_END);
@@ -423,14 +422,10 @@ public class AddNewEventActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
-
                 count++;
-
                 //adding items to arraylist for storing data
                 event.days.add(new TimeInterval(0, 0, 0));
-
-                Toast.makeText(AddNewEventActivity.this, "layout returned", Toast.LENGTH_SHORT).show();
-
+                //Toast.makeText(AddNewEventActivity.this, "layout returned", Toast.LENGTH_SHORT).show();
                 event_day_layout.addView(layoutreturner(count));
 
             }
