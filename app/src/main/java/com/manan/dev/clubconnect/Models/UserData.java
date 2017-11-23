@@ -1,26 +1,75 @@
 package com.manan.dev.clubconnect.Models;
 
+import java.util.Map;
+
 /**
  * Created by shubhamsharma on 21/11/17.
  */
 
 public class UserData {
-    String userPhoneNo, userBranch, userCourse, userRollNo;
+    String userPhoneNo, userBranch, userCourse, userRollNo, photoID, name;
+    Map<String, String> going, bookmarked;
     long userGraduationYear;
 
     public UserData() {
     }
 
-    public UserData(String userPhoneNo, String userBranch, String userCourse, String userRollNo, long userGraduationYear) {
+    public UserData(String userPhoneNo, String userBranch, String userCourse, String userRollNo, String photoID, String name, long userGraduationYear) {
         this.userPhoneNo = userPhoneNo;
         this.userBranch = userBranch;
         this.userCourse = userCourse;
         this.userRollNo = userRollNo;
+        this.photoID = photoID;
+        this.name = name;
         this.userGraduationYear = userGraduationYear;
     }
 
     public String getUserPhoneNo() {
         return userPhoneNo;
+    }
+
+    public UserData(String userPhoneNo, String userBranch, String userCourse, String userRollNo, String photoID, String name, Map<String, String> going, Map<String, String> bookmarked, long userGraduationYear) {
+        this.userPhoneNo = userPhoneNo;
+        this.userBranch = userBranch;
+        this.userCourse = userCourse;
+        this.userRollNo = userRollNo;
+        this.photoID = photoID;
+        this.name = name;
+        this.going = going;
+        this.bookmarked = bookmarked;
+        this.userGraduationYear = userGraduationYear;
+    }
+
+    public String getPhotoID() {
+        return photoID;
+    }
+
+    public void setPhotoID(String photoID) {
+        this.photoID = photoID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Map<String, String> getGoing() {
+        return going;
+    }
+
+    public void setGoing(Map<String, String> going) {
+        this.going = going;
+    }
+
+    public Map<String, String> getBookmarked() {
+        return bookmarked;
+    }
+
+    public void setBookmarked(Map<String, String> bookmarked) {
+        this.bookmarked = bookmarked;
     }
 
     public void setUserPhoneNo(String userPhoneNo) {
