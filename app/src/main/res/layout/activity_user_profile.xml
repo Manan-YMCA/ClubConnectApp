@@ -6,28 +6,45 @@
     android:layout_height="match_parent"
     tools:context="com.manan.dev.clubconnect.User.UserProfileActivity">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
         >
 
         <ImageView
+            android:layout_marginTop="20dp"
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:id="@+id/photo_crop_user"
             android:layout_gravity="center"
 
            />
+
         <EditText
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
+            android:layout_marginTop="20dp"
+            android:layout_height="wrap_content"
+            android:hint="Name"
+            android:id="@+id/et_name"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"/>
+
+        <EditText
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Phone No."
             android:id="@+id/user_profile_phone"
             android:layout_gravity="center"
             android:layout_marginBottom="10dp"/>
         <EditText
-            android:layout_width="300dp"
+            android:id="@+id/et_RollNo"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Roll Number"
             android:layout_gravity="center"
@@ -35,7 +52,7 @@
 
         <Spinner
             android:id="@+id/spinner1"
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:drawable/btn_dropdown"
             android:layout_gravity="center"
@@ -47,14 +64,27 @@
 
         <Spinner
             android:id="@+id/spinner2"
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:drawable/btn_dropdown"
             android:layout_gravity="center"
             android:tag="Year"
             style="@style/AppTheme.User"
             android:spinnerMode="dropdown" />
-    </LinearLayout>>
+
+        <Spinner
+            android:id="@+id/spinner3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/btn_dropdown"
+            android:layout_gravity="center"
+            android:tag="Year"
+            style="@style/AppTheme.User"
+            android:spinnerMode="dropdown" />
+
+
+    </LinearLayout>
+    </ScrollView>
 <android.support.design.widget.FloatingActionButton
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
