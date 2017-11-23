@@ -344,10 +344,8 @@ public class DashboardUserActivity extends AppCompatActivity
             // Handle the camera action
         } else if (id == R.id.nav_profile) {
             startActivity(new Intent(DashboardUserActivity.this, UserProfileActivity.class));
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_about) {
+        }
+        else if (id == R.id.nav_about) {
             String msg = "Try this awesome app which will make you aware of all the events in campus!" +
                     "\n This app has various features in it: " +
                     "\n 1. btkbruibgiewe" +

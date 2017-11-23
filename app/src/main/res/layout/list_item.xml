@@ -21,23 +21,22 @@
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
-            android:layout_toLeftOf="@+id/btnMore"
             android:text="Sample title"
             android:textColor="@android:color/black"
             android:textSize="18sp" />
 
-        <Button
-            android:id="@+id/btnMore"
-            android:textColor="@android:color/white"
-            android:layout_width="100dp"
-            android:layout_height="32dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:text="more"
-            android:background="@drawable/button_club" />
+        <!--<Button-->
+            <!--android:id="@+id/btnMore"-->
+            <!--android:textColor="@android:color/white"-->
+            <!--android:layout_width="100dp"-->
+            <!--android:layout_height="32dp"-->
+            <!--android:paddingLeft="10dp"-->
+            <!--android:paddingRight="10dp"-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:text="more"-->
+            <!--android:background="@drawable/button_club" />-->
 
 
     </RelativeLayout>

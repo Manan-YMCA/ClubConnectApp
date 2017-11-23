@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +26,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.manan.dev.clubconnect.Models.Coordinator;
+import com.manan.dev.clubconnect.User.UserProfileActivity;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 
@@ -34,7 +37,7 @@ public class AddNewCoordinatorActivity extends AppCompatActivity {
     private EditText coordEmail;
     private EditText coordPhone;
     private ImageView imgCoord;
-    private Button submitCoord;
+    private FloatingActionButton submitCoord;
     private Coordinator coordinator;
     private int PICK_IMAGE_REQUEST = 111;
     private String clubName;
@@ -54,7 +57,7 @@ public class AddNewCoordinatorActivity extends AppCompatActivity {
         coordEmail = (EditText) findViewById(R.id.et_email);
         coordPhone = (EditText) findViewById(R.id.et_phone);
         imgCoord = (ImageView)findViewById(R.id.img_coord);
-        submitCoord = (Button) findViewById(R.id.bt_coord_submit);
+        submitCoord = (FloatingActionButton) findViewById(R.id.bt_coord_submit);
         firebaseStorage = FirebaseStorage.getInstance().getReference();
 
         clubName = getIntent().getStringExtra("clubName");
@@ -64,7 +67,8 @@ public class AddNewCoordinatorActivity extends AppCompatActivity {
         pd.setCanceledOnTouchOutside(false);
         pd.setCancelable(false);
 
-
+        ImageView profilePhoto = (ImageView) findViewById(R.id.img_coord);
+        Picasso.with(AddNewCoordinatorActivity.this).load(R.drawable.login_back).transform(new CircleTransform()).into(profilePhoto);
         imgCoord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
