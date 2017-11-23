@@ -64,7 +64,7 @@ public class AdminZoneActivity extends AppCompatActivity {
         // signUpAsAdminBtn = (Button) findViewById(R.id.signUpAsAdminbtn);
         backToLoginScreen = (TextView) findViewById(R.id.back_to_login);
 
-        usernameAdminEditText.setText("manan");
+        usernameAdminEditText.setText("manan@ymca.com");
         passwordAdminEditText.setText("12345678");
 
         pd = new ProgressDialog(this);
@@ -101,7 +101,7 @@ public class AdminZoneActivity extends AppCompatActivity {
     }
 
     private void attemptAdminSignUp() {
-        String username = usernameAdminEditText.getText().toString() + "@ymca.com";
+        String username = usernameAdminEditText.getText().toString();
         String password = passwordAdminEditText.getText().toString();
         if (username.isEmpty()) {
             Toast.makeText(this, "Enter Username", Toast.LENGTH_SHORT).show();
@@ -131,7 +131,7 @@ public class AdminZoneActivity extends AppCompatActivity {
     }
 
     private void attemptAdminSignIn() {
-        String username = usernameAdminEditText.getText().toString() + "@ymca.com";
+        String username = usernameAdminEditText.getText().toString();
         String password = passwordAdminEditText.getText().toString();
         if (username.isEmpty()) {
             Toast.makeText(this, "Enter Username", Toast.LENGTH_SHORT).show();

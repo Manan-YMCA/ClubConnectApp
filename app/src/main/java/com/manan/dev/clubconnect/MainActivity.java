@@ -45,16 +45,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(offline)
-        {
+        if (offline) {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-            offline=false;
+            offline = false;
         }
 
         setContentView(R.layout.activity_main);
         containeer = (RelativeLayout) findViewById(R.id.container);
         TransitionDrawable trans = (TransitionDrawable) containeer.getBackground();
-            trans.startTransition(8000);
+        trans.startTransition(8000);
 
         //setTheme(android.R.style.Theme_Black_NoTitleBar_Fullscreen);
 
@@ -86,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Log.d(TAG, "facebook:onSuccess:" + loginResult);
-                
+
                 //String accessToken = loginResult.getAccessToken().getToken();
                 // save accessToken to SharedPreference
                 //saveAccessToken(accessToken);

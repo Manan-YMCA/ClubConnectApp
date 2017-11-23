@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/add_photos"
-        android:icon="@drawable/vector_attach_photo"
+        android:icon="@drawable/vector_insert_photo"
         android:title="Attach Photos"
         app:showAsAction="always" />
     <item

@@ -7,31 +7,32 @@
     tools:context="com.manan.dev.clubconnect.AddNewCoordinatorActivity">
 
     <ImageView
-        android:layout_alignParentTop="true"
         android:id="@+id/img_coord"
         android:layout_width="200dp"
         android:layout_height="200dp"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
         android:layout_marginBottom="10dp"
-        android:background="@drawable/vector_coordinator"/>
+        android:layout_marginTop="20dp"
+        android:background="@drawable/vector_coordinator" />
+
     <TextView
-        android:layout_below="@id/img_coord"
-        android:layout_width="wrap_content"
-        android:layout_centerInParent="true"
         android:id="@+id/text_view_user"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tap to Select Photo"/>
+        android:layout_below="@id/img_coord"
+        android:layout_centerInParent="true"
+        android:text="Tap to Select Photo" />
 
     <LinearLayout
         android:id="@+id/rLayoutCoord"
-        android:layout_below="@id/text_view_user"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/text_view_user"
         android:layout_centerInParent="true"
+        android:layout_margin="10dp"
         android:orientation="vertical"
-        android:padding="10dp"
-        android:layout_margin="10dp">
+        android:padding="10dp">
 
 
         <EditText
@@ -39,53 +40,47 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/tv_name"
-           android:layout_margin="10dp"
-            android:backgroundTint="#fff"
             android:layout_gravity="center"
-            android:hint="Enter Coord Name"
-/>
+            android:layout_margin="10dp"
+            android:backgroundTint="#fff"
+            android:hint="Enter Coord Name" />
+
         <EditText
             android:id="@+id/et_phone"
-            android:layout_margin="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/tv_phone_no"
             android:layout_alignBottom="@+id/tv_phone_no"
             android:layout_alignStart="@+id/input_coord_name"
+            android:layout_margin="10dp"
             android:backgroundTint="#fff"
-            android:hint="Enter Coord phone"
-             />
-
+            android:hint="Enter Coord phone" />
 
         <EditText
             android:id="@+id/et_email"
-
             android:layout_width="match_parent"
-            android:layout_margin="10dp"
-
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:layout_alignBaseline="@+id/tv_email"
             android:layout_alignBottom="@+id/tv_email"
             android:layout_alignStart="@+id/input_coord_name"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
             android:backgroundTint="#fff"
             android:hint="Enter Coord E-mail"
-            />
-
+            android:maxLines="2" />
 
 
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/bt_coord_submit"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="10dp"
-        android:src="@drawable/check"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
         android:layout_centerHorizontal="true"
-      />
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="20dp"
+        android:src="@drawable/check" />
 
 </RelativeLayout>

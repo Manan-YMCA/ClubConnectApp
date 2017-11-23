@@ -1,11 +1,10 @@
 package com.manan.dev.clubconnect.User;
 
 import android.app.ProgressDialog;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -53,11 +52,7 @@ public class UserProfileActivity extends AppCompatActivity {
         final Spinner course = (Spinner)findViewById(R.id.spinner2);
         final Spinner batch = (Spinner) findViewById(R.id.spinner3);
 
-
-
-
-
-        String[] itemsBatch = new String[]{"Select Graduation Year","2016","2017","2018", "2019", "2020"};
+        String[] itemsBatch = new String[]{"Select Graduation Year","2016","2017","2018", "2019", "2020","2021"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, itemsBatch);
         dropdown.setAdapter(adapter);
 
@@ -102,7 +97,6 @@ public class UserProfileActivity extends AppCompatActivity {
         pd.setCanceledOnTouchOutside(false);
         pd.setCancelable(false);
 
-
         submitFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -110,7 +104,7 @@ public class UserProfileActivity extends AppCompatActivity {
                 pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
                 pd.setMax(100);
                 pd.show();
-                //Log.d("value", userPhone.getText().toString());
+
                 String phoneNo = userPhone.getText().toString();
                 String rollNo = userRoll.getText().toString().toUpperCase();
                 String photoID = mAuth.getCurrentUser().getPhotoUrl().toString();

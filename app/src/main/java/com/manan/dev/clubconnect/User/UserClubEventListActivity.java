@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -37,11 +36,10 @@ public class UserClubEventListActivity extends AppCompatActivity {
         clubName = "kachra";
         try {
             clubName = getIntent().getExtras().getString(CLUB_NAME, "kachra");
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        Toast.makeText(this, clubName, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, clubName, Toast.LENGTH_SHORT).show();
 
         userSingleEventListRV = (RecyclerView) findViewById(R.id.rv_user_club_list);
 
@@ -51,7 +49,7 @@ public class UserClubEventListActivity extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         userSingleEventListRV.setLayoutManager(layoutManager);
 
-        userSingleEventListAdapter = new UserSingleEventListAdapter(userSingleEventListArrayList,this);
+        userSingleEventListAdapter = new UserSingleEventListAdapter(userSingleEventListArrayList, this);
         userSingleEventListRV.setAdapter(userSingleEventListAdapter);
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("events").child(clubName);
@@ -91,7 +89,7 @@ public class UserClubEventListActivity extends AppCompatActivity {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    userSingleEventListAdapter = new UserSingleEventListAdapter(userSingleEventListArrayList,UserClubEventListActivity.this);
+                    userSingleEventListAdapter = new UserSingleEventListAdapter(userSingleEventListArrayList, UserClubEventListActivity.this);
                     userSingleEventListRV.setAdapter(userSingleEventListAdapter);
 
                 }
@@ -105,8 +103,8 @@ public class UserClubEventListActivity extends AppCompatActivity {
                         obj.setEventId(dataSnapshot.getKey());
                         obj.setClubName(clubName);
 
-                        for(int i=0; i<userSingleEventListArrayList.size(); i++)
-                            if(userSingleEventListArrayList.get(i).getEventId().equals(dataSnapshot.getKey())) {
+                        for (int i = 0; i < userSingleEventListArrayList.size(); i++)
+                            if (userSingleEventListArrayList.get(i).getEventId().equals(dataSnapshot.getKey())) {
                                 userSingleEventListArrayList.set(i, obj);
                                 break;
                             }
@@ -115,15 +113,14 @@ public class UserClubEventListActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                    userSingleEventListAdapter = new UserSingleEventListAdapter(userSingleEventListArrayList,UserClubEventListActivity.this);
+                    userSingleEventListAdapter = new UserSingleEventListAdapter(userSingleEventListArrayList, UserClubEventListActivity.this);
                     userSingleEventListRV.setAdapter(userSingleEventListAdapter);
                 }
 
                 @Override
                 public void onChildRemoved(DataSnapshot dataSnapshot) {
-                    for(int i=0; i<userSingleEventListArrayList.size(); i++)
-                        if(userSingleEventListArrayList.get(i).getEventId().equals(dataSnapshot.getKey()))
-                        {
+                    for (int i = 0; i < userSingleEventListArrayList.size(); i++)
+                        if (userSingleEventListArrayList.get(i).getEventId().equals(dataSnapshot.getKey())) {
                             userSingleEventListArrayList.remove(i);
                             break;
                         }

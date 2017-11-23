@@ -1,6 +1,8 @@
 package com.manan.dev.clubconnect;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -14,16 +16,20 @@ public class AdminDashboardActivity extends AppCompatActivity {
     private FloatingActionButton addNewEventFab;
     private FirebaseAuth mAuth;
 
+    @SuppressLint("ResourceAsColor")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_dashboard);
         mAuth = FirebaseAuth.getInstance();
         addNewEventFab = (FloatingActionButton) findViewById(R.id.add_new_event_fab);
+        Object ffffff;
+        addNewEventFab.setBackgroundTintList(ColorStateList.valueOf(R.color.darkBlack));
+        //.withAlpha(R.color.cardview_shadow_start_color));
         addNewEventFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(AdminDashboardActivity.this,AddNewEventActivity.class));
+                startActivity(new Intent(AdminDashboardActivity.this, AddNewEventActivity.class));
             }
         });
     }
@@ -45,7 +51,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.action_settings:
                 FirebaseAuth.getInstance().signOut();
                 finish();

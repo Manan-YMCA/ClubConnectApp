@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/action_settings"
-        android:title="Log Out"/>
-    <item android:id="@+id/action_add_coord"
-        android:title="Add Cooridinator"/>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_add_coord"
+        android:icon="@drawable/vector_add_coords"
+        android:title="Add Cooridinator"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_settings"
+        android:icon="@drawable/vector_logout"
+        android:title="Log Out"
+        app:showAsAction="always" />
 </menu>
