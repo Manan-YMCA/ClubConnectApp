@@ -13,28 +13,51 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-       <RelativeLayout
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           >
-           <TextView
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:text="Event Name"
-               android:background="@android:color/white"
-               />
-        <ImageView
-            android:id="@+id/poster_club_event"
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/login_back" />
-       </RelativeLayout>>
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/poster_club_event"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/login_back" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/poster_club_event"
+                android:layout_margin="10dp">
+
+                <ImageView
+                    android:id="@+id/iv_back"
+                    android:layout_width="175dp"
+                    android:layout_height="65dp"
+                    android:src="@drawable/stroke_background" />
+
+                <TextView
+                    android:id="@+id/tv_event_name"
+                    android:layout_width="150dp"
+                    android:gravity="center_horizontal"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:padding="5dp"
+                    android:paddingLeft="10dp"
+                    android:text="Code Relay - Linked Lists
+"
+                    android:textColor="@android:color/white"
+                    android:textSize="17sp" />
+            </RelativeLayout>
+        </RelativeLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:paddingTop="15dp"
+            android:layout_height="wrap_content"
             android:paddingBottom="15dp"
-            android:layout_height="wrap_content">
+            android:background="#Ffc"
+            android:paddingTop="15dp">
 
             <TextView
                 android:id="@+id/date_club_event"
@@ -43,7 +66,6 @@
                 android:layout_weight="1"
                 android:drawableLeft="@drawable/vector_date"
                 android:paddingLeft="5dp"
-
                 android:text="Event Date"
                 android:textSize="15sp" />
 
@@ -53,6 +75,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:drawableLeft="@drawable/vector_time"
+                android:paddingLeft="5dp"
                 android:text="Event Time"
                 android:textSize="15sp" />
         </LinearLayout>

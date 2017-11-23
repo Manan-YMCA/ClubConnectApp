@@ -69,9 +69,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.manan.dev.clubconnect.DashboardUserActivity" />
         </activity>
-        <activity android:name=".User.UserProfileActivity"
+        <activity
+            android:name=".User.UserProfileActivity"
             android:label="Profile"
-            android:parentActivityName=".DashboardUserActivity"></activity>
+            android:parentActivityName=".DashboardUserActivity" />
+        <activity android:name=".AddNewClubActivity"></activity>
     </application>
 
 </manifest>

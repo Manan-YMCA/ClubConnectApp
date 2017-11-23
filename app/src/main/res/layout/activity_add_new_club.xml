@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.manan.dev.clubconnect.AddNewClubActivity">
+
+    <TextView
+        android:id="@+id/email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/et_email"
+        android:layout_alignBottom="@+id/et_email"
+        android:layout_alignStart="@+id/clubname"
+        android:text="E-mail"
+        android:textColor="#444"
+        android:textSize="20sp" />
+
+    <EditText
+        android:id="@+id/et_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/clubname"
+        android:layout_alignStart="@+id/et_club_name"
+        android:backgroundTint="#FAFAFA"
+        android:hint="Enter E-mail"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/clubname"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="37dp"
+        android:layout_toStartOf="@+id/et_email"
+        android:text="Club Name"
+        android:textColor="#444"
+        android:textSize="20sp" />
+
+    <EditText
+        android:id="@+id/et_club_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="48dp"
+        android:backgroundTint="#FAFAFA"
+        android:hint="Enter Club Name"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/clubname"
+        android:layout_below="@+id/et_club_name"
+        android:text="Password"
+        android:textColor="#444"
+        android:textSize="20sp" />
+
+    <EditText
+        android:id="@+id/et_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/et_club_name"
+        android:layout_below="@+id/clubname"
+        android:backgroundTint="#FAFAFA"
+        android:hint="Enter Password"
+        android:textSize="15sp" />
+
+    <Button
+        android:id="@+id/btn_add_club"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/et_password"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="45dp"
+        android:text="ADD CLUB" />
+</RelativeLayout>

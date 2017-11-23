@@ -1,8 +1,8 @@
 package com.manan.dev.clubconnect;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -20,8 +20,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.facebook.login.LoginManager;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
@@ -75,7 +73,7 @@ public class DashboardUserActivity extends AppCompatActivity
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard_user);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -150,7 +148,13 @@ public class DashboardUserActivity extends AppCompatActivity
         findViewById(R.id.srijan).setOnClickListener(this);
         findViewById(R.id.samarpan).setOnClickListener(this);
         findViewById(R.id.vividha).setOnClickListener(this);
-        findViewById(R.id.dhundhun).setOnClickListener(this);
+        findViewById(R.id.ananya).setOnClickListener(this);
+        findViewById(R.id.nataraja).setOnClickListener(this);
+        findViewById(R.id.jhalak).setOnClickListener(this);
+        findViewById(R.id.microbird).setOnClickListener(this);
+        findViewById(R.id.mechnext).setOnClickListener(this);
+        findViewById(R.id.taranum).setOnClickListener(this);
+
     }
 
 
@@ -268,11 +272,11 @@ public class DashboardUserActivity extends AppCompatActivity
                     } else
                         model.setPhotoID(null);
                     Calendar cal = Calendar.getInstance();
-                    cal.set(Calendar.HOUR_OF_DAY,0);
+                    cal.set(Calendar.HOUR_OF_DAY, 0);
                     cal.set(Calendar.MINUTE, 0);
                     cal.set(Calendar.SECOND, 0);
                     long curDate = cal.getTimeInMillis();
-                    if(model.getDays().get(0).getDate() < curDate)
+                    if (model.getDays().get(0).getDate() < curDate)
                         preEventsItem.add(model);
                     else
                         curEventsItem.add(model);
@@ -344,24 +348,40 @@ public class DashboardUserActivity extends AppCompatActivity
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_about) {
-            String msg = "\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+            String msg = "Try this awesome app which will make you aware of all the events in campus!" +
+                    "\n This app has various features in it: " +
+                    "\n 1. btkbruibgiewe" +
+                    "\n 2. ekjgbdbrgldee" +
+                    "\n 3. jlgblejrgbiue" +
+                    "\n Instructions to use this application:" +
+                    "\n 1. sjdbciulsdbvv" +
+                    "\n 2. ekjgbdbrgldee" +
+                    "\n 2. ekjgbdbrgldee" +
+                    "\n 3. jlgblejrgbiue" +
+                    "\n Instructions to use this application:" +
+                    "\n 1. sjdbciulsdbvv" +
+                    "\n 2. ekjgbdbrgldee" +
+                    "\n 2. ekjgbdbrgldee" +
+                    "\n 3. jlgblejrgbiue" +
+                    "\n Instructions to use this application:" +
+                    "\n 1. sjdbciulsdbvv" +
+                    "\n 2. ekjgbdbrgldee" +
+                    "\n 3. jlgblejrgbiue";
 
             createDialogBox(msg);
-
-
-
+            return true;
         } else if (id == R.id.nav_share) {
 
             String msg = "Try this awesome app which will make you aware of all the events in campus!";
             shareTextMessage(msg);
             return true;
 
-        } else if(id == R.id.nav_send){
+        } else if (id == R.id.nav_send) {
             String to = "shubhamkachroo@yahoo.co.in";
             String subject = "Bug Reported - Club Connect ";
             String msg = "I found a bug!\n";
 
-            sendEmailBug(to,subject,msg);
+            sendEmailBug(to, subject, msg);
             return true;
 
         } else if (id == R.id.nav_logout) {
@@ -386,32 +406,35 @@ public class DashboardUserActivity extends AppCompatActivity
     private void createDialogBox(String msg) {
         new MaterialStyledDialog.Builder(this)
                 .setTitle("About Us")
-                .setDescription(msg+"\n\n")
-               .withDialogAnimation(true)
+                .setDescription(msg + "\n\n")
+                .withDialogAnimation(true)
                 .setStyle(Style.HEADER_WITH_TITLE)
                 .setTitle("About US")
-                .setPositiveText(R.string.button)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        String to = "sharma.shubham0008@gmail.com";
-                        String subject = "Contact Club Connect";
-                        String msg = "Hey there\n";
-
-                        sendEmailBug(to,subject,msg);
-                    }})
-                .setScrollable(true,20)
+                .setScrollable(true, 20)
                 .setCancelable(true)
                 .show();
-
-
 
     }
 
     private void sendEmailBug(String to, String subject, String msg) {
-        Intent email = new Intent(Intent.ACTION_SEND);
 
-        email.putExtra(Intent.EXTRA_EMAIL, new String[]{ to});
+        Uri uri = Uri.parse("mailto:")
+                .buildUpon()
+                .appendQueryParameter("subject", subject)
+                .appendQueryParameter("body", msg)
+                .build();
+
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, uri);
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{to});
+        startActivity(Intent.createChooser(emailIntent, "Choose an Email client :"));
+
+        /*Intent email = new Intent(Intent.ACTION_SEND);
+
+        //   email.setData(Uri.parse("mailto:"));
+
+        email.setType("text/plain");
+
+        email.putExtra(Intent.EXTRA_EMAIL, new String[]{to});
         email.putExtra(Intent.EXTRA_SUBJECT, subject);
         email.putExtra(Intent.EXTRA_TEXT, msg);
 
@@ -419,12 +442,13 @@ public class DashboardUserActivity extends AppCompatActivity
         email.setType("message/rfc822");
 
         startActivity(Intent.createChooser(email, "Choose an Email client :"));
+        */
     }
 
     private void shareTextMessage(String msg) {
         Intent i = new Intent(Intent.ACTION_SEND);
         i.setType("text/plain");
-        i.putExtra(Intent.EXTRA_TEXT,msg);
+        i.putExtra(Intent.EXTRA_TEXT, msg);
         startActivity(i);
     }
 
@@ -432,8 +456,7 @@ public class DashboardUserActivity extends AppCompatActivity
     public void onClick(View v) {
         Bundle b = new Bundle();
         Intent i = new Intent(DashboardUserActivity.this, UserClubEventListActivity.class);
-        switch (v.getId())
-        {
+        switch (v.getId()) {
             case R.id.manan:
                 b.putString(CLUB_NAME, "manan");
                 i.putExtras(b);
@@ -454,8 +477,38 @@ public class DashboardUserActivity extends AppCompatActivity
                 i.putExtras(b);
                 startActivity(i);
                 break;
-            case R.id.dhundhun:
-                b.putString(CLUB_NAME, "dhundhun");
+            case R.id.ananya:
+                b.putString(CLUB_NAME, "ananya");
+                i.putExtras(b);
+                startActivity(i);
+                break;
+
+            case R.id.nataraja:
+                b.putString(CLUB_NAME, "nataraja");
+                i.putExtras(b);
+                startActivity(i);
+                break;
+
+            case R.id.jhalak:
+                b.putString(CLUB_NAME, "jhalak");
+                i.putExtras(b);
+                startActivity(i);
+                break;
+
+            case R.id.microbird:
+                b.putString(CLUB_NAME, "microbird");
+                i.putExtras(b);
+                startActivity(i);
+                break;
+
+            case R.id.mechnext:
+                b.putString(CLUB_NAME, "mechnext");
+                i.putExtras(b);
+                startActivity(i);
+                break;
+
+            case R.id.taranum:
+                b.putString(CLUB_NAME, "taranum");
                 i.putExtras(b);
                 startActivity(i);
                 break;
