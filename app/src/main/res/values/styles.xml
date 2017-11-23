@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
@@ -24,5 +24,10 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-
+<style
+    name="AppTheme.User" parent="AppTheme.AppBarOverlay">
+    <item name="android:state_activated">
+    true</item>>
+    <item name="android:color">#ffa5a5</item>>
+</style>
 </resources>

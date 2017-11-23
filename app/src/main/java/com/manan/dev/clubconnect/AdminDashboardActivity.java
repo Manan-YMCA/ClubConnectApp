@@ -50,6 +50,9 @@ public class AdminDashboardActivity extends AppCompatActivity {
                 FirebaseAuth.getInstance().signOut();
                 finish();
                 return true;
+            case R.id.action_add_coord:
+                String clubName = mAuth.getCurrentUser().getEmail().split("@")[0];
+                startActivity(new Intent(AdminDashboardActivity.this, AddNewCoordinatorActivity.class).putExtra("clubName", clubName));
             default:
                 return super.onOptionsItemSelected(item);
         }
