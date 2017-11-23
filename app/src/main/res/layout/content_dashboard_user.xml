@@ -35,69 +35,126 @@
             android:paddingBottom="2dp">
 
             <TextView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:background="@drawable/button_club"
-                android:gravity="center_horizontal"
-android:textColor="@android:color/white"
-                android:padding="10dp"
                 android:id="@+id/manan"
-                android:clickable="true"
-                android:text="Manan" />
-
-            <TextView
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
-
                 android:layout_marginLeft="10dp"
                 android:background="@drawable/button_club"
+                android:clickable="true"
                 android:gravity="center_horizontal"
                 android:padding="10dp"
+                android:text="Manan"
+                android:textColor="@android:color/white" />
+
+            <TextView
                 android:id="@+id/samarpan"
-                android:clickable="true"
-                android:text="Samarpan" />
-
-            <TextView
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
+
                 android:layout_marginLeft="10dp"
                 android:background="@drawable/button_club"
+                android:clickable="true"
                 android:gravity="center_horizontal"
                 android:padding="10dp"
+                android:text="Samarpan"
+                android:textColor="@android:color/white" />
+
+            <TextView
                 android:id="@+id/srijan"
-                android:textColor="@android:color/white"
-
-                android:clickable="true"
-                android:text="Srijan" />
-
-            <TextView
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
-
                 android:layout_marginLeft="10dp"
                 android:background="@drawable/button_club"
+                android:clickable="true"
                 android:gravity="center_horizontal"
                 android:padding="10dp"
-                android:id="@+id/vividha"
-                android:clickable="true"
-                android:text="Vividha" />
+                android:text="Srijan"
+                android:textColor="@android:color/white" />
 
             <TextView
-
-                android:layout_width="200dp"
+                android:id="@+id/vividha"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:background="@drawable/button_club"
+                android:clickable="true"
                 android:gravity="center_horizontal"
                 android:padding="10dp"
-                android:id="@+id/dhundhun"
-                android:textColor="@android:color/white"
+                android:text="Vividha"
+                android:textColor="@android:color/white" />
 
+            <TextView
+                android:id="@+id/ananya"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/button_club"
                 android:clickable="true"
-                android:text="Dhun-Dhun" />
+                android:gravity="center_horizontal"
+                android:padding="10dp"
+                android:text="Ananya"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:id="@+id/nataraja"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/button_club"
+                android:clickable="true"
+                android:gravity="center_horizontal"
+                android:padding="10dp"
+                android:text="Nataraja"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:id="@+id/jhalak"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/button_club"
+                android:clickable="true"
+                android:gravity="center_horizontal"
+                android:padding="10dp"
+                android:text="Jhalak"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:id="@+id/microbird"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/button_club"
+                android:clickable="true"
+                android:gravity="center_horizontal"
+                android:padding="10dp"
+                android:text="Microbird"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:id="@+id/mechnext"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/button_club"
+                android:clickable="true"
+                android:gravity="center_horizontal"
+                android:padding="10dp"
+                android:text="MechNext"
+                android:textColor="@android:color/white" />
+            <TextView
+                android:id="@+id/taranum"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/button_club"
+                android:clickable="true"
+                android:gravity="center_horizontal"
+                android:padding="10dp"
+                android:text="Taranum"
+                android:textColor="@android:color/white" />
+
+
         </LinearLayout>
     </HorizontalScrollView>
 

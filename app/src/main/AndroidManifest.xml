@@ -73,7 +73,9 @@
             android:name=".User.UserProfileActivity"
             android:label="Profile"
             android:parentActivityName=".DashboardUserActivity" />
-        <activity android:name=".AddNewCoordinatorActivity"></activity>
+        <activity android:name=".AddNewClubActivity"></activity>
+            android:parentActivityName=".DashboardUserActivity" />
+        <activity android:name=".AddNewCoordinatorActivity" />
     </application>
 
 </manifest>
