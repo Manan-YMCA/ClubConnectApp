@@ -91,6 +91,9 @@ public class AddNewEventActivity extends AppCompatActivity {
     private DatabaseReference mDatabaseReference;
     private CoordinatorAdapter coordinatorAdapter;
     private String clubNameData;
+    private EditText input_date;
+    private EditText input_start_time;
+    private EditText input_end_time;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -101,9 +104,9 @@ public class AddNewEventActivity extends AppCompatActivity {
         firebaseStorage = FirebaseStorage.getInstance().getReference();
 
         ImageView add_new_date = (ImageView) findViewById(R.id.Add_new_date);
-        EditText input_date = (EditText) findViewById(R.id.input_date);
-        EditText input_start_time = (EditText) findViewById(R.id.input_start_time);
-        EditText input_end_time = (EditText) findViewById(R.id.input_end_time);
+        input_date = (EditText) findViewById(R.id.input_date);
+        input_start_time = (EditText) findViewById(R.id.input_start_time);
+        input_end_time = (EditText) findViewById(R.id.input_end_time);
 
 
         input_eventname = (EditText) findViewById(R.id.input_eventname);
@@ -143,6 +146,7 @@ public class AddNewEventActivity extends AppCompatActivity {
         input_event_cooordinator.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                input_event_cooordinator.setError(null);
                 final Coordinator coordinator = coordinatorsAll.get(i);
                 event.coordinatorID.add(coordinator.getEmail());
                 @SuppressLint("InflateParams") final LinearLayout v = (LinearLayout) LayoutInflater.from(AddNewEventActivity.this).inflate(R.layout.add_coordinator_tv_item, null, false);
@@ -263,14 +267,56 @@ public class AddNewEventActivity extends AppCompatActivity {
     }
 
     void uploadEvent() {
-        pd.setIndeterminate(false);
-        pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        pd.setMax(100);
-        pd.show();
-        event.setEventName(input_eventname.getText().toString());
-        event.setEventDesc(input_description.getText().toString());
-        event.setEventVenue(input_event_venue.getText().toString());
-        new ImageUpload(uploadImagesToFirebase()).execute();
+
+        fillData();
+
+        Boolean checker = (!event.getEventVenue().equals("") &&
+                !event.getEventName().equals("") &&
+                !event.getEventDesc().equals("") &&
+                event.coordinatorID.size() > 0 &&
+                imgLocationsData.size() > 0 &&
+                event.days.size() >= 1 &&
+                event.days.get(0).getDate() > 0 &&
+                event.days.get(0).getStartTime() > 0 &&
+                event.days.get(0).getEndTime() > 0
+        );
+
+        if(checker){
+            pd.setIndeterminate(false);
+            pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            pd.setMax(100);
+            pd.show();
+            event.setEventName(input_eventname.getText().toString());
+            event.setEventDesc(input_description.getText().toString());
+            event.setEventVenue(input_event_venue.getText().toString());
+            new ImageUpload(uploadImagesToFirebase()).execute();
+        }
+        else {
+            if(event.getEventName().equals("")){
+                input_eventname.setError("Required");
+            }
+            if(event.getEventVenue().equals("")){
+                input_event_venue.setError("Required");
+            }
+            if(event.getEventDesc().equals("")){
+                input_description.setError("Required");
+            }
+            if(event.coordinatorID.size() == 0){
+                input_event_cooordinator.setError("Required");
+            }
+            if(imgLocationsData.size() == 0){
+                Toast.makeText(AddNewEventActivity.this, "One Poster is Compulsory!", Toast.LENGTH_SHORT).show();
+            }
+            if(event.days.get(0).getDate() == 0){
+                input_date.setError("Required");
+            }
+            if(event.days.get(0).getStartTime() == 0){
+                input_start_time.setError("Required");
+            }
+            if(event.days.get(0).getEndTime() == 0){
+                input_end_time.setError("Required");
+            }
+        }
 
     }
 
@@ -514,6 +560,7 @@ public class AddNewEventActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(final View v) {
+                input_date.setError(null);
                 Toast.makeText(AddNewEventActivity.this, "clicked", Toast.LENGTH_SHORT).show();
                 java.util.Calendar mcurrentDate = java.util.Calendar.getInstance();
                 final int mYear = mcurrentDate.get(java.util.Calendar.YEAR);
@@ -549,6 +596,10 @@ public class AddNewEventActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(final View v) {
+                if(isStart)
+                    input_start_time.setError(null);
+                else
+                    input_end_time.setError(null);
                 final java.util.Calendar mcurrentDate = java.util.Calendar.getInstance();
                 final int mHour = mcurrentDate.get(java.util.Calendar.HOUR_OF_DAY);
                 final int mMinute = mcurrentDate.get(java.util.Calendar.MINUTE);

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.manan.dev.clubconnect.AddNewCoordinatorActivity">
+
+    <ImageView
+        android:id="@+id/img_coord"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="80dp"
+        android:background="@drawable/vector_add"/>
+
+    <RelativeLayout
+        android:id="@+id/rLayoutCoord"
+        android:layout_marginLeft="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:padding="20dp">
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:padding="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_phone_no"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_name"
+            android:padding="5dp"
+            android:text="Phone No."
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_phone_no"
+            android:padding="5dp"
+            android:text="E-mail"
+            android:textSize="15sp" />
+
+
+
+
+        <EditText
+            android:id="@+id/input_coord_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/tv_name"
+            android:layout_alignBottom="@+id/tv_name"
+            android:layout_marginStart="130dp"
+            android:backgroundTint="#fff"
+            android:hint="Enter Coord Name"
+            android:textSize="12sp" />
+
+        <EditText
+            android:id="@+id/et_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/tv_phone_no"
+            android:layout_alignBottom="@+id/tv_phone_no"
+            android:layout_alignStart="@+id/input_coord_name"
+            android:backgroundTint="#fff"
+            android:hint="Enter Coord phone"
+            android:textSize="12sp" />
+
+
+        <EditText
+            android:id="@+id/et_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/tv_email"
+            android:layout_alignBottom="@+id/tv_email"
+            android:layout_alignStart="@+id/input_coord_name"
+            android:backgroundTint="#fff"
+            android:hint="Enter Coord E-mail"
+            android:textSize="12sp" />
+
+
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/bt_coord_submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rLayoutCoord"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"/>
+
+</RelativeLayout>
