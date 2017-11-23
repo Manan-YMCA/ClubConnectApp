@@ -1,9 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.manan.dev.clubconnect.User.UserProfileActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:id="@+id/photo_crop_user"
+            android:layout_gravity="center"
+
+           />
+        <EditText
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:hint="Phone No."
+            android:id="@+id/user_profile_phone"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"/>
+        <EditText
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:hint="Roll Number"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"/>
+
+        <Spinner
+            android:id="@+id/spinner1"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/btn_dropdown"
+            android:layout_gravity="center"
+            android:tag="Year"
+            style="@style/AppTheme.User"
+            android:spinnerMode="dropdown" />
+
+
+
+        <Spinner
+            android:id="@+id/spinner2"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/btn_dropdown"
+            android:layout_gravity="center"
+            android:tag="Year"
+            style="@style/AppTheme.User"
+            android:spinnerMode="dropdown" />
+    </LinearLayout>>
+<android.support.design.widget.FloatingActionButton
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:src="@drawable/check"
+    android:layout_gravity="end"
+
+    android:layout_alignParentRight="true"
+    android:layout_alignParentBottom="true"
+    android:layout_margin="10dp"
+    />
+
+
+</RelativeLayout>
