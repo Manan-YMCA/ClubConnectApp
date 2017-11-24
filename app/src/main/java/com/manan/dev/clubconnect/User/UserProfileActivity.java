@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -60,6 +61,8 @@ public class UserProfileActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter_2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, itemsCou);
         course.setAdapter(adapter_2);
 
+
+
         course.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -88,7 +91,9 @@ public class UserProfileActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
+                String[] itemsBatch1 = new String[]{"Select Batch"};
+                ArrayAdapter<String> adapter_3 = new ArrayAdapter<String>(UserProfileActivity.this, android.R.layout.simple_spinner_dropdown_item, itemsBatch1);
+                batch.setAdapter(adapter_3);
             }
         });
 
@@ -105,6 +110,7 @@ public class UserProfileActivity extends AppCompatActivity {
                 pd.setMax(100);
                 pd.show();
 
+
                 String phoneNo = userPhone.getText().toString();
                 String rollNo = userRoll.getText().toString().toUpperCase();
                 String photoID = mAuth.getCurrentUser().getPhotoUrl().toString();
@@ -114,19 +120,45 @@ public class UserProfileActivity extends AppCompatActivity {
                 long graduationYear = Long.parseLong(dropdown.getSelectedItem().toString());
                 UserData userData = new UserData(phoneNo, branch, coursedata, rollNo, photoID, name, graduationYear);
 
-                FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid()).setValue(userData).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()){
-                            Toast.makeText(UserProfileActivity.this, "Updated", Toast.LENGTH_SHORT).show();
-                            pd.dismiss();
-                        }
-                        else{
-                            pd.hide();
-                        }
-                    }
-                });
 
+                boolean checker = (!userData.getName().equals("") &&
+                        !userData.getPhotoID().equals("") &&
+                        !userData.getUserPhoneNo().equals("") &&
+                        !userData.getUserRollNo().equals("") &&
+                        batch.getSelectedItem().toString().equals("Select Batch") &&
+                        course.getSelectedItem().toString().equals("Select Course") &&
+                        dropdown.getSelectedItem().toString().equals("Select Graduation Year")
+                );
+
+                if (checker) {
+                    FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid()).setValue(userData).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(UserProfileActivity.this, "Updated", Toast.LENGTH_SHORT).show();
+                                pd.dismiss();
+                            } else {
+                                pd.hide();
+                            }
+                        }
+                    });
+
+                }
+                else {
+                    if(userData.getName().equals(""))
+                        userName.setError("Required");
+                    if(userData.getUserPhoneNo().equals(""))
+                        userPhone.setError("Required");
+                    if(userData.getUserRollNo().equals(""))
+                        userRoll.setError("Required");
+                    if(dropdown.getSelectedItem().toString().equals("Select Graduation Year"))
+                        ((TextView)dropdown.getSelectedView()).setError("Required");
+                    if(batch.getSelectedItem().toString().equals("Select Batch"))
+                        ((TextView)batch.getSelectedItem()).setError("Required");
+                    if(course.getSelectedItem().toString().equals("Select Course"))
+                        ((TextView)course.getSelectedItem()).setError("Required");
+                    pd.hide();
+                }
             }
         });
 

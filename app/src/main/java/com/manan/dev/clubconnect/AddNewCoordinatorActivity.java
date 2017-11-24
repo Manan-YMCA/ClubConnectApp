@@ -87,7 +87,7 @@ public class AddNewCoordinatorActivity extends AppCompatActivity {
     }
 
     private void CreateCoordinator() {
-        Boolean checker = (!coordName.equals("")&&!coordEmail.equals("")&&!coordPhone.equals("")&&userImage.equals(""));
+        Boolean checker = (!coordName.getText().toString().equals("")&&!coordEmail.getText().toString().equals("")&&!coordPhone.getText().toString().equals("")&&userImage.toString().equals(""));
 
         if(checker) {
             pd.show();
@@ -98,15 +98,16 @@ public class AddNewCoordinatorActivity extends AppCompatActivity {
             uploadImage();
         }
         else{
-            if(coordName.equals("")){
+            if(coordName.getText().toString().equals("")){
                 coordName.setError("Required");
             }
-            if(coordEmail.equals("")){
+            if(coordEmail.getText().toString().equals("")){
                 coordEmail.setError("Required");
             }
-            if(coordPhone.equals("")){
+            if(coordPhone.getText().toString().equals("")){
                 coordPhone.setError("Required");
             }
+            pd.hide();
         }
     }
 
