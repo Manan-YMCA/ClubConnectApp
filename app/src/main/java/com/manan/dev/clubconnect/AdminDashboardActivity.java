@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class AdminDashboardActivity extends AppCompatActivity {
     private FloatingActionButton addNewEventFab;
@@ -57,7 +58,11 @@ public class AdminDashboardActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.action_add_coord:
-                String clubName = mAuth.getCurrentUser().getEmail().split("@")[0];
+                FirebaseUser user = mAuth.getCurrentUser();
+                if(user==null)
+                    finish();
+
+                String clubName = user.getDisplayName();
                 startActivity(new Intent(AdminDashboardActivity.this, AddNewCoordinatorActivity.class).putExtra("clubName", clubName));
             default:
                 return super.onOptionsItemSelected(item);

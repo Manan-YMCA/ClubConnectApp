@@ -39,6 +39,7 @@ public class UserClubEventListActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        Log.d("Name",clubName);
 //        Toast.makeText(this, clubName, Toast.LENGTH_SHORT).show();
 
         userSingleEventListRV = (RecyclerView) findViewById(R.id.rv_user_club_list);

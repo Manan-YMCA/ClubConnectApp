@@ -109,15 +109,14 @@
 
 
         </LinearLayout>
-        >
 
         <ImageView
             android:id="@+id/naman"
             android:layout_width="100dp"
-            android:layout_height="200dp"
+            android:layout_height="150dp"
             android:layout_below="@id/child"
             android:layout_centerInParent="true"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="30dp"
             android:layout_weight="1"
             android:src="@drawable/login_back" />
 

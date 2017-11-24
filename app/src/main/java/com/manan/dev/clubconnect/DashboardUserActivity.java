@@ -71,6 +71,7 @@ public class DashboardUserActivity extends AppCompatActivity
     ArrayList<SectionDataModel> eventListForRecyclerView;
     private RecyclerViewDataAdapter adapter;
     private ProgressBar pb;
+    private NavigationView nav_view;
 
 
     @Override
@@ -101,11 +102,11 @@ public class DashboardUserActivity extends AppCompatActivity
         my_recycler_view.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
         //my_recycler_view.setAdapter(adapter);
-
+        nav_view = (NavigationView) findViewById(R.id.nav_view);
 
         //Fb Image  and  name fetching Code
-        fbImageView = (ImageView) ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0).findViewById(R.id.fbImageView);
-        tvfbName = (TextView) ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0).findViewById(R.id.tvfbName);
+        fbImageView = (ImageView) nav_view.getHeaderView(0).findViewById(R.id.fbImageView);
+        tvfbName = (TextView) nav_view.getHeaderView(0).findViewById(R.id.tvfbName);
         pb = (ProgressBar) findViewById(R.id.pb);
 
         setClickListeners();
@@ -135,8 +136,8 @@ public class DashboardUserActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        nav_view.setNavigationItemSelectedListener(this);
+        nav_view.setCheckedItem(R.id.nav_camera);
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("events");
 
@@ -163,6 +164,8 @@ public class DashboardUserActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         attachDatabaseListener();
+        if(nav_view!=null)
+            nav_view.setCheckedItem(R.id.nav_camera);
     }
 
     @Override
@@ -174,6 +177,9 @@ public class DashboardUserActivity extends AppCompatActivity
         curEventsItem.clear();
 
         eventListForRecyclerView.clear();
+
+        if(nav_view!=null)
+            nav_view.setCheckedItem(R.id.nav_camera);
     }
 
     private void detatchDatabaseListener() {
@@ -340,6 +346,7 @@ public class DashboardUserActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        item.setChecked(false);
 
         if (id == R.id.nav_camera) {
             // Handle the camera action
@@ -366,7 +373,6 @@ public class DashboardUserActivity extends AppCompatActivity
                     "\n 1. sjdbciulsdbvv" +
                     "\n 2. ekjgbdbrgldee" +
                     "\n 3. jlgblejrgbiue";
-
             createDialogBox(msg);
             return true;
         } else if (id == R.id.nav_share) {
@@ -396,9 +402,8 @@ public class DashboardUserActivity extends AppCompatActivity
 
         }
         else if (id == R.id.nav_dev)
-        {            startActivity(new Intent(DashboardUserActivity.this, DevelopersActivity.class));
-
-
+        {
+            startActivity(new Intent(DashboardUserActivity.this, DevelopersActivity.class));
         }
 
 
@@ -467,52 +472,52 @@ public class DashboardUserActivity extends AppCompatActivity
                 startActivity(i);
                 break;
             case R.id.vividha:
-                b.putString(CLUB_NAME, "vividha");
+                b.putString(CLUB_NAME, "Vividha");
                 i.putExtras(b);
                 startActivity(i);
                 break;
             case R.id.srijan:
-                b.putString(CLUB_NAME, "srijan");
+                b.putString(CLUB_NAME, "Srijan");
                 i.putExtras(b);
                 startActivity(i);
                 break;
             case R.id.samarpan:
-                b.putString(CLUB_NAME, "samarpan");
+                b.putString(CLUB_NAME, "Samarpan");
                 i.putExtras(b);
                 startActivity(i);
                 break;
             case R.id.ananya:
-                b.putString(CLUB_NAME, "ananya");
+                b.putString(CLUB_NAME, "Ananya");
                 i.putExtras(b);
                 startActivity(i);
                 break;
 
             case R.id.nataraja:
-                b.putString(CLUB_NAME, "nataraja");
+                b.putString(CLUB_NAME, "Nataraja");
                 i.putExtras(b);
                 startActivity(i);
                 break;
 
             case R.id.jhalak:
-                b.putString(CLUB_NAME, "jhalak");
+                b.putString(CLUB_NAME, "Jhalak");
                 i.putExtras(b);
                 startActivity(i);
                 break;
 
             case R.id.microbird:
-                b.putString(CLUB_NAME, "microbird");
+                b.putString(CLUB_NAME, "Microbird");
                 i.putExtras(b);
                 startActivity(i);
                 break;
 
             case R.id.mechnext:
-                b.putString(CLUB_NAME, "mechnext");
+                b.putString(CLUB_NAME, "Mechnext");
                 i.putExtras(b);
                 startActivity(i);
                 break;
 
             case R.id.taranum:
-                b.putString(CLUB_NAME, "taranum");
+                b.putString(CLUB_NAME, "Taranum");
                 i.putExtras(b);
                 startActivity(i);
                 break;

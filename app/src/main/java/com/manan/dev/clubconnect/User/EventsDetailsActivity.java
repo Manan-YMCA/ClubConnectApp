@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -362,7 +363,14 @@ public class EventsDetailsActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<FileDownloadTask.TaskSnapshot> task) {
                                     if (task.isSuccessful()) {
+
+
                                         Uri path = Uri.fromFile(file);
+
+                                        MediaScannerConnection.scanFile(EventsDetailsActivity.this,
+                                                new String[]{file.getAbsolutePath()},
+                                                null,
+                                                null);
 
                                         //Get File MIME type
                                         String type = MimeTypeMap.getSingleton().getMimeTypeFromExtension("jpg");

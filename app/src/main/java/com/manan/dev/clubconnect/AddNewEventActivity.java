@@ -186,10 +186,10 @@ public class AddNewEventActivity extends AppCompatActivity {
         endTime.get(count).setFocusable(false);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        assert user != null;
-        String userEmail = user.getEmail();
-        assert userEmail != null;
-        clubNameData = userEmail.split("@")[0];
+        //assert user != null;
+        //String userEmail = user.getEmail();
+        //assert userEmail != null;
+        clubNameData = user.getDisplayName();
 
         input_clubname.setText(clubNameData);
 
