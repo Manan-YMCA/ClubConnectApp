@@ -201,7 +201,7 @@ public class AddNewEventActivity extends AppCompatActivity {
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("coordinators").child(clubNameData);
 
-        Toast.makeText(AddNewEventActivity.this, "" + TimeZone.getDefault().getRawOffset(), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(AddNewEventActivity.this, "" + TimeZone.getDefault().getRawOffset(), Toast.LENGTH_SHORT).show();
 
     }
 

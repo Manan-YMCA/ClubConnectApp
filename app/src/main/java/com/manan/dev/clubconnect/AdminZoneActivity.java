@@ -64,7 +64,7 @@ public class AdminZoneActivity extends AppCompatActivity {
         // signUpAsAdminBtn = (Button) findViewById(R.id.signUpAsAdminbtn);
         backToLoginScreen = (TextView) findViewById(R.id.back_to_login);
 
-        usernameAdminEditText.setText("manan@ymca.com");
+        usernameAdminEditText.setText("manantechnosurge@gmail.com");
         passwordAdminEditText.setText("12345678");
 
         pd = new ProgressDialog(this);
