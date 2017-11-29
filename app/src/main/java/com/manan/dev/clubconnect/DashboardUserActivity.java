@@ -354,25 +354,8 @@ public class DashboardUserActivity extends AppCompatActivity
             startActivity(new Intent(DashboardUserActivity.this, UserProfileActivity.class));
         }
         else if (id == R.id.nav_about) {
-            String msg = "Try this awesome app which will make you aware of all the events in campus!" +
-                    "\n This app has various features in it: " +
-                    "\n 1. btkbruibgiewe" +
-                    "\n 2. ekjgbdbrgldee" +
-                    "\n 3. jlgblejrgbiue" +
-                    "\n Instructions to use this application:" +
-                    "\n 1. sjdbciulsdbvv" +
-                    "\n 2. ekjgbdbrgldee" +
-                    "\n 2. ekjgbdbrgldee" +
-                    "\n 3. jlgblejrgbiue" +
-                    "\n Instructions to use this application:" +
-                    "\n 1. sjdbciulsdbvv" +
-                    "\n 2. ekjgbdbrgldee" +
-                    "\n 2. ekjgbdbrgldee" +
-                    "\n 3. jlgblejrgbiue" +
-                    "\n Instructions to use this application:" +
-                    "\n 1. sjdbciulsdbvv" +
-                    "\n 2. ekjgbdbrgldee" +
-                    "\n 3. jlgblejrgbiue";
+            String msg = "It is an integrated platform providing people with all the the necessary and most up to date features for Event management. \n" +
+                    "The user panel would be giving all the informations about event in the form of cards, mentioning the gyst of event and the details like venue, day,timings and more. ";
             createDialogBox(msg);
             return true;
         } else if (id == R.id.nav_share) {
@@ -382,7 +365,7 @@ public class DashboardUserActivity extends AppCompatActivity
             return true;
 
         } else if (id == R.id.nav_send) {
-            String to = "shubhamkachroo@yahoo.co.in";
+            String to = "manantechnosurge@gmail.com";
             String subject = "Bug Reported - Club Connect ";
             String msg = "I found a bug!\n";
 
@@ -467,7 +450,7 @@ public class DashboardUserActivity extends AppCompatActivity
         Intent i = new Intent(DashboardUserActivity.this, UserClubEventListActivity.class);
         switch (v.getId()) {
             case R.id.manan:
-                b.putString(CLUB_NAME, "manan");
+                b.putString(CLUB_NAME, "Manan");
                 i.putExtras(b);
                 startActivity(i);
                 break;

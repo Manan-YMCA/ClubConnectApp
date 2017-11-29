@@ -89,7 +89,7 @@ public class AddNewCoordinatorActivity extends AppCompatActivity {
     private void CreateCoordinator() {
         Boolean checker = (!coordName.getText().toString().equals("")&&!coordEmail.getText().toString().equals("")&&!coordPhone.getText().toString().equals("")&&userImage.toString().equals(""));
 
-        if(checker) {
+        if(true) {
             pd.show();
 
             coordinator.setName(coordName.getText().toString());
@@ -142,9 +142,7 @@ public class AddNewCoordinatorActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 Toast.makeText(AddNewCoordinatorActivity.this, "Coordinator is added!", Toast.LENGTH_SHORT).show();
                                 pd.dismiss();
-                                Intent i = new Intent(AddNewCoordinatorActivity.this, AdminDashboardActivity.class);
-                                startActivity(i);
-                                //  finish();
+                                finish();
                             } else {
                                 Toast.makeText(AddNewCoordinatorActivity.this, "coordinator add failed", Toast.LENGTH_SHORT).show();
                                 pd.dismiss();

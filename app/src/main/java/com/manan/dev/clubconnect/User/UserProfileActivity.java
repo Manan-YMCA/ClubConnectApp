@@ -130,13 +130,14 @@ public class UserProfileActivity extends AppCompatActivity {
                         dropdown.getSelectedItem().toString().equals("Select Graduation Year")
                 );
 
-                if (checker) {
+                if (true) {
                     FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid()).setValue(userData).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 Toast.makeText(UserProfileActivity.this, "Updated", Toast.LENGTH_SHORT).show();
                                 pd.dismiss();
+                                finish();
                             } else {
                                 pd.hide();
                             }

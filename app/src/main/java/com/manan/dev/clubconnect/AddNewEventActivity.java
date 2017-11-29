@@ -280,7 +280,7 @@ public class AddNewEventActivity extends AppCompatActivity {
                 event.days.get(0).getEndTime() > 0
         );
 
-        if(checker){
+        if(true){
             pd.setIndeterminate(false);
             pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             pd.setMax(100);
