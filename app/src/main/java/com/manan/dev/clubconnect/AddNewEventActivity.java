@@ -252,7 +252,8 @@ public class AddNewEventActivity extends AppCompatActivity {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                imgLocationsData.remove(localData);
+                if(!imgLocationsData.remove(localData))
+                    Toast.makeText(AddNewEventActivity.this, "Sorry, the image was not removed compeltely!", Toast.LENGTH_SHORT).show();
                 container.removeView(relativeLayout);
             }
         });
@@ -269,25 +270,25 @@ public class AddNewEventActivity extends AppCompatActivity {
 
         fillData();
 
-        Boolean checker = (!event.getEventVenue().equals("") &&
-                !event.getEventName().equals("") &&
-                !event.getEventDesc().equals("") &&
+        Boolean filled =
+                !input_event_venue.getText().toString().trim().equals("") &&
+                !input_eventname.getText().toString().trim().equals("") &&
+                !input_description.getText().toString().trim().equals("") &&
                 event.coordinatorID.size() > 0 &&
                 imgLocationsData.size() > 0 &&
                 event.days.size() >= 1 &&
                 event.days.get(0).getDate() > 0 &&
                 event.days.get(0).getStartTime() > 0 &&
-                event.days.get(0).getEndTime() > 0
-        );
+                event.days.get(0).getEndTime() > 0;
 
-        if(true){
+        if(filled){
             pd.setIndeterminate(false);
             pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             pd.setMax(100);
             pd.show();
-            event.setEventName(input_eventname.getText().toString());
-            event.setEventDesc(input_description.getText().toString());
-            event.setEventVenue(input_event_venue.getText().toString());
+            event.setEventName(input_eventname.getText().toString().trim());
+            event.setEventDesc(input_description.getText().toString().trim());
+            event.setEventVenue(input_event_venue.getText().toString().trim());
             new ImageUpload(uploadImagesToFirebase()).execute();
         }
         else {

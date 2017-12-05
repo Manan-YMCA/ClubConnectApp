@@ -93,7 +93,7 @@ Picasso.with(mContext).load(singleItem.getPhotoID().getPosters().get(0)).resize(
                 public void onClick(View v) {
 
                     int position  = getLayoutPosition();
-                    Toast.makeText(mContext, itemsList.get(position).getEventId(), Toast.LENGTH_LONG).show();
+                    //Toast.makeText(mContext, itemsList.get(position).getEventId(), Toast.LENGTH_LONG).show();
                     Intent singleEventDetailIntent = new Intent(mContext, EventsDetailsActivity.class);
                     Bundle singleEventDetailBundle = new Bundle();
                     singleEventDetailBundle.putString(CLUB_NAME,itemsList.get(position).getClubName());

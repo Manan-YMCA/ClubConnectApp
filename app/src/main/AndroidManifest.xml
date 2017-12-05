@@ -70,7 +70,6 @@
         <activity
             android:name=".User.EventsDetailsActivity"
             android:label="@string/title_activity_events_details"
-            android:parentActivityName=".DashboardUserActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

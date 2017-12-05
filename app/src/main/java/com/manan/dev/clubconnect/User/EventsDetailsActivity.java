@@ -19,10 +19,12 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
@@ -122,7 +124,11 @@ public class EventsDetailsActivity extends AppCompatActivity {
                 addEventToCalender();
             }
         });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("coordinators").child(clubName);
         mDBRefCurEvent = FirebaseDatabase.getInstance().getReference().child("events").child(clubName);
@@ -135,6 +141,17 @@ public class EventsDetailsActivity extends AppCompatActivity {
 //        Toast.makeText(EventsDetailsActivity.this, Integer.toString(curEvent.getPhotoID().getPosters().size()), Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                EventsDetailsActivity.this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     private void addEventToCalender() {
         long date = curEvent.getDays().get(0).getDate();

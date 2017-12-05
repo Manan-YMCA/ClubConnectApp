@@ -87,9 +87,12 @@ public class AddNewCoordinatorActivity extends AppCompatActivity {
     }
 
     private void CreateCoordinator() {
-        Boolean checker = (!coordName.getText().toString().equals("")&&!coordEmail.getText().toString().equals("")&&!coordPhone.getText().toString().equals("")&&userImage.toString().equals(""));
+        Boolean filled =    !coordName.getText().toString().trim().equals("")&&
+                            !coordEmail.getText().toString().trim().equals("")&&
+                            !coordPhone.getText().toString().trim().equals("")&&
+                            !userImage.toString().trim().equals("");
 
-        if(true) {
+        if(filled) {
             pd.show();
 
             coordinator.setName(coordName.getText().toString());
