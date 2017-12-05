@@ -178,9 +178,12 @@ public class AddNewEventActivity extends AppCompatActivity {
         date.add(input_date);
         startTime.add(input_start_time);
         endTime.add(input_end_time);
-        date.get(count).setOnClickListener(createOnClickListenerDate(count));
-        startTime.get(count).setOnClickListener(createOnClickListenerTime(count, true));
-        endTime.get(count).setOnClickListener(createOnClickListenerTime(count, false));
+        input_date.setOnClickListener(createOnClickListenerDate(count, input_date));
+        input_start_time.setOnClickListener(createOnClickListenerTime(count, true, input_start_time));
+        input_end_time.setOnClickListener(createOnClickListenerTime(count, false, input_end_time));
+        //date.get(count).setOnClickListener(createOnClickListenerDate(count, date.get(count)));
+        //startTime.get(count).setOnClickListener(createOnClickListenerTime(count, true, startTime.get(count)));
+        //endTime.get(count).setOnClickListener(createOnClickListenerTime(count, false, endTime.get(count)));
         startTime.get(count).setFocusable(false);
         date.get(count).setFocusable(false);
         endTime.get(count).setFocusable(false);
@@ -427,7 +430,36 @@ public class AddNewEventActivity extends AppCompatActivity {
                 //adding items to arraylist for storing data
                 event.days.add(new TimeInterval(0, 0, 0));
                 //Toast.makeText(AddNewEventActivity.this, "layout returned", Toast.LENGTH_SHORT).show();
-                event_day_layout.addView(layoutreturner(count));
+
+                //inflating the layout
+                LinearLayout lLayout = (LinearLayout) LayoutInflater.from(AddNewEventActivity.this).inflate(R.layout.add_date_layout_item, null, false);
+                String dayText = "Day" + " " + (count + 1);
+                ((TextView) lLayout.findViewById(R.id.tv_date_label_layout)).setText(dayText);
+                TextView dateTextView = (TextView) lLayout.findViewById(R.id.input_date_layout);
+                TextView startTimeTextView = (TextView) lLayout.findViewById(R.id.input_start_time_layout);
+                TextView endTimeTextView = (TextView) lLayout.findViewById(R.id.input_end_time_layout);
+
+                //setting non focusable on textViews
+                dateTextView.setLongClickable(false);
+                startTimeTextView.setLongClickable(false);
+                endTimeTextView.setLongClickable(false);
+                dateTextView.setFocusable(false);
+                startTimeTextView.setFocusable(false);
+                endTimeTextView.setFocusable(false);
+
+                //adding onClickListeners to TextViews
+                dateTextView.setOnClickListener(createOnClickListenerDate(count, dateTextView));
+                startTimeTextView.setOnClickListener(createOnClickListenerTime(count, true, startTimeTextView));
+                endTimeTextView.setOnClickListener(createOnClickListenerTime(count, false, endTimeTextView));
+
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                int fifteen = (int) getResources().getDimension(R.dimen.fifteen);
+                layoutParams.setMargins(fifteen, fifteen, fifteen, fifteen);
+                lLayout.setLayoutParams(layoutParams);
+                int five = (int) getResources().getDimension(R.dimen.five);
+                lLayout.setPadding(five, five, five, five);
+
+                event_day_layout.addView(lLayout);
 
             }
         };
@@ -435,122 +467,7 @@ public class AddNewEventActivity extends AppCompatActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    @SuppressLint({"ResourceType", "SetTextI18n"})
-    LinearLayout layoutreturner(int count) {
-        LinearLayout rLayout = new LinearLayout(AddNewEventActivity.this);
-        rLayout.setBackground(getResources().getDrawable(R.drawable.border_textview));
-        Resources r = getResources();
-        rLayout.setOrientation(LinearLayout.HORIZONTAL);
-        int fifteen = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, r.getDisplayMetrics());
-        int five = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, r.getDisplayMetrics());
-        //int sixty = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 60, r.getDisplayMetrics());
-        //int zero = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0, r.getDisplayMetrics());
-
-        //params for main layout
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-        layoutParams.setMargins(fifteen, fifteen, fifteen, fifteen);
-        rLayout.setPadding(five, five, five, five);
-
-        //creating a linear layout2
-        LinearLayout lLayout = new LinearLayout(AddNewEventActivity.this);
-        lLayout.setOrientation(LinearLayout.HORIZONTAL);
-        LinearLayout.LayoutParams lLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT);
-        lLayoutParams.setMargins(0, five, 0, 0);
-
-        //creating layout params for textView
-        LinearLayout.LayoutParams lparams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        lparams1.gravity = Gravity.CENTER_VERTICAL;
-        lparams1.setMargins(0, 0, five, 0);
-
-        //creating layout params for date editText
-        LinearLayout.LayoutParams lparams2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-        //creating layout params for time editText
-        LinearLayout.LayoutParams lparams3 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f);
-
-
-        //adding items to arraylist for adding edit text
-        date.add(new EditText(AddNewEventActivity.this));
-        startTime.add(new EditText(AddNewEventActivity.this));
-        endTime.add(new EditText(AddNewEventActivity.this));
-
-        //formatting the time editText
-        date.get(count).setLayoutParams(lparams2);
-        startTime.get(count).setLayoutParams(lparams3);
-        endTime.get(count).setLayoutParams(lparams3);
-        rLayout.setLayoutParams(layoutParams);
-        lLayout.setLayoutParams(lLayoutParams);
-
-
-        //setting hints to the edit text boxes
-        startTime.get(count).setHint(R.string.start_time);
-        date.get(count).setHint(R.string.date);
-        endTime.get(count).setHint(R.string.end_time);
-
-        //adding background to the edit text
-        date.get(count).setBackground(getResources().getDrawable(android.R.drawable.editbox_background));
-        startTime.get(count).setBackground(getResources().getDrawable(android.R.drawable.editbox_background));
-        endTime.get(count).setBackground(getResources().getDrawable(android.R.drawable.editbox_background));
-
-
-        //formatting the date editText
-        date.get(count).setPadding(five, five, five, five);
-
-        //setting text sizes of the edittext boxes
-        startTime.get(count).setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-        endTime.get(count).setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-
-        //user cannot click or paste in date and time edit texts
-        date.get(count).setLongClickable(false);
-        startTime.get(count).setLongClickable(false);
-        endTime.get(count).setLongClickable(false);
-        date.get(count).setFocusable(false);
-        startTime.get(count).setFocusable(false);
-        endTime.get(count).setFocusable(false);
-
-
-        //adding on click listeners to edittext boxes
-        date.get(count).setOnClickListener(createOnClickListenerDate(count));
-        startTime.get(count).setOnClickListener(createOnClickListenerTime(count, true));
-        endTime.get(count).setOnClickListener(createOnClickListenerTime(count, false));
-
-        //creating text views
-        TextView tvDay = new TextView(AddNewEventActivity.this);
-        tvDay.setLayoutParams(lparams1);
-        String dayText = "Day" + " " + (count + 1);
-        tvDay.setText(dayText);
-        tvDay.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
-        tvDay.setPadding(five * 3, five * 3, five * 3, five * 3);
-
-
-        TextView tvTo = new TextView(AddNewEventActivity.this);
-        tvTo.setText("TO");
-        tvTo.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        tvTo.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
-
-
-        //adding items to the lower linear layout
-        lLayout.addView(startTime.get(count));
-        lLayout.addView(tvTo);
-        lLayout.addView(endTime.get(count));
-
-        LinearLayout llayout3 = new LinearLayout(this);
-        llayout3.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        llayout3.setOrientation(LinearLayout.VERTICAL);
-
-        llayout3.addView(date.get(count));
-        llayout3.addView(lLayout);
-
-        //adding items to relative layout
-        rLayout.addView(tvDay);
-        rLayout.addView(llayout3);
-
-        return rLayout;
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    View.OnClickListener createOnClickListenerDate(final int i) {
+    View.OnClickListener createOnClickListenerDate(final int i, final TextView dateTextView) {
 
         return new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
@@ -572,7 +489,8 @@ public class AddNewEventActivity extends AppCompatActivity {
                         myCalendar.set(java.util.Calendar.DAY_OF_MONTH, selectedday);
                         String myFormat = "dd/MM/yy"; //Change as you need
                         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.ENGLISH);
-                        date.get(i).setText(sdf.format(myCalendar.getTime()));
+
+                        dateTextView.setText(sdf.format(myCalendar.getTime()));
 
                         event.days.get(i).setDate(myCalendar.getTimeInMillis());
                     }
@@ -586,7 +504,7 @@ public class AddNewEventActivity extends AppCompatActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    View.OnClickListener createOnClickListenerTime(final int i, final boolean isStart) {
+    View.OnClickListener createOnClickListenerTime(final int i, final boolean isStart, final TextView timeTextView) {
 
         return new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
@@ -604,16 +522,8 @@ public class AddNewEventActivity extends AppCompatActivity {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         String displayTime = String.format(Locale.ENGLISH, "%02d:%02d", hourOfDay, minute);
-                        if (isStart)
-                            startTime.get(i).setText(displayTime);
-                        else
-                            endTime.get(i).setText(displayTime);
 
-                        //Calendar cal = Calendar.getInstance();
-                        //cal.setTimeInMillis(0);
-                        //cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                        //cal.set(Calendar.MINUTE, minute);
-
+                        timeTextView.setText(displayTime);
                         Toast.makeText(AddNewEventActivity.this, "" + TimeZone.getDefault().getRawOffset(), Toast.LENGTH_SHORT).show();
                         long time = 1000L * (hourOfDay * 60 * 60 + minute * 60) - TimeZone.getDefault().getRawOffset();
                         if (isStart)
