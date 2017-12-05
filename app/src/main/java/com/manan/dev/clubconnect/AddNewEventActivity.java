@@ -51,6 +51,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
@@ -300,7 +301,7 @@ public class AddNewEventActivity extends AppCompatActivity {
         if(filled){
             pd.setIndeterminate(false);
             pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            pd.setMax(100);
+            pd.setMax(imgLocationsData.size());
             pd.show();
             event.setEventName(input_eventname.getText().toString().trim());
             event.setEventDesc(input_description.getText().toString().trim());
@@ -351,7 +352,7 @@ public class AddNewEventActivity extends AppCompatActivity {
 
         pd.setIndeterminate(true);
         //pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        pd.setProgress(0);
+        //pd.setProgress(100);
         pd.show();
 
         databaseRootRef.child("events").child(clubNameData).push().setValue(event).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -403,14 +404,18 @@ public class AddNewEventActivity extends AppCompatActivity {
                         assert uri != null;
                         event.photoID.posters.add(uri.toString());
 
-                        int cur = pd.getProgress();
-
-                        pd.setProgress((int) (cur + 100.0 / imgLocationsData.size()));
+                        int cur = pd.getSecondaryProgress();
+                        pd.setSecondaryProgress(cur + 1);
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(AddNewEventActivity.this, "Image Upload failed", Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                        pd.setProgress((int) (((float)taskSnapshot.getBytesTransferred())/taskSnapshot.getTotalByteCount())*100);
                     }
                 });
                 promises.add(promise);
