@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 //saveAccessToken(accessToken);
                 handleFacebookAccessToken(loginResult.getAccessToken());
 
-                Toast.makeText(MainActivity.this, "Login Successful!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, "Login Successful!", Toast.LENGTH_SHORT).show();
 
             }
 
@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, DashboardUserActivity.class));
             //finish();
         } else if (currentUser != null) {
-            Toast.makeText(MainActivity.this, "Switching to Dashboard!", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(MainActivity.this, "Switching to Dashboard!", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(MainActivity.this, AdminDashboardActivity.class));
             //finish();
         }

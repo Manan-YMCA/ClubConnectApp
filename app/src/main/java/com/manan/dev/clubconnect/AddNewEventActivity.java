@@ -19,6 +19,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -48,6 +49,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
@@ -68,6 +70,7 @@ import java.util.TimeZone;
 import static java.util.Collections.sort;
 
 public class AddNewEventActivity extends AppCompatActivity {
+    private static final String TAG = "AddNewEventActivity";
     private EditText input_eventname;
     private EditText input_event_venue;
     private EditText input_clubname;
@@ -94,6 +97,13 @@ public class AddNewEventActivity extends AppCompatActivity {
     private EditText input_date;
     private EditText input_start_time;
     private EditText input_end_time;
+    private DatabaseReference databaseRootRef;
+
+
+    //For online-offline feature
+    private ValueEventListener mChildOnlineOfflineEventListener;
+    private boolean isOnline;
+    private DatabaseReference connectedRef;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -189,7 +199,11 @@ public class AddNewEventActivity extends AppCompatActivity {
         //assert user != null;
         //String userEmail = user.getEmail();
         //assert userEmail != null;
-        clubNameData = user.getDisplayName();
+        if (user != null) {
+            clubNameData = user.getDisplayName();
+        }else{
+            finish();
+        }
 
         input_clubname.setText(clubNameData);
 
@@ -200,9 +214,11 @@ public class AddNewEventActivity extends AppCompatActivity {
         pd.setCancelable(false);
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("coordinators").child(clubNameData);
+        databaseRootRef = FirebaseDatabase.getInstance().getReference();
+        connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
 
 //        Toast.makeText(AddNewEventActivity.this, "" + TimeZone.getDefault().getRawOffset(), Toast.LENGTH_SHORT).show();
-
+        isOnline = false;
     }
 
     @Override
@@ -292,51 +308,70 @@ public class AddNewEventActivity extends AppCompatActivity {
             new ImageUpload(uploadImagesToFirebase()).execute();
         }
         else {
+            boolean anyError = false;
+
             if(event.getEventName().equals("")){
                 input_eventname.setError("Required");
+                anyError = true;
             }
             if(event.getEventVenue().equals("")){
                 input_event_venue.setError("Required");
+                anyError = true;
             }
             if(event.getEventDesc().equals("")){
                 input_description.setError("Required");
+                anyError = true;
             }
             if(event.coordinatorID.size() == 0){
                 input_event_cooordinator.setError("Required");
-            }
-            if(imgLocationsData.size() == 0){
-                Toast.makeText(AddNewEventActivity.this, "One Poster is Compulsory!", Toast.LENGTH_SHORT).show();
+                anyError = true;
             }
             if(event.days.get(0).getDate() == 0){
                 input_date.setError("Required");
+                anyError = true;
             }
             if(event.days.get(0).getStartTime() == 0){
                 input_start_time.setError("Required");
+                anyError = true;
             }
             if(event.days.get(0).getEndTime() == 0){
                 input_end_time.setError("Required");
+                anyError = true;
+            }
+
+            if(imgLocationsData.size() == 0 && !anyError){
+                Toast.makeText(AddNewEventActivity.this, "One Poster is Compulsory!", Toast.LENGTH_SHORT).show();
             }
         }
 
     }
 
     private void uploadEventData() {
+        Log.d(TAG, "Uploading Event Data");
+
         pd.setIndeterminate(true);
         //pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         pd.setProgress(0);
         pd.show();
 
-        FirebaseDatabase.getInstance().getReference().child("events").child(clubNameData).push().setValue(event).addOnCompleteListener(new OnCompleteListener<Void>() {
+        databaseRootRef.child("events").child(clubNameData).push().setValue(event).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
+                Log.d(TAG, "Uploading Event Data Completed");
+
                 if (task.isSuccessful()) {
                     Toast.makeText(AddNewEventActivity.this, "Project complete", Toast.LENGTH_SHORT).show();
                     pd.dismiss();
                     AddNewEventActivity.this.finish();
                 } else {
                     Toast.makeText(AddNewEventActivity.this, "Project Failed", Toast.LENGTH_SHORT).show();
-                    pd.hide();
+                    pd.dismiss();
                 }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "Failure detected");
             }
         });
     }
@@ -346,9 +381,8 @@ public class AddNewEventActivity extends AppCompatActivity {
         ArrayList<StorageTask<UploadTask.TaskSnapshot>> promises = new ArrayList<>();
 
         for (int i = 0; i < imgLocationsData.size(); i++) {
-            String imgName = imgLocationsData.get(i).getLastPathSegment();
 
-            Bitmap bmp = null;
+            Bitmap bmp;
             try {
                 bmp = MediaStore.Images.Media.getBitmap(AddNewEventActivity.this.getContentResolver(), imgLocationsData.get(i));
                 bmp = Bitmap.createScaledBitmap(bmp, 500, (int) ((float) bmp.getHeight() / bmp.getWidth() * 500), true);
@@ -356,17 +390,15 @@ public class AddNewEventActivity extends AppCompatActivity {
                 ByteArrayOutputStream boas = new ByteArrayOutputStream();
                 bmp.compress(Bitmap.CompressFormat.JPEG, 100, boas);
 
-                imgName = imgName.replace('.', '@');
-                int lastIndex = imgName.lastIndexOf('@');
-                String imgExtension = imgName.substring(lastIndex + 1);
-                StorageReference childRef = firebaseStorage.child(input_eventname.getText().toString() + "_" + i + "." + imgExtension);
+                StorageReference childRef = firebaseStorage.child(input_eventname.getText().toString() + "_" + i);
 
                 // To be put on final add event button to avoid useless uploads
                 UploadTask uploadTask = childRef.putBytes(boas.toByteArray());
                 StorageTask<UploadTask.TaskSnapshot> promise = uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Toast.makeText(AddNewEventActivity.this, "Image Upload successful", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "Image Upload Successful!");
+                        //Toast.makeText(AddNewEventActivity.this, "Image Upload successful", Toast.LENGTH_SHORT).show();
                         Uri uri = taskSnapshot.getDownloadUrl();
                         assert uri != null;
                         event.photoID.posters.add(uri.toString());
@@ -400,7 +432,10 @@ public class AddNewEventActivity extends AppCompatActivity {
                 startActivityForResult(Intent.createChooser(intent, "Select Image"), PICK_IMAGE_REQUEST);
                 return true;
             case R.id.create_new_event:
-                uploadEvent();
+                if(isOnline)
+                    uploadEvent();
+                else
+                    Toast.makeText(this, "Sorry! You are offline!", Toast.LENGTH_SHORT).show();
                 return true;
             case android.R.id.home:
                 onBackPressed();
@@ -557,7 +592,6 @@ public class AddNewEventActivity extends AppCompatActivity {
             @Override
             public void onClick(final View v) {
                 input_date.setError(null);
-                Toast.makeText(AddNewEventActivity.this, "clicked", Toast.LENGTH_SHORT).show();
                 java.util.Calendar mcurrentDate = java.util.Calendar.getInstance();
                 final int mYear = mcurrentDate.get(java.util.Calendar.YEAR);
                 final int mMonth = mcurrentDate.get(java.util.Calendar.MONTH);
@@ -614,7 +648,6 @@ public class AddNewEventActivity extends AppCompatActivity {
                         //cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
                         //cal.set(Calendar.MINUTE, minute);
 
-                        Toast.makeText(AddNewEventActivity.this, "" + TimeZone.getDefault().getRawOffset(), Toast.LENGTH_SHORT).show();
                         long time = 1000L * (hourOfDay * 60 * 60 + minute * 60) - TimeZone.getDefault().getRawOffset();
                         if (isStart)
                             event.days.get(i).setStartTime(time);
@@ -687,6 +720,7 @@ public class AddNewEventActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         detachDatabaseReadListener();
+        detachOnlineOfflineReadListener();
         coordinatorsAll.clear();
     }
 
@@ -694,6 +728,8 @@ public class AddNewEventActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         attachDatabaseReadListener();
+
+        attackOnlineOfflineReadListener();
         //updateList();
     }
 
@@ -701,6 +737,14 @@ public class AddNewEventActivity extends AppCompatActivity {
         if (mChildEventListener != null) {
             mDatabaseReference.removeEventListener(mChildEventListener);
             mChildEventListener = null;
+        }
+    }
+
+
+    private void detachOnlineOfflineReadListener() {
+        if (mChildOnlineOfflineEventListener != null) {
+            connectedRef.removeEventListener(mChildOnlineOfflineEventListener);
+            mChildOnlineOfflineEventListener = null;
         }
     }
 
@@ -754,6 +798,35 @@ public class AddNewEventActivity extends AppCompatActivity {
         }
     }
 
+    private void attackOnlineOfflineReadListener() {
+        if (mChildOnlineOfflineEventListener == null) {
+            mChildOnlineOfflineEventListener  = new ValueEventListener() {
+
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+                    try {
+                        isOnline = snapshot.getValue(Boolean.class);
+                    }catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                    if (isOnline) {
+                        Log.d(TAG, "Online");
+                    } else {
+                        Log.d(TAG, "Offline");
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    System.err.println("Listener was cancelled");
+                }
+            };
+        }
+        connectedRef.addValueEventListener(mChildOnlineOfflineEventListener);
+    }
+
+
     private void updateList() {
         sort(coordinatorsAll);
         coordinatorAdapter = new CoordinatorAdapter(
@@ -780,8 +853,11 @@ public class AddNewEventActivity extends AppCompatActivity {
 
             for (int i = 0; i < promises.size(); i++) {
                 while (!promises.get(i).isComplete()) ;
-                if (!promises.get(i).isSuccessful())
+
+                if (!promises.get(i).isSuccessful()) {
                     alluploaded = false;
+                    Log.d(TAG, "Image Upload Unsuccessful for task "+i);
+                }
             }
             while (event.getPhotoID().getPosters().size() != promises.size()) ;
             return null;
@@ -790,8 +866,8 @@ public class AddNewEventActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
             pd.hide();
-            Toast.makeText(AddNewEventActivity.this, "Image Upload Complete!", Toast.LENGTH_SHORT).show();
             if (alluploaded) {
+                Toast.makeText(AddNewEventActivity.this, "Image Upload Complete!", Toast.LENGTH_SHORT).show();
                 uploadEventData();
             }
         }
