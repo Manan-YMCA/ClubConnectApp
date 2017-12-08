@@ -24,10 +24,9 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-<style
-    name="AppTheme.User" parent="AppTheme.AppBarOverlay">
-    <item name="android:state_activated">
-    true</item>>
-    <item name="android:color">#ffa5a5</item>>
-</style>
+    <style name="AppTheme.User" parent="AppTheme.AppBarOverlay">
+        <item name="android:state_activated">
+            true</item>>
+        <item name="android:color">#ffa5a5</item>>
+    </style>
 </resources>

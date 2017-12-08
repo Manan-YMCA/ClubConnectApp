@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_toRightOf="@id/iv_time"
-            android:text="Tuesday, 21 November"
+            android:text="[Day, Date Month]"
             android:textColor="#111"
             android:singleLine="true"
             android:textSize="14sp" />
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_alignStart="@id/tv_date"
             android:layout_below="@id/tv_date"
-            android:text="19:00 - 21:30"
+            android:text="[Start Time - End Time]"
             android:textColor="#555"
             android:textSize="12sp" />
     </RelativeLayout>

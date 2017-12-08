@@ -35,7 +35,6 @@
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
-
         <activity
             android:name="com.facebook.CustomTabActivity"
             android:exported="true">
@@ -48,25 +47,19 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-
         <activity android:name=".AdminDashboardActivity" />
-
         <activity
             android:name=".AdminZoneActivity"
             android:theme="@style/CodeFont" />
-
         <activity
             android:name=".AddNewEventActivity"
             android:label="Create New Event"
             android:parentActivityName=".AdminDashboardActivity" />
-
         <activity android:name=".User.UserClubEventListActivity" />
-
         <activity
             android:name=".DashboardUserActivity"
             android:label="@string/title_activity_dashboard_user"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".User.EventsDetailsActivity"
             android:label="@string/title_activity_events_details"
@@ -75,17 +68,26 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.manan.dev.clubconnect.DashboardUserActivity" />
         </activity>
-
         <activity
             android:name=".User.UserProfileActivity"
             android:label="Profile"
             android:parentActivityName=".DashboardUserActivity" />
         <activity android:name=".AddNewClubActivity" />
-
-
         <activity android:name=".AddNewCoordinatorActivity" />
-        <activity android:name=".User.DevelopersActivity"></activity>
-
+        <activity android:name=".User.DevelopersActivity" />
+        <activity
+            android:name=".EditEventActivity"
+            android:label="[Event Name]"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".EditEvent.EventName"
+            android:label="Enter the event name" />
+        <activity
+            android:name=".EditEvent.EventVenue"
+            android:label="Enter the event venue" />
+        <activity android:name=".EditEvent.EventDetails" />
+        <activity android:name=".EditEvent.ModifyCoordinators" />
+        <activity android:name=".EditEvent.EventTimings"></activity>
     </application>
 
 </manifest>

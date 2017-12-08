@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.manan.dev.clubconnect.User.EventsDetailsActivity"
-    tools:showIn="@layout/activity_events_details">
+    tools:showIn="@layout/activity_edit_event"
+    tools:context="com.manan.dev.clubconnect.EditEventActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -44,7 +43,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_toEndOf="@+id/iv_vector_calender"
-                    android:text="18:00"
+                    android:text="[Start Time]"
                     android:textColor="#000"
                     android:textSize="15sp" />
 
@@ -54,7 +53,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignStart="@id/tv_time"
                     android:layout_below="@id/tv_time"
-                    android:text="October 14"
+                    android:text="[Start Date]"
                     android:textSize="13sp" />
 
                 <ImageView
@@ -69,11 +68,64 @@
                     android:id="@+id/tv_venue"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/iv_edit_venue"
                     android:gravity="center"
-                    android:text="Main Auditorium"
+                    android:text="[Venue]"
                     android:textColor="#000"
+                    android:textSize="15sp" />
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_edit_white_24dp"
+                    android:tint="#777"
+                    android:id="@+id/iv_edit_venue"
+                    android:layout_alignParentEnd="true" />
+
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="24dp"
+            android:elevation="10dp"
+            app:cardElevation="10dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <TextView
+                    android:id="@+id/labelDetails"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Details"
+                    android:textColor="#000"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/tv_edit_details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="EDIT"
+                    android:textStyle="bold"
+                    android:textColor="#3F51B5"
+                    android:textSize="13sp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignBaseline="@+id/labelDetails" />
+
+                <TextView
+                    android:layout_below="@id/labelDetails"
+                    android:id="@+id/tv_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="[Details of your event will appear here.\n\n Do not add venue or the details related to timings here.\n\nYou can add emojis 👯🎊 or empty lines to beautify your details]"
                     android:textSize="15sp" />
             </RelativeLayout>
         </android.support.v7.widget.CardView>
@@ -87,57 +139,41 @@
             android:elevation="10dp"
             app:cardElevation="10dp">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:padding="12dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Details"
-                    android:textColor="#000"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:id="@+id/tv_details"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Thanks very much! The java solution works but xml not. But there is a problem in java solution. In this solution the images background set to green just until button is pressed. I want it remains green until next press, and if user press the button again, change color to blue. How can i implement it?"
-                    android:textSize="15sp" />
-            </LinearLayout>
-        </android.support.v7.widget.CardView>
-
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="24dp"
-            android:elevation="10dp"
-            app:cardElevation="10dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="12dp">
-
-                <TextView
+                    android:id="@+id/labelCoords"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Co-ordinators"
                     android:textColor="#000"
                     android:textSize="18sp" />
 
-                <LinearLayout
-                    android:id="@+id/ll_coordinators"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/tvAddCoords"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical" />
+                    android:text="MODIFY"
+                    android:textStyle="bold"
+                    android:textColor="#3F51B5"
+                    android:textSize="13sp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignBaseline="@+id/labelCoords" />
 
-            </LinearLayout>
+                <LinearLayout
+                    android:layout_below="@+id/labelCoords"
+                    android:id="@+id/ll_coordinators"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+                    <include layout="@layout/coordinators_event_details_display"/>
+                </LinearLayout>
+
+            </RelativeLayout>
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
@@ -149,20 +185,63 @@
             android:layout_marginTop="24dp"
             android:elevation="10dp"
             app:cardElevation="10dp">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp">
 
-            <HorizontalScrollView
+                <TextView
+                    android:id="@+id/labelPosters"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Posters"
+                    android:textColor="#000"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/tvAddPosters"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ADD"
+                    android:textStyle="bold"
+                    android:textColor="#3F51B5"
+                    android:textSize="13sp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignBaseline="@+id/labelPosters" />
+
+
+                <HorizontalScrollView
+                    android:layout_below="@+id/labelPosters"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fillViewport="true"
                 android:scrollbars="none">
 
-                <LinearLayout
-                    android:id="@+id/ll_posters"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="12dp" />
+                    <LinearLayout
+                        android:id="@+id/ll_posters"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="12dp">
+                        <RelativeLayout
+                            android:layout_width="65dp"
+                            android:layout_height="80dp"
+                            android:background="#DDDEE3"
+                            android:layout_margin="5dp">
+
+                            <TextView
+                                android:layout_centerInParent="true"
+                                android:text="Poster"
+                                android:padding="12dp"
+                                android:tint="#445"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:adjustViewBounds="true"/>
+                        </RelativeLayout>
+                    </LinearLayout>
             </HorizontalScrollView>
+            </RelativeLayout>
+
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
@@ -175,20 +254,33 @@
             android:elevation="10dp"
             app:cardElevation="10dp">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:padding="12dp">
 
                 <TextView
+                    android:id="@+id/labelTimings"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Timings"
                     android:textColor="#000"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    />
+
+                <TextView
+                    android:id="@+id/tvAddTimings"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ADD"
+                    android:textStyle="bold"
+                    android:textColor="#3F51B5"
+                    android:textSize="13sp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignBaseline="@+id/labelTimings" />
 
                 <LinearLayout
+                    android:layout_below="@+id/labelTimings"
                     android:id="@+id/ll_timmings_all"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -197,7 +289,8 @@
                     <include layout="@layout/user_single_event_item_timmings" />
 
                 </LinearLayout>
-            </LinearLayout>
+            </RelativeLayout>
         </android.support.v7.widget.CardView>
     </LinearLayout>
+
 </android.support.v4.widget.NestedScrollView>

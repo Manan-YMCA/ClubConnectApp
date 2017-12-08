@@ -8,8 +8,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,12 +26,15 @@ import com.manan.dev.clubconnect.Models.UserData;
 import com.manan.dev.clubconnect.R;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+
 public class UserProfileActivity extends AppCompatActivity {
 
     private ImageView userImg;
     private EditText userName;
     private EditText userPhone;
     private EditText userRoll;
+    private LinearLayout llClubs;
     private FirebaseAuth mAuth;
     private FloatingActionButton submitFab;
     private ProgressDialog pd;
@@ -118,8 +124,18 @@ public class UserProfileActivity extends AppCompatActivity {
                 String branch = batch.getSelectedItem().toString();
                 String coursedata = course.getSelectedItem().toString();
                 long graduationYear = Long.parseLong(dropdown.getSelectedItem().toString());
-                UserData userData = new UserData(phoneNo, branch, coursedata, rollNo, photoID, name, graduationYear);
+                ArrayList<String> clubs=null;
 
+                for(int i=0; i<llClubs.getChildCount(); i++)
+                {
+                    CheckBox cb = (CheckBox) llClubs.getChildAt(i);
+                    cb.isChecked();
+                }
+
+                //UserData userData = new UserData(phoneNo, branch, coursedata, rollNo, photoID, name, graduationYear);
+
+
+                UserData userData = new UserData(phoneNo, branch, coursedata, rollNo, photoID, name, null, null, clubs, graduationYear);
 
                 boolean checker = (!userData.getName().equals("") &&
                         !userData.getPhotoID().equals("") &&

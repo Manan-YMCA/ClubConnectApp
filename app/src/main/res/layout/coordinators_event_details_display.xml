@@ -15,14 +15,14 @@
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:padding="5dp"
-            android:src="@android:drawable/ic_menu_call" />
+            android:src="@drawable/round_img"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/iv_photo"
             android:layout_marginLeft="10dp"
-            android:text="Kushank Arora"
+            android:text="[Full Name]"
             android:id="@+id/tv_org_name"
             android:textColor="#000"
             android:textSize="18dp" />
@@ -33,7 +33,7 @@
             android:layout_alignStart="@+id/tv_org_name"
             android:layout_below="@+id/tv_org_name"
             android:id="@+id/tv_phone_no"
-            android:text="9999999999" />
+            android:text="[Phone Number]" />
 
     </RelativeLayout>
 </LinearLayout>

@@ -66,8 +66,10 @@ public class CoordinatorAdapter extends ArrayAdapter<Coordinator> {
             TextView lblName = (TextView) view.findViewById(R.id.coordinator_item_name);
             ImageView imgView = (ImageView) view.findViewById(R.id.cancel_coordinator);
             lblName.setText(coordinator.getName());
-            Log.d("getView",coordinator.getPhoto());
-            Picasso.with(context).load(coordinator.getPhoto()).resize(50,50).centerCrop().transform(new CircleTransform()).into(imgView);
+            if(coordinator.getPhoto()!=null) {
+                Log.d("getView", coordinator.getPhoto());
+                Picasso.with(context).load(coordinator.getPhoto()).resize(50, 50).centerCrop().transform(new CircleTransform()).into(imgView);
+            }
         }
         return view;
     }
@@ -97,6 +99,7 @@ public class CoordinatorAdapter extends ArrayAdapter<Coordinator> {
                 filterResults.count = suggestions.size();
                 return filterResults;
             } else {
+                Log.d("Something", itemsAll.size()+"");
                 Collections.copy(suggestions,itemsAll);
                 FilterResults filterResults = new FilterResults();
                 filterResults.values = suggestions;

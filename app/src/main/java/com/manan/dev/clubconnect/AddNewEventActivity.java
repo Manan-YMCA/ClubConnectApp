@@ -7,7 +7,6 @@ import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
@@ -20,8 +19,6 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.util.Log;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -82,6 +79,7 @@ public class AddNewEventActivity extends AppCompatActivity {
     int count = 0, PICK_IMAGE_REQUEST = 111;
     ArrayList<EditText> date;
     ArrayList<EditText> startTime, endTime;
+    ArrayList<LinearLayout> timeIntervalLayouts;
     //ArrayList<Long> dateData, startTimeData, endTimeData;
     private ArrayList<Uri> imgLocationsData;
     private ArrayList<Coordinator> coordinatorsAll;
@@ -95,9 +93,6 @@ public class AddNewEventActivity extends AppCompatActivity {
     private DatabaseReference mDatabaseReference;
     private CoordinatorAdapter coordinatorAdapter;
     private String clubNameData;
-    private EditText input_date;
-    private EditText input_start_time;
-    private EditText input_end_time;
     private DatabaseReference databaseRootRef;
 
 
@@ -115,9 +110,9 @@ public class AddNewEventActivity extends AppCompatActivity {
         firebaseStorage = FirebaseStorage.getInstance().getReference();
 
         ImageView add_new_date = (ImageView) findViewById(R.id.Add_new_date);
-        input_date = (EditText) findViewById(R.id.input_date);
-        input_start_time = (EditText) findViewById(R.id.input_start_time);
-        input_end_time = (EditText) findViewById(R.id.input_end_time);
+        EditText input_date = (EditText) findViewById(R.id.input_date);
+        EditText input_start_time = (EditText) findViewById(R.id.input_start_time);
+        EditText input_end_time = (EditText) findViewById(R.id.input_end_time);
 
 
         input_eventname = (EditText) findViewById(R.id.input_eventname);
@@ -127,6 +122,8 @@ public class AddNewEventActivity extends AppCompatActivity {
         event_day_layout = (LinearLayout) findViewById(R.id.event_day_layout);
         containerCoordinators = (LinearLayout) findViewById(R.id.ll_add_coordinators);
         input_event_cooordinator = (AutoCompleteTextView) findViewById(R.id.coordinator_name);
+
+        timeIntervalLayouts = new ArrayList<>();
         event = new Event();
         event.coordinatorID = new ArrayList<>();
         event.days = new ArrayList<>();
@@ -205,7 +202,7 @@ public class AddNewEventActivity extends AppCompatActivity {
         //assert userEmail != null;
         if (user != null) {
             clubNameData = user.getDisplayName();
-        }else{
+        } else {
             finish();
         }
 
@@ -272,7 +269,7 @@ public class AddNewEventActivity extends AppCompatActivity {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!imgLocationsData.remove(localData))
+                if (!imgLocationsData.remove(localData))
                     Toast.makeText(AddNewEventActivity.this, "Sorry, the image was not removed compeltely!", Toast.LENGTH_SHORT).show();
                 container.removeView(relativeLayout);
             }
@@ -290,18 +287,21 @@ public class AddNewEventActivity extends AppCompatActivity {
 
         fillData();
 
+        removeCompletelyEmptyTimeInterval();
+
         Boolean filled =
                 !input_event_venue.getText().toString().trim().equals("") &&
-                !input_eventname.getText().toString().trim().equals("") &&
-                !input_description.getText().toString().trim().equals("") &&
-                event.coordinatorID.size() > 0 &&
-                imgLocationsData.size() > 0 &&
-                event.days.size() >= 1 &&
-                event.days.get(0).getDate() > 0 &&
-                event.days.get(0).getStartTime() > 0 &&
-                event.days.get(0).getEndTime() > 0;
+                        !input_eventname.getText().toString().trim().equals("") &&
+                        !input_description.getText().toString().trim().equals("") &&
+                        event.coordinatorID.size() > 0 &&
+                        imgLocationsData.size() > 0 &&
+                        event.days.size() >= 1 &&
+                        event.days.get(0).getDate() > 0 &&
+                        event.days.get(0).getStartTime() > 0 &&
+                        event.days.get(0).getEndTime() > 0 &&
+                        !isEmptyDateTimeInterval();
 
-        if(filled){
+        if (filled) {
             pd.setIndeterminate(false);
             pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             pd.setMax(imgLocationsData.size());
@@ -310,44 +310,98 @@ public class AddNewEventActivity extends AppCompatActivity {
             event.setEventDesc(input_description.getText().toString().trim());
             event.setEventVenue(input_event_venue.getText().toString().trim());
             new ImageUpload(uploadImagesToFirebase()).execute();
-        }
-        else {
+        } else {
             boolean anyError = false;
 
-            if(event.getEventName().equals("")){
+            if (event.getEventName().equals("")) {
                 input_eventname.setError("Required");
                 anyError = true;
             }
-            if(event.getEventVenue().equals("")){
+            if (event.getEventVenue().equals("")) {
                 input_event_venue.setError("Required");
                 anyError = true;
             }
-            if(event.getEventDesc().equals("")){
+            if (event.getEventDesc().equals("")) {
                 input_description.setError("Required");
                 anyError = true;
             }
-            if(event.coordinatorID.size() == 0){
+            if (event.coordinatorID.size() == 0) {
                 input_event_cooordinator.setError("Required");
                 anyError = true;
             }
-            if(event.days.get(0).getDate() == 0){
-                input_date.setError("Required");
-                anyError = true;
-            }
-            if(event.days.get(0).getStartTime() == 0){
-                input_start_time.setError("Required");
-                anyError = true;
-            }
-            if(event.days.get(0).getEndTime() == 0){
-                input_end_time.setError("Required");
-                anyError = true;
+
+            try {
+                if (event.days.get(0).getDate() == 0) {
+                    date.get(0).setError("Required");
+                    anyError = true;
+                }
+            }catch (Exception e){
+                e.printStackTrace();
             }
 
-            if(imgLocationsData.size() == 0 && !anyError){
+
+
+            for (int i = 0; i < event.days.size(); i++) {
+                if (event.days.get(i).getStartTime() == 0) {
+                    startTime.get(i).setError("Required");
+                    anyError = true;
+                }
+                if (event.days.get(i).getEndTime() == 0) {
+                    endTime.get(i).setError("Required");
+                    anyError = true;
+                }
+            }
+
+            if (imgLocationsData.size() == 0 && !anyError) {
                 Toast.makeText(AddNewEventActivity.this, "One Poster is Compulsory!", Toast.LENGTH_SHORT).show();
             }
         }
 
+    }
+
+    private void removeCompletelyEmptyTimeInterval() {
+        for (int i = 0; i < event.getDays().size(); i++) {
+            TimeInterval curDate = event.getDays().get(i);
+            if (curDate.getDate() == 0) {
+                try {
+                    event.getDays().remove(i);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                try {
+                    timeIntervalLayouts.get(i).setVisibility(View.GONE);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                try {
+                    timeIntervalLayouts.remove(i);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                try {
+                    date.remove(i);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                try {
+                    startTime.remove(i);
+                } catch (Exception e) {
+                    endTime.remove(i);
+                }
+
+                i--;
+            }
+        }
+
+    }
+
+    private boolean isEmptyDateTimeInterval() {
+        for (int i = 0; i < event.getDays().size(); i++) {
+            TimeInterval curDate = event.getDays().get(i);
+            if (curDate.getDate() == 0 || curDate.getStartTime() == 0 || curDate.getEndTime() == 0)
+                return true;
+        }
+        return false;
     }
 
     private void uploadEventData() {
@@ -418,7 +472,7 @@ public class AddNewEventActivity extends AppCompatActivity {
                 }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                        pd.setProgress((int) (((float)taskSnapshot.getBytesTransferred())/taskSnapshot.getTotalByteCount())*100);
+                        pd.setProgress((int) (((float) taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount()) * 100);
                     }
                 });
                 promises.add(promise);
@@ -440,7 +494,7 @@ public class AddNewEventActivity extends AppCompatActivity {
                 startActivityForResult(Intent.createChooser(intent, "Select Image"), PICK_IMAGE_REQUEST);
                 return true;
             case R.id.create_new_event:
-                if(isOnline)
+                if (isOnline)
                     uploadEvent();
                 else
                     Toast.makeText(this, "Sorry! You are offline!", Toast.LENGTH_SHORT).show();
@@ -500,6 +554,7 @@ public class AddNewEventActivity extends AppCompatActivity {
                 lLayout.setPadding(five, five, five, five);
 
                 event_day_layout.addView(lLayout);
+                timeIntervalLayouts.add(lLayout);
 
             }
         };
@@ -513,7 +568,7 @@ public class AddNewEventActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(final View v) {
-                input_date.setError(null);
+                dateTextView.setError(null);
                 java.util.Calendar mcurrentDate = java.util.Calendar.getInstance();
                 final int mYear = mcurrentDate.get(java.util.Calendar.YEAR);
                 final int mMonth = mcurrentDate.get(java.util.Calendar.MONTH);
@@ -549,10 +604,7 @@ public class AddNewEventActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(final View v) {
-                if(isStart)
-                    input_start_time.setError(null);
-                else
-                    input_end_time.setError(null);
+                timeTextView.setError(null);
                 final java.util.Calendar mcurrentDate = java.util.Calendar.getInstance();
                 final int mHour = mcurrentDate.get(java.util.Calendar.HOUR_OF_DAY);
                 final int mMinute = mcurrentDate.get(java.util.Calendar.MINUTE);
@@ -716,14 +768,13 @@ public class AddNewEventActivity extends AppCompatActivity {
 
     private void attackOnlineOfflineReadListener() {
         if (mChildOnlineOfflineEventListener == null) {
-            mChildOnlineOfflineEventListener  = new ValueEventListener() {
+            mChildOnlineOfflineEventListener = new ValueEventListener() {
 
                 @Override
                 public void onDataChange(DataSnapshot snapshot) {
                     try {
                         isOnline = snapshot.getValue(Boolean.class);
-                    }catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                     if (isOnline) {
@@ -772,7 +823,7 @@ public class AddNewEventActivity extends AppCompatActivity {
 
                 if (!promises.get(i).isSuccessful()) {
                     alluploaded = false;
-                    Log.d(TAG, "Image Upload Unsuccessful for task "+i);
+                    Log.d(TAG, "Image Upload Unsuccessful for task " + i);
                 }
             }
             while (event.getPhotoID().getPosters().size() != promises.size()) ;

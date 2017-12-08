@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -25,12 +26,12 @@ public class AdminDashboardActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         addNewEventFab = (FloatingActionButton) findViewById(R.id.add_new_event_fab);
         Object ffffff;
-        addNewEventFab.setBackgroundTintList(ColorStateList.valueOf(R.color.darkBlack));
+        //addNewEventFab.setBackgroundTintList(ColorStateList.valueOf(R.color.darkBlack));
         //.withAlpha(R.color.cardview_shadow_start_color));
         addNewEventFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(AdminDashboardActivity.this, AddNewEventActivity.class));
+                startActivity(new Intent(AdminDashboardActivity.this, EditEventActivity.class));
             }
         });
     }

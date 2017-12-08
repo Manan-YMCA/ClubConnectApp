@@ -102,4 +102,5 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="button">ContactUs</string>
+    <string name="title_activity_edit_event">EditEventActivity</string>
 </resources>
