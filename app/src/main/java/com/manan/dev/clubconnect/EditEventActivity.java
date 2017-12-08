@@ -20,16 +20,24 @@ import android.widget.Toast;
 
 import com.manan.dev.clubconnect.EditEvent.EventDetails;
 import com.manan.dev.clubconnect.EditEvent.EventName;
+import com.manan.dev.clubconnect.EditEvent.EventTimings;
 import com.manan.dev.clubconnect.EditEvent.EventVenue;
 import com.manan.dev.clubconnect.EditEvent.ModifyCoordinators;
 import com.manan.dev.clubconnect.Models.Coordinator;
 import com.manan.dev.clubconnect.Models.Event;
+import com.manan.dev.clubconnect.Models.TimeInterval;
+import com.manan.dev.clubconnect.User.EventsDetailsActivity;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+
+import static java.util.Collections.sort;
 
 public class EditEventActivity extends AppCompatActivity {
 
@@ -45,6 +53,10 @@ public class EditEventActivity extends AppCompatActivity {
     public static final String REQ_PARA_EVENT_COORD_PHOTO = "coord_photo";
     public static final String REQ_PARA_EVENT_COORD_EMAIL = "coord_email";
     private static final int REQ_ID_COORDS = 5;
+    public static final String REQ_PARA_EVENT_DATE = "event_date";
+    public static final String REQ_PARA_EVENT_STIME = "event_stime";
+    public static final String REQ_PARA_EVENT_ETIME = "event_etime";
+    private static final int REQ_ID_TIMINGS = 6;
 
     Event event;
 
@@ -55,6 +67,7 @@ public class EditEventActivity extends AppCompatActivity {
     private TextView tvVenue;
     private TextView tvDetails;
     private LinearLayout llCoordinators;
+    private LinearLayout llTimings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +92,7 @@ public class EditEventActivity extends AppCompatActivity {
         tvVenue = findViewById(R.id.tv_venue);
         tvDetails = findViewById(R.id.tv_details);
         llCoordinators = findViewById(R.id.ll_coordinators);
+        llTimings = findViewById(R.id.ll_timmings_all);
 
         appBar = findViewById(R.id.app_bar);
         collapsingToolbarLayout = findViewById(R.id.toolbar_layout);
@@ -164,6 +178,17 @@ public class EditEventActivity extends AppCompatActivity {
                 }
             });
         }
+        View addTimings = findViewById(R.id.tvAddTimings);
+        if(addTimings!=null)
+        {
+            addTimings.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(EditEventActivity.this, EventTimings.class);
+                    startActivityForResult(intent, REQ_ID_TIMINGS);
+                }
+            });
+        }
     }
     void fromCoordinatorsToArrayList(ArrayList<String> name, ArrayList<String> phone, ArrayList<String> email, ArrayList<String> photo)
     {
@@ -220,6 +245,45 @@ public class EditEventActivity extends AppCompatActivity {
             tvVenue.setText(event.getEventVenue());
         if(event.getEventDesc()!=null)
             tvDetails.setText(event.getEventDesc());
+
+        if(event.getDays().size()!=0)
+        {
+            llTimings.removeAllViews();
+        }
+        for(TimeInterval ti : event.getDays()){
+            LinearLayout ll = (LinearLayout) LayoutInflater.from(EditEventActivity.this).inflate(R.layout.user_single_event_item_timmings, null, false);
+            ll.setClickable(true);
+            ll.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+
+            TextView tvDateTimmings = (TextView) ll.findViewById(R.id.tv_date);
+            TextView tvTimeTimmings = (TextView) ll.findViewById(R.id.tv_duration);
+
+            Calendar cal1 = Calendar.getInstance();
+            Calendar cal2 = Calendar.getInstance();
+            SimpleDateFormat sdf1,sdf2;
+            String formattedDate1;
+
+            cal1.setTimeInMillis(ti.getDate());
+            sdf1 = new SimpleDateFormat("EEEE, dd MMMM", Locale.US);
+            // sdf2 = new SimpleDateFormat("EEEE");
+            //formattedDate1 = sdf2.format(cal1.getTime())+ ", "+sdf1.format(cal1.getTime());
+            formattedDate1 = sdf1.format(cal1.getTime());
+            tvDateTimmings.setText(formattedDate1);
+
+            cal1.setTimeInMillis(ti.getStartTime());
+            cal2.setTimeInMillis(ti.getEndTime());
+            sdf1 = new SimpleDateFormat("HH:mm", Locale.US);
+            sdf2 = new SimpleDateFormat("HH:mm", Locale.US);
+            formattedDate1 = sdf1.format(cal1.getTime())+ " - " + sdf2.format(cal2.getTime());
+            tvTimeTimmings.setText(formattedDate1);
+
+            llTimings.addView(ll);
+        }
     }
 
     @Override
@@ -257,6 +321,18 @@ public class EditEventActivity extends AppCompatActivity {
 
                     event.setCoordinatorID(email);
                     upDateCoordinators(name, phone, email, photo);
+                }
+                break;
+            case REQ_ID_TIMINGS:
+                if(data!=null)
+                {
+                    long date = data.getLongExtra(REQ_PARA_EVENT_DATE,0);
+                    long stime = data.getLongExtra(REQ_PARA_EVENT_STIME,0);
+                    long etime = data.getLongExtra(REQ_PARA_EVENT_ETIME, 0);
+
+                    event.getDays().add(new TimeInterval(date,stime, etime));
+                    sort(event.getDays());
+                    updateUIText();
                 }
                 break;
             case REQ_ID_POSTER:

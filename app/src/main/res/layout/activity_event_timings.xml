@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:maxLength="25"
+        android:focusable="false"
         android:hint="Date"
         android:inputType="textPersonName"
         android:layout_margin="10dp"/>
@@ -22,6 +23,7 @@
             android:id="@+id/etEventStartTime"
             android:layout_width="0dp"
             android:layout_weight="0.5"
+            android:focusable="false"
             android:layout_height="wrap_content"
             android:hint="Start Time"
             android:layout_margin="10dp"/>
@@ -29,6 +31,7 @@
             android:id="@+id/etEventEndtime"
             android:layout_weight="0.5"
             android:layout_width="0dp"
+            android:focusable="false"
             android:layout_height="wrap_content"
             android:hint="End Time"
             android:layout_margin="10dp"/>
@@ -45,8 +48,11 @@
             android:text="Cancel"
             android:background="@drawable/md_transparent_border"
             android:backgroundTint="#aaa"
-            android:textAllCaps="false"/>
+            android:textAllCaps="false"
+            android:id="@+id/bCancel"
+            />
         <Button
+            android:id="@+id/bOK"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:padding="10dp"

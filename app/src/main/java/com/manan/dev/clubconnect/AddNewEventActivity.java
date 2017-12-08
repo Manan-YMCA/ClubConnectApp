@@ -569,29 +569,8 @@ public class AddNewEventActivity extends AppCompatActivity {
             @Override
             public void onClick(final View v) {
                 dateTextView.setError(null);
-                java.util.Calendar mcurrentDate = java.util.Calendar.getInstance();
-                final int mYear = mcurrentDate.get(java.util.Calendar.YEAR);
-                final int mMonth = mcurrentDate.get(java.util.Calendar.MONTH);
-                final int mDay = mcurrentDate.get(java.util.Calendar.DAY_OF_MONTH);
 
-                DatePickerDialog mDatePicker = new DatePickerDialog(AddNewEventActivity.this, new DatePickerDialog.OnDateSetListener() {
-                    public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
-                        java.util.Calendar myCalendar = java.util.Calendar.getInstance();
-                        myCalendar.setTimeInMillis(0);
-                        myCalendar.set(java.util.Calendar.YEAR, selectedyear);
-                        myCalendar.set(java.util.Calendar.MONTH, selectedmonth);
-                        myCalendar.set(java.util.Calendar.DAY_OF_MONTH, selectedday);
-                        String myFormat = "dd/MM/yy"; //Change as you need
-                        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.ENGLISH);
 
-                        dateTextView.setText(sdf.format(myCalendar.getTime()));
-
-                        event.days.get(i).setDate(myCalendar.getTimeInMillis());
-                    }
-                }, mYear, mMonth, mDay);
-                mDatePicker.setTitle("Select date");
-                mDatePicker.getDatePicker().setCalendarViewShown(true);
-                mDatePicker.show();
 
             }
         };

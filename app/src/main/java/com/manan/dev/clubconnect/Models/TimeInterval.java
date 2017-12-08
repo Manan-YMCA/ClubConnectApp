@@ -1,10 +1,12 @@
 package com.manan.dev.clubconnect.Models;
 
+import android.support.annotation.NonNull;
+
 /**
  * Created by Shubham on 11/16/2017.
  */
 
-public class TimeInterval {
+public class TimeInterval implements Comparable<TimeInterval>{
     long date;
     long startTime, endTime;
 
@@ -38,5 +40,10 @@ public class TimeInterval {
 
     public long getStartTime() {
         return startTime;
+    }
+
+    @Override
+    public int compareTo(@NonNull TimeInterval ti) {
+        return (int) (this.getStartTime() + this.getDate()- (ti.getStartTime()+ti.getDate()));
     }
 }
