@@ -41,6 +41,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -57,6 +58,7 @@ import com.manan.dev.clubconnect.Models.TimeInterval;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -88,6 +90,7 @@ public class EditEventActivity extends AppCompatActivity {
     public static final String REQ_PARA_EVENT_DATE = "event_date";
     public static final String REQ_PARA_EVENT_STIME = "event_stime";
     public static final String REQ_PARA_EVENT_ETIME = "event_etime";
+    private static final String REQ_PARA_EVENT_POSTERS = "event_posters";
 
     private static final String TAG = "EditEventActivity";
 
@@ -135,6 +138,38 @@ public class EditEventActivity extends AppCompatActivity {
         setListenersForButtons();
 
         initForEventUpload();
+
+        initDataIfGot();
+    }
+
+    private void initDataIfGot() {
+        Intent data = getIntent();
+
+        event.setEventName(data.getStringExtra(REQ_PARA_EVENT_NAME));
+
+        if(event.getEventName()==null)
+            return;
+
+        event.setEventDesc(data.getStringExtra(REQ_PARA_EVENT_DETAILS));
+        event.setEventVenue(data.getStringExtra(REQ_PARA_EVENT_VENUE));
+        event.getPhotoID().setPosters(data.getStringArrayListExtra(REQ_PARA_EVENT_POSTERS));
+        event.setCoordinatorID(data.getStringArrayListExtra(REQ_PARA_EVENT_COORD_EMAIL));
+        long[] date,stime,etime;
+        date = data.getLongArrayExtra(REQ_PARA_EVENT_DATE);
+        stime = data.getLongArrayExtra(REQ_PARA_EVENT_STIME);
+        etime = data.getLongArrayExtra(REQ_PARA_EVENT_ETIME);
+        for(int i=0; i<date.length; i++)
+            event.getDays().add(new TimeInterval(date[i], stime[i], etime[i]));
+
+        ArrayList<String> name,phone,email,photo;
+        name = data.getStringArrayListExtra(REQ_PARA_EVENT_COORD_NAME);
+        email = data.getStringArrayListExtra(REQ_PARA_EVENT_COORD_EMAIL);
+        phone = data.getStringArrayListExtra(REQ_PARA_EVENT_COORD_PHONE);
+        photo = data.getStringArrayListExtra(REQ_PARA_EVENT_COORD_PHOTO);
+
+        updateUIText();
+        updatePostersBasedOnDownloadURLs();
+        updateCoordinators(name,phone,email,photo);
     }
 
     private void initDataVariables() {
@@ -307,7 +342,71 @@ public class EditEventActivity extends AppCompatActivity {
         }
     }
 
-    void upDateCoordinators(ArrayList<String> name, ArrayList<String> phone, ArrayList<String> email, ArrayList<String> photo) {
+    void updatePostersBasedOnDownloadURLs() {
+        if (event.getPhotoID().getPosters().size() > 0) {
+            for(int i=0;i<event.getPhotoID().getPosters().size(); i++)
+            {
+                StorageReference ref = FirebaseStorage.getInstance().getReferenceFromUrl(event.getPhotoID().getPosters().get(i));
+                try {
+                    final File localFile = File.createTempFile("image"+i, "jpg");
+                    final int finalI = i;
+                    ref.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                            Uri cur = Uri.fromFile(localFile);
+                            posters.set(finalI,cur);
+                            if(finalI==0)
+                                updateMainPosterUI();
+                            else
+                                updatePosterUI(cur);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+    }
+
+    private void updatePosterUI(Uri poster) {
+        final ImageView iv = addNewHolderForImage(llPosters, poster);
+
+        try {
+            Bitmap bitmap;
+            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), poster);
+            float finalWidth = min(100, bitmap.getWidth());
+            bitmap = Bitmap.createScaledBitmap(bitmap, (int) finalWidth, (int) (finalWidth / bitmap.getWidth() * bitmap.getHeight()),
+                    true);
+            iv.setImageBitmap(bitmap);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void updateMainPosterUI() {
+        if(posters.get(0)==null)
+            return;
+        try {
+            Bitmap bitmap;
+            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), posters.get(0));
+            bitmap = getAppBarFriendlyBitmap(bitmap);
+            appBar.setBackground(new BitmapDrawable(EditEventActivity.this.getResources(), bitmap));
+            float finalWidth = min(100, bitmap.getWidth());
+            bitmap = Bitmap.createScaledBitmap(bitmap, (int) finalWidth, (int) (finalWidth / bitmap.getWidth() * bitmap.getHeight()),
+                    true);
+            ivMainPoster.setImageBitmap(bitmap);
+            ivMainPoster.setVisibility(View.VISIBLE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    void updateCoordinators(ArrayList<String> name, ArrayList<String> phone, ArrayList<String> email, ArrayList<String> photo) {
         llCoordinators.removeAllViews();
 
         if (name.size() == 0) {
@@ -329,11 +428,6 @@ public class EditEventActivity extends AppCompatActivity {
 
             coordinatorsAll.put(email.get(i), new Coordinator(name.get(i), email.get(i), phone.get(i), photo.get(i)));
 
-        }
-    }
-
-    void updatePoster() {
-        if (event.getPhotoID().getPosters().size() > 0) {
         }
     }
 
@@ -443,7 +537,7 @@ public class EditEventActivity extends AppCompatActivity {
                     email = data.getStringArrayListExtra(REQ_PARA_EVENT_COORD_EMAIL);
 
                     event.setCoordinatorID(email);
-                    upDateCoordinators(name, phone, email, photo);
+                    updateCoordinators(name, phone, email, photo);
                 }
                 break;
             case REQ_ID_TIMINGS:
@@ -484,42 +578,20 @@ public class EditEventActivity extends AppCompatActivity {
                 if (data != null && data.getData() != null) {
                     Uri localData = data.getData();
                     posters.set(0, localData);
-                    try {
-                        Bitmap bitmap;
-                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), localData);
-                        bitmap = getAppBarFriendlyBitmap(bitmap);
-                        appBar.setBackground(new BitmapDrawable(EditEventActivity.this.getResources(), bitmap));
-                        float finalWidth = min(100, bitmap.getWidth());
-                        bitmap = Bitmap.createScaledBitmap(bitmap, (int) finalWidth, (int) (finalWidth / bitmap.getWidth() * bitmap.getHeight()),
-                                true);
-                        ivMainPoster.setImageBitmap(bitmap);
-                        ivMainPoster.setVisibility(View.VISIBLE);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    updateMainPosterUI();
                 }
                 break;
             case REQ_ID_ATTACH_IMAGE:
                 if (data != null && data.getData() != null) {
                     Uri localData = data.getData();
                     posters.add(localData);
-                    final ImageView iv = addNewHolderForImage(llPosters, localData);
-
-                    try {
-                        Bitmap bitmap;
-                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), localData);
-                        float finalWidth = min(100, bitmap.getWidth());
-                        bitmap = Bitmap.createScaledBitmap(bitmap, (int) finalWidth, (int) (finalWidth / bitmap.getWidth() * bitmap.getHeight()),
-                                true);
-                        iv.setImageBitmap(bitmap);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    updatePosterUI(localData);
                 }
                 break;
         }
 
     }
+
 
     private ImageView addNewHolderForImage(final LinearLayout container, final Uri localData) {
         final RelativeLayout relativeLayout = new RelativeLayout(this);
@@ -607,11 +679,11 @@ public class EditEventActivity extends AppCompatActivity {
     }
 
     void uploadEvent() {
-        if (event.getEventName()==null || event.getEventName().equals("")) {
+        if (event.getEventName() == null || event.getEventName().equals("")) {
             Toast.makeText(EditEventActivity.this, "Event Name cannot be empty!", Toast.LENGTH_SHORT).show();
-        } else if (event.getEventVenue()==null || event.getEventVenue().equals("")) {
+        } else if (event.getEventVenue() == null || event.getEventVenue().equals("")) {
             Toast.makeText(EditEventActivity.this, "Event Venue cannot be empty!", Toast.LENGTH_SHORT).show();
-        } else if (event.getEventDesc()==null || event.getEventDesc().equals("")) {
+        } else if (event.getEventDesc() == null || event.getEventDesc().equals("")) {
             Toast.makeText(EditEventActivity.this, "Event Description cannot be empty!", Toast.LENGTH_SHORT).show();
         } else if (event.coordinatorID.size() == 0) {
             Toast.makeText(EditEventActivity.this, "There should be atleast 1 coordinator", Toast.LENGTH_SHORT).show();
@@ -624,6 +696,9 @@ public class EditEventActivity extends AppCompatActivity {
             pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             pd.setMax(posters.size());
             pd.show();
+
+            event.getPhotoID().getPosters().clear();
+
             new ImageUpload(uploadImagesToFirebase()).execute();
         }
     }
@@ -663,7 +738,7 @@ public class EditEventActivity extends AppCompatActivity {
         ArrayList<StorageTask<UploadTask.TaskSnapshot>> promises = new ArrayList<>();
 
         event.getPhotoID().getPosters().clear();
-        for(int i=0; i<posters.size(); i++)
+        for (int i = 0; i < posters.size(); i++)
             event.getPhotoID().getPosters().add(null);
 
         for (int i = 0; i < posters.size(); i++) {
@@ -676,7 +751,7 @@ public class EditEventActivity extends AppCompatActivity {
                 ByteArrayOutputStream boas = new ByteArrayOutputStream();
                 bmp.compress(Bitmap.CompressFormat.JPEG, 100, boas);
 
-                StorageReference childRef = firebaseStorage.child(event.getEventName() + "_"+event.getDays().get(0).getDate() + "_" + i);
+                StorageReference childRef = firebaseStorage.child(event.getEventName() + "_" + event.getDays().get(0).getDate() + "_" + i);
 
                 UploadTask uploadTask = childRef.putBytes(boas.toByteArray());
                 final int finalI = i;
@@ -711,11 +786,10 @@ public class EditEventActivity extends AppCompatActivity {
         return promises;
     }
 
-
     boolean isUntouched() {
-        return (event.getEventVenue()==null &&
-                (event.getEventName()==null || event.getEventName().trim().equals(""))&&
-                (event.getEventDesc()==null || event.getEventDesc().trim().equals(""))&&
+        return (event.getEventVenue() == null &&
+                (event.getEventName() == null || event.getEventName().trim().equals("")) &&
+                (event.getEventDesc() == null || event.getEventDesc().trim().equals("")) &&
                 event.coordinatorID.size() == 0 &&
                 posters.size() == 1 &&
                 posters.get(0) == null &&
@@ -786,7 +860,7 @@ public class EditEventActivity extends AppCompatActivity {
 
                 @Override
                 public void onCancelled(DatabaseError error) {
-                    Log.e(TAG,"Listener was cancelled");
+                    Log.e(TAG, "Listener was cancelled");
                 }
             };
         }
@@ -813,8 +887,8 @@ public class EditEventActivity extends AppCompatActivity {
                     Log.d(TAG, "Image Upload Unsuccessful for task " + i);
                 }
             }
-            for(int i=0;i<event.getPhotoID().getPosters().size();i++)
-                while(event.getPhotoID().getPosters().get(i)==null);
+            for (int i = 0; i < event.getPhotoID().getPosters().size(); i++)
+                while (event.getPhotoID().getPosters().get(i) == null) ;
             return null;
         }
 
