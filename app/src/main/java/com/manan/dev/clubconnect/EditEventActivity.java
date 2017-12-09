@@ -91,6 +91,7 @@ public class EditEventActivity extends AppCompatActivity {
     public static final String REQ_PARA_EVENT_STIME = "event_stime";
     public static final String REQ_PARA_EVENT_ETIME = "event_etime";
     private static final String REQ_PARA_EVENT_POSTERS = "event_posters";
+    private static final String REQ_PARA_EVENT_ID = "event_id";
 
     private static final String TAG = "EditEventActivity";
 
@@ -150,6 +151,7 @@ public class EditEventActivity extends AppCompatActivity {
         if(event.getEventName()==null)
             return;
 
+        event.setEventId(data.getStringExtra(REQ_PARA_EVENT_ID));
         event.setEventDesc(data.getStringExtra(REQ_PARA_EVENT_DETAILS));
         event.setEventVenue(data.getStringExtra(REQ_PARA_EVENT_VENUE));
         event.getPhotoID().setPosters(data.getStringArrayListExtra(REQ_PARA_EVENT_POSTERS));
@@ -711,7 +713,16 @@ public class EditEventActivity extends AppCompatActivity {
         //pd.setProgress(100);
         pd.show();
 
-        FirebaseDatabase.getInstance().getReference().child("events").child(event.getClubName()).push().setValue(event).addOnCompleteListener(new OnCompleteListener<Void>() {
+        DatabaseReference dataRef;
+
+        if(event.getEventId()!=null)
+        {
+            dataRef = FirebaseDatabase.getInstance().getReference().child("events").child(event.getClubName()).child(event.getEventId());
+        }else{
+             dataRef = FirebaseDatabase.getInstance().getReference().child("events").child(event.getClubName()).push();
+        }
+
+        dataRef.setValue(event).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 Log.d(TAG, "Uploading Event Data Completed");
