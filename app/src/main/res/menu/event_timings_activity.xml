@@ -6,6 +6,5 @@
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="ifRoom"
-        android:icon="@android:drawable/ic_menu_delete"
-        android:iconTint="#ff000000"/>
+        android:icon="@android:drawable/ic_menu_delete"/>
 </menu>
