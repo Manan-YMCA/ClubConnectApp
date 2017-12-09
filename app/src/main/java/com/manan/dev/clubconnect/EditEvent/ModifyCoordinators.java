@@ -3,6 +3,7 @@ package com.manan.dev.clubconnect.EditEvent;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.util.Log;
@@ -53,6 +54,12 @@ public class ModifyCoordinators extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_coordinators);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
         name = getIntent().getStringArrayListExtra(EditEventActivity.REQ_PARA_EVENT_COORD_NAME);
         phone = getIntent().getStringArrayListExtra(EditEventActivity.REQ_PARA_EVENT_COORD_PHONE);
         photo = getIntent().getStringArrayListExtra(EditEventActivity.REQ_PARA_EVENT_COORD_PHOTO);

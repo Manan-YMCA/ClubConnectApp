@@ -1,6 +1,7 @@
 package com.manan.dev.clubconnect.EditEvent;
 
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -23,6 +24,12 @@ public class EventVenue extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_venue);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
         String venue = getIntent().getStringExtra(EditEventActivity.REQ_PARA_EVENT_VENUE);
 
         final AutoCompleteTextView eventVenue = findViewById(R.id.etEventVenue);

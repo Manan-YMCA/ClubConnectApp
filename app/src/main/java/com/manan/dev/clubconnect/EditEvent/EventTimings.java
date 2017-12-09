@@ -3,6 +3,7 @@ package com.manan.dev.clubconnect.EditEvent;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -31,6 +32,11 @@ public class EventTimings extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_timings);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         date = getIntent().getLongExtra(EditEventActivity.REQ_PARA_EVENT_DATE, 0);
         stime = getIntent().getLongExtra(EditEventActivity.REQ_PARA_EVENT_STIME, 0);
