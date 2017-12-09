@@ -125,17 +125,25 @@ public class UserProfileActivity extends AppCompatActivity {
                 String branch = batch.getSelectedItem().toString();
                 String coursedata = course.getSelectedItem().toString();
                 long graduationYear = Long.parseLong(dropdown.getSelectedItem().toString());
-                ArrayList<String> clubs=null;
+                ArrayList<String> pendingClubs=new ArrayList<>();
 
                 for(int i=0; i<llClubs.getChildCount(); i++)
                 {
                     CheckBox cb = (CheckBox) llClubs.getChildAt(i);
+                    if(cb.isChecked()){
+                        Toast.makeText(UserProfileActivity.this, cb.getText().toString(), Toast.LENGTH_SHORT).show();
+                        try {
+                            pendingClubs.add(cb.getText().toString());
+                        }catch (Exception e){
+                            Toast.makeText(UserProfileActivity.this, cb.getText(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
                 }
 
                 //UserData userData = new UserData(phoneNo, branch, coursedata, rollNo, photoID, name, graduationYear);
 
 
-                UserData userData = new UserData(phoneNo, branch, coursedata, rollNo, photoID, name, null, null, clubs, null, graduationYear);
+                final UserData userData = new UserData(phoneNo, branch, coursedata, rollNo, photoID, name, null, null, null, null, graduationYear);
 
                 boolean checker = (!userData.getName().equals("") &&
                         !userData.getPhotoID().equals("") &&
@@ -147,18 +155,19 @@ public class UserProfileActivity extends AppCompatActivity {
                 );
 
                 if (true) {
-                    FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid()).setValue(userData).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(UserProfileActivity.this, "Updated", Toast.LENGTH_SHORT).show();
-                                pd.dismiss();
-                                finish();
-                            } else {
-                                pd.hide();
+                    for(String club : pendingClubs) {
+                        FirebaseDatabase.getInstance().getReference().child("notification").child(club).push().setValue(mAuth.getCurrentUser().getUid()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if(task.isSuccessful()){
+                                    uploadProfile(userData);
+                                }
+                                else{
+                                    Toast.makeText(UserProfileActivity.this, "Failed", Toast.LENGTH_SHORT).show();
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
 
                 }
                 else {
@@ -179,5 +188,20 @@ public class UserProfileActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void uploadProfile(UserData userData) {
+        FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid()).setValue(userData).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Toast.makeText(UserProfileActivity.this, "Updated", Toast.LENGTH_SHORT).show();
+                    pd.dismiss();
+                    finish();
+                } else {
+                    pd.hide();
+                }
+            }
+        });
     }
 }
