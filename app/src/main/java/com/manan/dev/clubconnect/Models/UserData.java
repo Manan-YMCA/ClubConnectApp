@@ -10,13 +10,13 @@ import java.util.Map;
 public class UserData {
     String userPhoneNo, userBranch, userCourse, userRollNo, photoID, name;
     Map<String, String> going, bookmarked;
-    ArrayList<String> clubs;
+    ArrayList<String> pendingClubs, myClubs;
     long userGraduationYear;
 
     public UserData() {
     }
 
-    public UserData(String userPhoneNo, String userBranch, String userCourse, String userRollNo, String photoID, String name, Map<String, String> going, Map<String, String> bookmarked, ArrayList<String> clubs, long userGraduationYear) {
+    public UserData(String userPhoneNo, String userBranch, String userCourse, String userRollNo, String photoID, String name, Map<String, String> going, Map<String, String> bookmarked, ArrayList<String> pendingClubs, ArrayList<String> myClubs, long userGraduationYear) {
         this.userPhoneNo = userPhoneNo;
         this.userBranch = userBranch;
         this.userCourse = userCourse;
@@ -25,7 +25,8 @@ public class UserData {
         this.name = name;
         this.going = going;
         this.bookmarked = bookmarked;
-        this.clubs = clubs;
+        this.pendingClubs = pendingClubs;
+        this.myClubs = myClubs;
         this.userGraduationYear = userGraduationYear;
     }
 
@@ -101,11 +102,19 @@ public class UserData {
         this.userGraduationYear = userGraduationYear;
     }
 
-    public ArrayList<String> getClubs() {
-        return clubs;
+    public ArrayList<String> getPendingClubs() {
+        return pendingClubs;
     }
 
-    public void setClubs(ArrayList<String> clubs) {
-        this.clubs = clubs;
+    public void setPendingClubs(ArrayList<String> pendingClubs) {
+        this.pendingClubs = pendingClubs;
+    }
+
+    public ArrayList<String> getMyClubs() {
+        return myClubs;
+    }
+
+    public void setMyClubs(ArrayList<String> myClubs) {
+        this.myClubs = myClubs;
     }
 }
