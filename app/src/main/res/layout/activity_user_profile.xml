@@ -62,8 +62,14 @@
                 android:tag="Year" />
 
 
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    >
             <Spinner
                 android:id="@+id/spinner2"
+                android:layout_weight="1"
                 style="@style/AppTheme.User"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -75,21 +81,90 @@
             <Spinner
                 android:id="@+id/spinner3"
                 style="@style/AppTheme.User"
+                android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:background="@android:drawable/btn_dropdown"
                 android:spinnerMode="dropdown"
                 android:tag="Year" />
-
+</LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Select the Club"
+                    android:textSize="18dp"
+                    />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#000"
+                    android:layout_marginBottom="10dp"
+                    />
+                <LinearLayout
+                    android:id="@+id/club_radiogrp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                <CheckBox android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rb_manan" android:checked="true"
+                    android:text="Manan">
+                </CheckBox>
+                <CheckBox android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rb_srijan" android:text="Srijan" android:checked="true">
+                </CheckBox>
+                <CheckBox android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rb_ananya" android:text="Ananya">
+                </CheckBox>
+                <CheckBox android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rb_vividha" android:text="Vividha">
+                </CheckBox>
+                <CheckBox android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rb_microbird" android:text="Microbird">
+                </CheckBox>
+                <CheckBox android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rb_jhalak" android:text="Jhalak">
+                </CheckBox>
+                <CheckBox android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rb_samarpan" android:text="Samarpan">
+                </CheckBox>
+                <CheckBox android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rb_natraja" android:text="Natraja">
+                </CheckBox>
+                <CheckBox android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rb_mechnext" android:text="Mechnext">
+                </CheckBox>
+                <CheckBox android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rb_tarannum" android:text="Tarannum">
+                </CheckBox>
+                </LinearLayout>
+            </LinearLayout>
 
         </LinearLayout>
+
+
+
     </ScrollView>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/submit_fab"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
 

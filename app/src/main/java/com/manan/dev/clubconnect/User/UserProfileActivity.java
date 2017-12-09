@@ -49,6 +49,7 @@ public class UserProfileActivity extends AppCompatActivity {
         userPhone = (EditText) findViewById(R.id.user_profile_phone);
         userRoll = (EditText) findViewById(R.id.et_RollNo);
         submitFab = (FloatingActionButton) findViewById(R.id.submit_fab);
+        llClubs = (LinearLayout) findViewById(R.id.club_radiogrp);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -129,13 +130,12 @@ public class UserProfileActivity extends AppCompatActivity {
                 for(int i=0; i<llClubs.getChildCount(); i++)
                 {
                     CheckBox cb = (CheckBox) llClubs.getChildAt(i);
-                    cb.isChecked();
                 }
 
                 //UserData userData = new UserData(phoneNo, branch, coursedata, rollNo, photoID, name, graduationYear);
 
 
-                UserData userData = new UserData(phoneNo, branch, coursedata, rollNo, photoID, name, null, null, clubs, graduationYear);
+                UserData userData = new UserData(phoneNo, branch, coursedata, rollNo, photoID, name, null, null, clubs, null, graduationYear);
 
                 boolean checker = (!userData.getName().equals("") &&
                         !userData.getPhotoID().equals("") &&
