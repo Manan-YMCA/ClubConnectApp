@@ -9,6 +9,16 @@
         android:padding="12dp">
 
         <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_edit_white_24dp"
+            android:tint="#777"
+            android:padding="6dp"
+            android:id="@+id/iv_edit_timings"
+            android:layout_alignParentEnd="true"
+            android:visibility="gone"/>
+        <ImageView
             android:id="@+id/iv_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -23,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_toRightOf="@id/iv_time"
-            android:text="[Day, Date Month]"
+            android:text="@string/default_date"
             android:textColor="#111"
             android:singleLine="true"
             android:textSize="14sp" />
@@ -34,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_alignStart="@id/tv_date"
             android:layout_below="@id/tv_date"
-            android:text="[Start Time - End Time]"
+            android:text="@string/default_duration"
             android:textColor="#555"
             android:textSize="12sp" />
     </RelativeLayout>

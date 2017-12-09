@@ -358,7 +358,7 @@ public class EventsDetailsActivity extends AppCompatActivity {
             for (int i = 0; i < curEvent.photoID.posters.size(); i++) {
                 final String url = curEvent.photoID.posters.get(i);
                 ImageView iv = new ImageView(this);
-                iv.setLayoutParams(new LinearLayout.LayoutParams(300, 300));
+                iv.setLayoutParams(new LinearLayout.LayoutParams((int) getResources().getDimension(R.dimen.dp80),(int)getResources().getDimension(R.dimen.dp80) ));
                 iv.setPadding(0, 0, (int) EventsDetailsActivity.this.getResources().getDimension(R.dimen.dp10), 0);
                 iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 final int finalI = i + 1;

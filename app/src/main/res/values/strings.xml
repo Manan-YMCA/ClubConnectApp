@@ -103,4 +103,8 @@
     </string>
     <string name="button">ContactUs</string>
     <string name="title_activity_edit_event">EditEventActivity</string>
+    <string name="default_date">[Day, Date Month]</string>
+    <string name="default_duration">[Start Time - End Time]</string>
+    <string name="default_start_time">[Start Time]</string>
+    <string name="default_start_date">[Start Date]</string>
 </resources>

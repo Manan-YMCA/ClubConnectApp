@@ -5,6 +5,8 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -30,11 +32,9 @@ public class EventTimings extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_timings);
 
-        date = stime = etime = 0;
-
-        long event_date = getIntent().getLongExtra(EditEventActivity.REQ_PARA_EVENT_DATE, 0);
-        long event_stime = getIntent().getLongExtra(EditEventActivity.REQ_PARA_EVENT_STIME, 0);
-        long event_etime = getIntent().getLongExtra(EditEventActivity.REQ_PARA_EVENT_ETIME, 0);
+        date = getIntent().getLongExtra(EditEventActivity.REQ_PARA_EVENT_DATE, 0);
+        stime = getIntent().getLongExtra(EditEventActivity.REQ_PARA_EVENT_STIME, 0);
+        etime = getIntent().getLongExtra(EditEventActivity.REQ_PARA_EVENT_ETIME, 0);
 
         final EditText eventDate = findViewById(R.id.etEventDate);
         final EditText eventStartTime = findViewById(R.id.etEventStartTime);
@@ -42,24 +42,24 @@ public class EventTimings extends AppCompatActivity {
         Button bOK = findViewById(R.id.bOK);
         Button bCancel = findViewById(R.id.bCancel);
 
-        if (event_date != 0) {
+        if (date != 0) {
             java.util.Calendar myCalendar = java.util.Calendar.getInstance();
-            myCalendar.setTimeInMillis(event_date);
+            myCalendar.setTimeInMillis(date);
             String myFormat = "dd/MM/yy"; //Change as you need
             SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.ENGLISH);
 
             eventDate.setText(sdf.format(myCalendar.getTime()));
         }
-        if (event_stime != 0) {
+        if (stime != 0) {
 
             final java.util.Calendar mcurrentDate = java.util.Calendar.getInstance();
-            mcurrentDate.setTimeInMillis(event_stime);
+            mcurrentDate.setTimeInMillis(stime);
             String displayTime = String.format(Locale.ENGLISH, "%02d:%02d", mcurrentDate.get(Calendar.HOUR_OF_DAY), mcurrentDate.get(Calendar.MINUTE));
             eventStartTime.setText(displayTime);
         }
-        if (event_etime != 0) {
+        if (etime != 0) {
             final java.util.Calendar mcurrentDate = java.util.Calendar.getInstance();
-            mcurrentDate.setTimeInMillis(event_etime);
+            mcurrentDate.setTimeInMillis(etime);
             String displayTime = String.format(Locale.ENGLISH, "%02d:%02d", mcurrentDate.get(Calendar.HOUR_OF_DAY), mcurrentDate.get(Calendar.MINUTE));
             eventEndTime.setText(displayTime);
         }
@@ -76,9 +76,9 @@ public class EventTimings extends AppCompatActivity {
                         Toast.makeText(EventTimings.this, "Event end time cannot be empty", Toast.LENGTH_SHORT).show();
                     } else {
                         Intent intent = new Intent();
-                        intent.putExtra(EditEventActivity.REQ_PARA_EVENT_DATE, date);
-                        intent.putExtra(EditEventActivity.REQ_PARA_EVENT_STIME, stime);
-                        intent.putExtra(EditEventActivity.REQ_PARA_EVENT_ETIME, etime);
+                        intent.putExtra(EditEventActivity.REQ_PARA_EVENT_DATE, EventTimings.this.date);
+                        intent.putExtra(EditEventActivity.REQ_PARA_EVENT_STIME, EventTimings.this.stime);
+                        intent.putExtra(EditEventActivity.REQ_PARA_EVENT_ETIME, EventTimings.this.etime);
                         setResult(RESULT_OK, intent);
                         finish();
                     }
@@ -115,7 +115,7 @@ public class EventTimings extends AppCompatActivity {
 
                         eventDate.setText(sdf.format(myCalendar.getTime()));
 
-                        date = (myCalendar.getTimeInMillis());
+                        EventTimings.this.date = (myCalendar.getTimeInMillis());
                     }
                 }, mYear, mMonth, mDay);
                 mDatePicker.setTitle("Select date");
@@ -138,7 +138,7 @@ public class EventTimings extends AppCompatActivity {
 
                         eventEndTime.setText(displayTime);
                         //Toast.makeText(AddNewEventActivity.this, "" + TimeZone.getDefault().getRawOffset(), Toast.LENGTH_SHORT).show();
-                        etime = 1000L * (hourOfDay * 60 * 60 + minute * 60) - TimeZone.getDefault().getRawOffset();
+                        EventTimings.this.etime = 1000L * (hourOfDay * 60 * 60 + minute * 60) - TimeZone.getDefault().getRawOffset();
                     }
                 }, mHour, mMinute, true);
 
@@ -161,7 +161,7 @@ public class EventTimings extends AppCompatActivity {
 
                         eventStartTime.setText(displayTime);
                         //Toast.makeText(AddNewEventActivity.this, "" + TimeZone.getDefault().getRawOffset(), Toast.LENGTH_SHORT).show();
-                        stime = 1000L * (hourOfDay * 60 * 60 + minute * 60) - TimeZone.getDefault().getRawOffset();
+                        EventTimings.this.stime = 1000L * (hourOfDay * 60 * 60 + minute * 60) - TimeZone.getDefault().getRawOffset();
                     }
                 }, mHour, mMinute, true);
 
@@ -176,5 +176,29 @@ public class EventTimings extends AppCompatActivity {
         Intent intent = new Intent();
         setResult(RESULT_CANCELED, intent);
         super.onBackPressed();
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.event_timings_activity, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_delete) {
+            Intent intent = new Intent();
+            setResult(RESULT_OK, intent);
+            finish();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

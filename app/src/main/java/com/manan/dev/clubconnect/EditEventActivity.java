@@ -2,6 +2,7 @@ package com.manan.dev.clubconnect;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,8 +14,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,7 +29,6 @@ import com.manan.dev.clubconnect.EditEvent.ModifyCoordinators;
 import com.manan.dev.clubconnect.Models.Coordinator;
 import com.manan.dev.clubconnect.Models.Event;
 import com.manan.dev.clubconnect.Models.TimeInterval;
-import com.manan.dev.clubconnect.User.EventsDetailsActivity;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -37,6 +39,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import static java.lang.Math.min;
 import static java.util.Collections.sort;
 
 public class EditEventActivity extends AppCompatActivity {
@@ -44,23 +47,26 @@ public class EditEventActivity extends AppCompatActivity {
     private static final int REQ_ID_NAME = 1;
     private static final int REQ_ID_POSTER = 2;
     private static final int REQ_ID_VENUE = 3;
+    private static final int REQ_ID_DETAILS = 4;
+    private static final int REQ_ID_COORDS = 5;
+    private static final int REQ_ID_TIMINGS = 6;
+    private static final int REQ_ID_TIMINGS_EDIT = 7;
+    private static final int REQ_ID_ATTACH_IMAGE = 8;
     public static final String REQ_PARA_EVENT_NAME = "event_name";
     public static final String REQ_PARA_EVENT_VENUE = "event_venue";
-    private static final int REQ_ID_DETAILS = 4;
     public static final String REQ_PARA_EVENT_DETAILS = "event_details";
     public static final String REQ_PARA_EVENT_COORD_NAME = "coord_name";
     public static final String REQ_PARA_EVENT_COORD_PHONE = "coord_phone";
     public static final String REQ_PARA_EVENT_COORD_PHOTO = "coord_photo";
     public static final String REQ_PARA_EVENT_COORD_EMAIL = "coord_email";
-    private static final int REQ_ID_COORDS = 5;
     public static final String REQ_PARA_EVENT_DATE = "event_date";
     public static final String REQ_PARA_EVENT_STIME = "event_stime";
     public static final String REQ_PARA_EVENT_ETIME = "event_etime";
-    private static final int REQ_ID_TIMINGS = 6;
 
     Event event;
 
     private Map<String,Coordinator> coordinatorsAll;
+    private ArrayList<Uri> posters;
 
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private AppBarLayout appBar;
@@ -68,6 +74,11 @@ public class EditEventActivity extends AppCompatActivity {
     private TextView tvDetails;
     private LinearLayout llCoordinators;
     private LinearLayout llTimings;
+    private TimeInterval editTimingReqSentFor;
+    private LinearLayout llPosters;
+    private ImageView ivMainPoster;
+    private TextView tvStartTime;
+    private TextView tvStartDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,11 +99,19 @@ public class EditEventActivity extends AppCompatActivity {
         event.photoID.afterEvent = new ArrayList<>();
 
         coordinatorsAll = new HashMap<>();
+        posters = new ArrayList<>();
+        posters.add(null);
+
+        editTimingReqSentFor = null;
 
         tvVenue = findViewById(R.id.tv_venue);
         tvDetails = findViewById(R.id.tv_details);
         llCoordinators = findViewById(R.id.ll_coordinators);
         llTimings = findViewById(R.id.ll_timmings_all);
+        llPosters = findViewById(R.id.ll_posters);
+        ivMainPoster = findViewById(R.id.iv_main_poster);
+        tvStartTime = findViewById(R.id.tv_time);
+        tvStartDate = findViewById(R.id.tv_date);
 
         appBar = findViewById(R.id.app_bar);
         collapsingToolbarLayout = findViewById(R.id.toolbar_layout);
@@ -189,6 +208,20 @@ public class EditEventActivity extends AppCompatActivity {
                 }
             });
         }
+
+        View addPosters = findViewById(R.id.tvAddPosters);
+        if(addPosters!=null)
+        {
+            addPosters.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent();
+                    intent.setType("image/*");
+                    intent.setAction(Intent.ACTION_PICK);
+                    startActivityForResult(Intent.createChooser(intent, "Select Image"), REQ_ID_ATTACH_IMAGE);
+                }
+            });
+        }
     }
     void fromCoordinatorsToArrayList(ArrayList<String> name, ArrayList<String> phone, ArrayList<String> email, ArrayList<String> photo)
     {
@@ -246,22 +279,48 @@ public class EditEventActivity extends AppCompatActivity {
         if(event.getEventDesc()!=null)
             tvDetails.setText(event.getEventDesc());
 
-        if(event.getDays().size()!=0)
+        llTimings.removeAllViews();
+
+        if(event.getDays().size()==0)
         {
-            llTimings.removeAllViews();
-        }
-        for(TimeInterval ti : event.getDays()){
             LinearLayout ll = (LinearLayout) LayoutInflater.from(EditEventActivity.this).inflate(R.layout.user_single_event_item_timmings, null, false);
-            ll.setClickable(true);
-            ll.setOnClickListener(new View.OnClickListener() {
+            TextView tvDateTimmings = ll.findViewById(R.id.tv_date);
+            TextView tvTimeTimmings = ll.findViewById(R.id.tv_duration);
+            tvDateTimmings.setText(getResources().getString(R.string.default_date));
+            tvTimeTimmings.setText(getResources().getString(R.string.default_duration));
+            llTimings.addView(ll);
+
+            tvStartDate.setText(getResources().getString(R.string.default_start_date));
+            tvStartTime.setText(getResources().getString(R.string.default_start_time));
+        }else{
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis(event.getDays().get(0).getDate());
+            SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy", Locale.US);
+            String formattedDate = sdf.format(cal.getTime());
+            tvStartDate.setText(formattedDate);
+
+            cal.setTimeInMillis(event.getDays().get(0).getStartTime());
+            sdf = new SimpleDateFormat("HH:mm", Locale.US);
+            formattedDate = sdf.format(cal.getTime());
+            tvStartTime.setText(formattedDate);
+        }
+        for(final TimeInterval ti : event.getDays()){
+            LinearLayout ll = (LinearLayout) LayoutInflater.from(EditEventActivity.this).inflate(R.layout.user_single_event_item_timmings, null, false);
+            TextView tvDateTimmings = ll.findViewById(R.id.tv_date);
+            TextView tvTimeTimmings = ll.findViewById(R.id.tv_duration);
+            View editTimings = ll.findViewById(R.id.iv_edit_timings);
+            editTimings.setVisibility(View.VISIBLE);
+            editTimings.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    Intent intent = new Intent(EditEventActivity.this, EventTimings.class);
+                    intent.putExtra(EditEventActivity.REQ_PARA_EVENT_DATE, ti.getDate());
+                    intent.putExtra(EditEventActivity.REQ_PARA_EVENT_STIME, ti.getStartTime());
+                    intent.putExtra(EditEventActivity.REQ_PARA_EVENT_ETIME, ti.getEndTime());
+                    editTimingReqSentFor = ti;
+                    startActivityForResult(intent, REQ_ID_TIMINGS_EDIT);
                 }
             });
-
-            TextView tvDateTimmings = (TextView) ll.findViewById(R.id.tv_date);
-            TextView tvTimeTimmings = (TextView) ll.findViewById(R.id.tv_duration);
 
             Calendar cal1 = Calendar.getInstance();
             Calendar cal2 = Calendar.getInstance();
@@ -335,14 +394,62 @@ public class EditEventActivity extends AppCompatActivity {
                     updateUIText();
                 }
                 break;
+            case REQ_ID_TIMINGS_EDIT:
+                if(data == null)
+                {
+                    event.getDays().remove(editTimingReqSentFor);
+                    updateUIText();
+                }else{
+                    long date = data.getLongExtra(REQ_PARA_EVENT_DATE,0);
+                    long stime = data.getLongExtra(REQ_PARA_EVENT_STIME,0);
+                    long etime = data.getLongExtra(REQ_PARA_EVENT_ETIME, 0);
+
+                    if(date==0){
+                        event.getDays().remove(editTimingReqSentFor);
+                        updateUIText();
+                        break;
+                    }
+
+                    editTimingReqSentFor.setDate(date);
+                    editTimingReqSentFor.setStartTime(stime);
+                    editTimingReqSentFor.setEndTime(etime);
+
+                    sort(event.getDays());
+                    updateUIText();
+                }
+                break;
             case REQ_ID_POSTER:
                 if (data != null && data.getData() != null) {
                     Uri localData = data.getData();
+                    posters.set(0, localData);
                     try {
                         Bitmap bitmap;
                         bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), localData);
                         bitmap = getAppBarFriendlyBitmap(bitmap);
                         appBar.setBackground(new BitmapDrawable(EditEventActivity.this.getResources(), bitmap));
+                        float finalWidth = min(100,bitmap.getWidth());
+                        bitmap = Bitmap.createScaledBitmap(bitmap, (int) finalWidth, (int) (finalWidth / bitmap.getWidth() * bitmap.getHeight()),
+                                true);
+                        ivMainPoster.setImageBitmap(bitmap);
+                        ivMainPoster.setVisibility(View.VISIBLE);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+            case REQ_ID_ATTACH_IMAGE:
+                if (data != null && data.getData() != null) {
+                    Uri localData = data.getData();
+                    posters.add(localData);
+                    final ImageView iv = addNewHolderForImage(llPosters, localData);
+
+                    try {
+                        Bitmap bitmap;
+                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), localData);
+                        float finalWidth = min(100,bitmap.getWidth());
+                        bitmap = Bitmap.createScaledBitmap(bitmap, (int) finalWidth, (int) (finalWidth / bitmap.getWidth() * bitmap.getHeight()),
+                                true);
+                        iv.setImageBitmap(bitmap);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -351,6 +458,42 @@ public class EditEventActivity extends AppCompatActivity {
         }
 
     }
+
+    private ImageView addNewHolderForImage(final LinearLayout container, final Uri localData) {
+        final RelativeLayout relativeLayout = new RelativeLayout(this);
+        RelativeLayout.LayoutParams rlLayoutParams = new RelativeLayout.LayoutParams((int) getResources().getDimension(R.dimen.dp80),(int)getResources().getDimension(R.dimen.dp80) );
+        relativeLayout.setLayoutParams(rlLayoutParams);
+        relativeLayout.setPadding(0, 0,(int) getResources().getDimension(R.dimen.ten),  0);
+
+        ImageView imageViewData = new ImageView(this);
+        imageViewData.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        imageViewData.setCropToPadding(true);
+        imageViewData.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+        ImageView imageView = new ImageView(this);
+        RelativeLayout.LayoutParams ivLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        ivLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_END);
+        ivLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+        imageView.setLayoutParams(ivLayoutParams);
+        imageView.setBackgroundColor(Color.argb(0xaa, 140, 140, 140));
+        imageView.setImageDrawable(getResources().getDrawable(R.drawable.vector_clear));
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!posters.remove(localData))
+                    Toast.makeText(EditEventActivity.this, "Sorry, the image was not removed compeltely!", Toast.LENGTH_SHORT).show();
+                container.removeView(relativeLayout);
+            }
+        });
+
+        relativeLayout.addView(imageViewData);
+        relativeLayout.addView(imageView);
+
+        container.addView(relativeLayout);
+
+        return imageViewData;
+    }
+
 
     private Bitmap getAppBarFriendlyBitmap(Bitmap bitmap) {
         float tWidth = appBar.getWidth();

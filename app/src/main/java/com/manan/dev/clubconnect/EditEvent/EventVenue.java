@@ -73,6 +73,7 @@ public class EventVenue extends AppCompatActivity {
 
         eventVenue.setAdapter(new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, EVENT_VENUE));
+        eventVenue.setThreshold(1);
     }
 
     @Override
