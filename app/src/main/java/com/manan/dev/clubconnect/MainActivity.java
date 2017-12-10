@@ -27,6 +27,10 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
+import com.manan.dev.clubconnect.Models.UserData;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -140,6 +144,18 @@ public class MainActivity extends AppCompatActivity {
     void LogInStub(String s) {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null && currentUser.getProviders().get(0).equals("facebook.com")) {
+            try {
+                String key = mAuth.getCurrentUser().getUid();
+                UserData user = new UserData(null, null, null, null, mAuth.getCurrentUser().getPhotoUrl().toString(), mAuth.getCurrentUser().getDisplayName(), null, null, null, null,null, null);
+                Map<String, Object> values = user.toMap();
+
+                Map<String,Object> childUpdates = new HashMap<>();
+                childUpdates.put("/users/"+key, values);
+                FirebaseDatabase.getInstance().getReference().updateChildren(childUpdates);
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
             startActivity(new Intent(MainActivity.this, DashboardUserActivity.class));
             //finish();
         } else if (currentUser != null) {

@@ -31,6 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:singleLine="true"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="20dp"
                 android:hint="Name" />
@@ -39,6 +40,7 @@
                 android:id="@+id/user_profile_phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:singleLine="true"
                 android:layout_gravity="center"
                 android:layout_marginBottom="10dp"
                 android:hint="Phone No." />
@@ -49,7 +51,17 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="10dp"
+                android:singleLine="true"
                 android:hint="Roll Number" />
+
+            <EditText
+                android:id="@+id/et_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp"
+                android:inputType="textEmailAddress"
+                android:hint="Email Id" />
 
             <Spinner
                 android:id="@+id/spinner1"
@@ -113,44 +125,44 @@
                     android:orientation="vertical">
                 <CheckBox android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/rb_manan" android:checked="true"
+                    android:id="@+id/Manan"
                     android:text="Manan">
                 </CheckBox>
                 <CheckBox android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/rb_srijan" android:text="Srijan" android:checked="true">
+                    android:id="@+id/Srijan" android:text="Srijan">
                 </CheckBox>
                 <CheckBox android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/rb_ananya" android:text="Ananya">
+                    android:id="@+id/Ananya" android:text="Ananya">
                 </CheckBox>
                 <CheckBox android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/rb_vividha" android:text="Vividha">
+                        android:id="@+id/Vividha" android:text="Vividha">
                 </CheckBox>
                 <CheckBox android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/rb_microbird" android:text="Microbird">
+                    android:id="@+id/Microbird" android:text="Microbird">
                 </CheckBox>
                 <CheckBox android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/rb_jhalak" android:text="Jhalak">
+                    android:id="@+id/Jhalak" android:text="Jhalak">
                 </CheckBox>
                 <CheckBox android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/rb_samarpan" android:text="Samarpan">
+                    android:id="@+id/Samarpan" android:text="Samarpan">
                 </CheckBox>
                 <CheckBox android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/rb_natraja" android:text="Natraja">
+                    android:id="@+id/Natraja" android:text="Natraja">
                 </CheckBox>
                 <CheckBox android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/rb_mechnext" android:text="Mechnext">
+                    android:id="@+id/Mechnext" android:text="Mechnext">
                 </CheckBox>
                 <CheckBox android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/rb_tarannum" android:text="Tarannum">
+                    android:id="@+id/Tarannum" android:text="Tarannum">
                 </CheckBox>
                 </LinearLayout>
             </LinearLayout>
