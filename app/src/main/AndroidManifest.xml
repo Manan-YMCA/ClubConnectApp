@@ -69,7 +69,6 @@
             android:label="Profile"
             android:parentActivityName=".DashboardUserActivity" />
         <activity android:name=".AddNewClubActivity" />
-        <activity android:name=".AddNewCoordinatorActivity" />
         <activity android:name=".User.DevelopersActivity" />
         <activity
             android:name=".EditEventActivity"

@@ -8,12 +8,6 @@
         android:title="Request"
         app:showAsAction="always"/>
     <item
-        android:id="@+id/action_add_coord"
-        android:icon="@drawable/vector_add_coords"
-        android:title="Add Cooridinator"
-        app:showAsAction="always" />
-
-    <item
         android:id="@+id/action_settings"
         android:icon="@drawable/vector_logout"
         android:title="Log Out"

@@ -64,17 +64,6 @@ public class AdminDashboardActivity extends AppCompatActivity {
                 String cllubName = usser.getDisplayName();
                 startActivity(new Intent(AdminDashboardActivity.this, RequestUserActivity.class).putExtra("name",cllubName));
                 return true;
-
-            case R.id.action_add_coord:
-                FirebaseUser user = mAuth.getCurrentUser();
-                if(user==null) {
-                    finish();
-                    return true;
-                }
-                String clubName = user.getDisplayName();
-                startActivity(new Intent(AdminDashboardActivity.this, AddNewCoordinatorActivity.class).putExtra("clubName", clubName));
-                finish();
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
