@@ -3,9 +3,9 @@ package com.manan.dev.clubconnect.EditEvent;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,7 +15,6 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.manan.dev.clubconnect.AddNewEventActivity;
 import com.manan.dev.clubconnect.EditEventActivity;
 import com.manan.dev.clubconnect.R;
 
@@ -143,7 +142,6 @@ public class EventTimings extends AppCompatActivity {
                         String displayTime = String.format(Locale.ENGLISH, "%02d:%02d", hourOfDay, minute);
 
                         eventEndTime.setText(displayTime);
-                        //Toast.makeText(AddNewEventActivity.this, "" + TimeZone.getDefault().getRawOffset(), Toast.LENGTH_SHORT).show();
                         EventTimings.this.etime = 1000L * (hourOfDay * 60 * 60 + minute * 60) - TimeZone.getDefault().getRawOffset();
                     }
                 }, mHour, mMinute, true);
@@ -166,7 +164,6 @@ public class EventTimings extends AppCompatActivity {
                         String displayTime = String.format(Locale.ENGLISH, "%02d:%02d", hourOfDay, minute);
 
                         eventStartTime.setText(displayTime);
-                        //Toast.makeText(AddNewEventActivity.this, "" + TimeZone.getDefault().getRawOffset(), Toast.LENGTH_SHORT).show();
                         EventTimings.this.stime = 1000L * (hourOfDay * 60 * 60 + minute * 60) - TimeZone.getDefault().getRawOffset();
                     }
                 }, mHour, mMinute, true);

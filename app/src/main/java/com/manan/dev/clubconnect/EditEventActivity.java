@@ -770,7 +770,6 @@ public class EditEventActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         Log.d(TAG, "Image Upload Successful!");
-                        //Toast.makeText(AddNewEventActivity.this, "Image Upload successful", Toast.LENGTH_SHORT).show();
                         Uri uri = taskSnapshot.getDownloadUrl();
                         assert uri != null;
                         event.photoID.posters.set(finalI, uri.toString());

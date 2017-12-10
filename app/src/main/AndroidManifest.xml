@@ -51,10 +51,6 @@
         <activity
             android:name=".AdminZoneActivity"
             android:theme="@style/CodeFont" />
-        <activity
-            android:name=".AddNewEventActivity"
-            android:label="Create New Event"
-            android:parentActivityName=".AdminDashboardActivity" />
         <activity android:name=".User.UserClubEventListActivity" />
         <activity
             android:name=".DashboardUserActivity"
