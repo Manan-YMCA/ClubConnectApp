@@ -1,85 +1,59 @@
 package com.manan.dev.clubconnect;
 
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.manan.dev.clubconnect.Adapters.RequestUserViewAdapter;
-import com.manan.dev.clubconnect.Adapters.UserSingleEventListAdapter;
-import com.manan.dev.clubconnect.Models.Coordinator;
-import com.manan.dev.clubconnect.Models.Event;
 import com.manan.dev.clubconnect.Models.UserData;
-import com.manan.dev.clubconnect.User.UserClubEventListActivity;
 
-import java.net.URI;
 import java.util.ArrayList;
-import java.util.List;
-
-import static com.manan.dev.clubconnect.Adapters.UserSingleEventListAdapter.CLUB_NAME;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RequestUserActivity extends AppCompatActivity {
 
-    private StorageReference firebaseStorage;
-    private String clubName;
 
-
-    private RecyclerView requestRecyclerView;
-    private RequestUserViewAdapter requestlistRecyclerAdapter;
-    private ArrayList<UserData> userIdArrayList;
+    private RequestUserViewAdapter requestListRecyclerAdapter;
     private DatabaseReference mDatabaseReference;
     private ChildEventListener mChildEventListener;
     private DatabaseReference mDBRefCurEvent;
     private ChildEventListener mChildEventListCurEvent;
-    private List<String> userIdList;
+
+    private ArrayList<UserData> userIdArrayList;
+    private ArrayList<String> userIdList;
+    private Map<String, UserData> allUsers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        firebaseStorage = FirebaseStorage.getInstance().getReference();
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_user);
 
-
-        clubName = getIntent().getStringExtra("name");
-
-        Toast.makeText(this, clubName, Toast.LENGTH_SHORT).show();
-
-        requestRecyclerView = (RecyclerView) findViewById(R.id.request_recycler_view);
-
         userIdArrayList = new ArrayList<>();
+        userIdList = new ArrayList<>();
+        allUsers = new HashMap<>();
+
+        RecyclerView requestRecyclerView = findViewById(R.id.request_recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         requestRecyclerView.setLayoutManager(mLayoutManager);
+        requestListRecyclerAdapter = new RequestUserViewAdapter(userIdArrayList, this);
+        requestRecyclerView.setAdapter(requestListRecyclerAdapter);
 
-String photo="https://firebasestorage.googleapis.com/v0/b/club-connect-29c71.appspot.com/o/Designing%20Competition_0.1239154461?alt=media&token=3c172732-d314-4e58-b901-7182db7067ad";
-        UserData dummy = new UserData("9911526283",null,null,null,photo,"shubham",null,null,null,null,0);
 
-        userIdArrayList.add(dummy);
-        userIdArrayList.add(dummy);
-
-        requestlistRecyclerAdapter = new RequestUserViewAdapter(userIdArrayList, this);
-        requestRecyclerView.setAdapter(requestlistRecyclerAdapter);
-
+        String clubName = getIntent().getStringExtra("name");
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("notification").child(clubName);
-
         mDBRefCurEvent = FirebaseDatabase.getInstance().getReference().child("users");
 
 
-
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -91,23 +65,22 @@ String photo="https://firebasestorage.googleapis.com/v0/b/club-connect-29c71.app
         }
     }
 
-        @Override
-        protected void onResume() {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        attachDatabaseListener();
+    }
 
-            super.onResume();
-          //  Toast.makeText(this,"OnResume ",Toast.LENGTH_SHORT).show();
-
-            attachDatabaseListener();
-        }
     @Override
     protected void onPause() {
         super.onPause();
-   //     Toast.makeText(this,"Onpause ",Toast.LENGTH_SHORT).show();
-        detatchDatabaseListener();
+        detachDatabaseListener();
         userIdArrayList.clear();
+        userIdList.clear();
+        allUsers.clear();
     }
 
-    private void detatchDatabaseListener() {
+    private void detachDatabaseListener() {
         if (mChildEventListener != null) {
             mDatabaseReference.removeEventListener(mChildEventListener);
             mChildEventListener = null;
@@ -120,73 +93,34 @@ String photo="https://firebasestorage.googleapis.com/v0/b/club-connect-29c71.app
 
 
     private void attachDatabaseListener() {
-       // Toast.makeText(this,"AttachData ",Toast.LENGTH_SHORT).show();
-
         if (mChildEventListener == null) {
             mChildEventListener = new ChildEventListener() {
-                public String refValue;
 
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     try {
-
-
-                        refValue= dataSnapshot.getValue().toString();
-                        Log.d("onAdded", refValue);
+                        String refValue = dataSnapshot.getValue(String.class);
                         userIdList.add(refValue);
-
-
-//                        for(DataSnapshot data : dataSnapshot.getChildren())
-//                        {
-//                            Log.d("onAdded", "onChildAdded: ");
-//                            String obj=data.toString();
-//                            Toast.makeText(RequestUserActivity.this,obj,Toast.LENGTH_LONG).show();
-//                            userIdList.add(obj);
-//                        }
-
-
-
-
+                        modifyUserIdArrayList();
+                        requestListRecyclerAdapter.notifyDataSetChanged();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-//                    requestlistRecyclerAdapter = new RequestUserViewAdapter(userIdArrayList, RequestUserActivity.this);
-//                    requestRecyclerView.setAdapter(requestlistRecyclerAdapter);
-
                 }
 
                 @Override
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                    try {
-                        Log.d("onAdded", dataSnapshot.toString());
-                        Toast.makeText(RequestUserActivity.this,dataSnapshot.toString(),Toast.LENGTH_SHORT).show();
-
-                        UserData obj = dataSnapshot.getValue(UserData.class);
-
-
-                        for (int i = 0; i < userIdArrayList.size(); i++)
-                            if (userIdArrayList.get(i).equals(dataSnapshot.getKey())) {
-                                userIdArrayList.set(i, obj);
-                                break;
-                            }
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-//                    requestlistRecyclerAdapter = new RequestUserViewAdapter(userIdArrayList, RequestUserActivity.this);
-//                    requestRecyclerView.setAdapter(requestlistRecyclerAdapter);
                 }
 
                 @Override
                 public void onChildRemoved(DataSnapshot dataSnapshot) {
-                    for (int i = 0; i < userIdArrayList.size(); i++)
-                        if (userIdArrayList.get(i).equals(dataSnapshot.getKey())) {
-                            userIdArrayList.remove(i);
-                            break;
-                        }
-
-
+                    try {
+                        userIdList.remove(dataSnapshot.getValue(String.class));
+                        modifyUserIdArrayList();
+                        requestListRecyclerAdapter.notifyDataSetChanged();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 @Override
@@ -204,57 +138,46 @@ String photo="https://firebasestorage.googleapis.com/v0/b/club-connect-29c71.app
         }
         if (mChildEventListCurEvent == null) {
             mChildEventListCurEvent = new ChildEventListener() {
-                public UserData obj;
-
-
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     try {
-
-                        Log.d("ChildAdded", String.valueOf(userIdList.size()));
-                        for (int i = 0; i < userIdList.size(); i++){
-
-                            if (userIdList.get(i).equals(dataSnapshot.getKey())) {
-                                UserData u = dataSnapshot.getValue(UserData.class);
-                                userIdArrayList.add(u);
-                            }
-                    }
-
-
+                        UserData u = dataSnapshot.getValue(UserData.class);
+                        if (u != null)
+                            allUsers.put(dataSnapshot.getKey(), u);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    requestlistRecyclerAdapter = new RequestUserViewAdapter(userIdArrayList, RequestUserActivity.this);
-                    requestRecyclerView.setAdapter(requestlistRecyclerAdapter);
+                    modifyUserIdArrayList();
+                    requestListRecyclerAdapter.notifyDataSetChanged();
 
                 }
 
                 @Override
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                     try {
-                        for (int i = 0; i < userIdList.size(); i++)
-                            if (userIdList.get(i).equals(dataSnapshot.getKey())) {
-                                UserData u = dataSnapshot.getValue(UserData.class);
-                                userIdArrayList.add(u);
-                            }
-
-
+                        UserData u = dataSnapshot.getValue(UserData.class);
+                        if (u != null)
+                            allUsers.put(dataSnapshot.getKey(), u);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    requestlistRecyclerAdapter = new RequestUserViewAdapter(userIdArrayList, RequestUserActivity.this);
-                    requestRecyclerView.setAdapter(requestlistRecyclerAdapter);
-
+                    modifyUserIdArrayList();
+                    requestListRecyclerAdapter.notifyDataSetChanged();
                 }
 
                 @Override
                 public void onChildRemoved(DataSnapshot dataSnapshot) {
-
+                    try {
+                        allUsers.remove(dataSnapshot.getKey());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    modifyUserIdArrayList();
+                    requestListRecyclerAdapter.notifyDataSetChanged();
                 }
 
                 @Override
                 public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
                 }
 
                 @Override
@@ -263,8 +186,15 @@ String photo="https://firebasestorage.googleapis.com/v0/b/club-connect-29c71.app
                 }
             };
             mDBRefCurEvent.addChildEventListener(mChildEventListCurEvent);
+        }
+
+
     }
 
-
-}
+    private void modifyUserIdArrayList() {
+        userIdArrayList.clear();
+        for (String key : userIdList)
+            if (allUsers.containsKey(key))
+                userIdArrayList.add(allUsers.get(key));
+    }
 }
