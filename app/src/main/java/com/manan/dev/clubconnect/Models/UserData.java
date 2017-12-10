@@ -16,7 +16,7 @@ public class UserData {
     public UserData() {
     }
 
-    public UserData(String userPhoneNo, String userBranch, String userCourse, String userRollNo, String photoID, String name, Map<String, String> going, Map<String, String> bookmarked, ArrayList<String> pendingClubs, ArrayList<String> myClubs, long userGraduationYear) {
+    public UserData(String userPhoneNo, String userBranch, String userCourse, String userRollNo, String photoID, String name, Map<String, String> going, Map<String, String> bookmarked, ArrayList<String> pendingClubs,ArrayList<String> myClubs, long userGraduationYear) {
         this.userPhoneNo = userPhoneNo;
         this.userBranch = userBranch;
         this.userCourse = userCourse;

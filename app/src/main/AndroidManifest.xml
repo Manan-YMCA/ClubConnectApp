@@ -87,7 +87,8 @@
             android:label="Enter the event venue" />
         <activity android:name=".EditEvent.EventDetails" />
         <activity android:name=".EditEvent.ModifyCoordinators" />
-        <activity android:name=".EditEvent.EventTimings"></activity>
+        <activity android:name=".EditEvent.EventTimings" />
+        <activity android:name=".RequestUserActivity"></activity>
     </application>
 
 </manifest>

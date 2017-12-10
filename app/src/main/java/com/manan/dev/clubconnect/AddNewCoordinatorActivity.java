@@ -26,6 +26,7 @@ import com.manan.dev.clubconnect.Models.Coordinator;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 
 public class AddNewCoordinatorActivity extends AppCompatActivity {
 
@@ -57,6 +58,8 @@ public class AddNewCoordinatorActivity extends AppCompatActivity {
         firebaseStorage = FirebaseStorage.getInstance().getReference();
 
         clubName = getIntent().getStringExtra("clubName");
+
+        Toast.makeText(this, clubName, Toast.LENGTH_SHORT).show();
 
         pd = new ProgressDialog(this);
         pd.setMessage("Please Wait...");
@@ -170,12 +173,14 @@ public class AddNewCoordinatorActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             userImage = data.getData();
-            int finalWidth = 100;
+            int finalWidth = 150;
             try {
                 Bitmap bitmap;
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), userImage);
                 bitmap = Bitmap.createScaledBitmap(bitmap, (int) finalWidth, (int) finalWidth, true);
-                imgCoord.setImageBitmap(bitmap);
+
+               imgCoord.setImageBitmap(bitmap);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }

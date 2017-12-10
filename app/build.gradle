@@ -38,5 +38,6 @@ dependencies {
     compile 'com.github.javiersantos:MaterialStyledDialogs:2.1'
     compile 'com.android.support:design:26.1.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
+
 }
 apply plugin: 'com.google.gms.google-services'

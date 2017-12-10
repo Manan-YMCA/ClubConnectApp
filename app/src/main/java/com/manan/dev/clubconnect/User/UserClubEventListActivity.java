@@ -41,7 +41,7 @@ public class UserClubEventListActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Log.d("Name",clubName);
+        Log.d("Name", clubName);
 //        Toast.makeText(this, clubName, Toast.LENGTH_SHORT).show();
 
         userSingleEventListRV = (RecyclerView) findViewById(R.id.rv_user_club_list);
@@ -66,8 +66,7 @@ public class UserClubEventListActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId())
-        {
+        switch (item.getItemId()) {
             case android.R.id.home:
                 UserClubEventListActivity.this.finish();
                 return true;

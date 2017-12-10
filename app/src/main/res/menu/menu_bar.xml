@@ -3,6 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_request_notfiy"
+        android:icon="@drawable/vector_club"
+        android:title="Request"
+        app:showAsAction="always"/>
+    <item
         android:id="@+id/action_add_coord"
         android:icon="@drawable/vector_add_coords"
         android:title="Add Cooridinator"
@@ -13,4 +18,5 @@
         android:icon="@drawable/vector_logout"
         android:title="Log Out"
         app:showAsAction="always" />
+
 </menu>

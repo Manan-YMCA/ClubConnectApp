@@ -32,6 +32,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(AdminDashboardActivity.this, EditEventActivity.class));
+
             }
         });
     }
@@ -58,13 +59,24 @@ public class AdminDashboardActivity extends AppCompatActivity {
                 FirebaseAuth.getInstance().signOut();
                 finish();
                 return true;
+            case R.id.action_request_notfiy:
+                FirebaseUser usser = mAuth.getCurrentUser();
+                String cllubName = usser.getDisplayName();
+
+                if(usser==null)
+                    finish();
+                startActivity(new Intent(AdminDashboardActivity.this, RequestUserActivity.class).putExtra("name",cllubName));
+                return true;
+
             case R.id.action_add_coord:
                 FirebaseUser user = mAuth.getCurrentUser();
+                String clubName = user.getDisplayName();
                 if(user==null)
                     finish();
-
-                String clubName = user.getDisplayName();
                 startActivity(new Intent(AdminDashboardActivity.this, AddNewCoordinatorActivity.class).putExtra("clubName", clubName));
+                finish();
+
+
             default:
                 return super.onOptionsItemSelected(item);
         }

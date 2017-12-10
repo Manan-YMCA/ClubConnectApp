@@ -49,7 +49,6 @@ public class UserProfileActivity extends AppCompatActivity {
         userPhone = (EditText) findViewById(R.id.user_profile_phone);
         userRoll = (EditText) findViewById(R.id.et_RollNo);
         submitFab = (FloatingActionButton) findViewById(R.id.submit_fab);
-        llClubs = (LinearLayout) findViewById(R.id.club_radiogrp);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -125,17 +124,19 @@ public class UserProfileActivity extends AppCompatActivity {
                 String branch = batch.getSelectedItem().toString();
                 String coursedata = course.getSelectedItem().toString();
                 long graduationYear = Long.parseLong(dropdown.getSelectedItem().toString());
-                ArrayList<String> clubs=null;
+                ArrayList<String> clubs=new ArrayList<String>();
 
-                for(int i=0; i<llClubs.getChildCount(); i++)
-                {
-                    CheckBox cb = (CheckBox) llClubs.getChildAt(i);
-                }
+//
+//                for(int i=0; i<llClubs.getChildCount(); i++)
+//                {
+//                    CheckBox cb = (CheckBox) llClubs.getChildAt(i);
+//                    cb.isChecked();
+//
 
                 //UserData userData = new UserData(phoneNo, branch, coursedata, rollNo, photoID, name, graduationYear);
 
 
-                UserData userData = new UserData(phoneNo, branch, coursedata, rollNo, photoID, name, null, null, clubs, null, graduationYear);
+                UserData userData = new UserData(phoneNo, branch, coursedata, rollNo, photoID, name, null, null, clubs,null, graduationYear);
 
                 boolean checker = (!userData.getName().equals("") &&
                         !userData.getPhotoID().equals("") &&
@@ -147,18 +148,24 @@ public class UserProfileActivity extends AppCompatActivity {
                 );
 
                 if (true) {
-                    FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid()).setValue(userData).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(UserProfileActivity.this, "Updated", Toast.LENGTH_SHORT).show();
-                                pd.dismiss();
-                                finish();
-                            } else {
-                                pd.hide();
-                            }
-                        }
-                    });
+                  try {
+                      FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid()).setValue(userData).addOnCompleteListener(new OnCompleteListener<Void>() {
+                          @Override
+                          public void onComplete(@NonNull Task<Void> task) {
+                              if (task.isSuccessful()) {
+                                  Toast.makeText(UserProfileActivity.this, "Updated", Toast.LENGTH_SHORT).show();
+                                  pd.dismiss();
+                                  finish();
+                              } else {
+                                  pd.hide();
+                              }
+                          }
+                      });
+                  }
+                  catch (Exception e) {
+
+                      e.printStackTrace();
+                  }
 
                 }
                 else {
