@@ -2,12 +2,8 @@ package com.manan.dev.clubconnect.Adapters;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.graphics.Movie;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,13 +18,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.manan.dev.clubconnect.CircleTransform;
-import com.manan.dev.clubconnect.Models.Event;
 import com.manan.dev.clubconnect.Models.UserData;
 import com.manan.dev.clubconnect.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class RequestUserViewAdapter extends RecyclerView.Adapter<RequestUserViewAdapter.MyViewHolder> {
 
@@ -44,11 +38,11 @@ public class RequestUserViewAdapter extends RecyclerView.Adapter<RequestUserView
 
         MyViewHolder(View view) {
             super(view);
-            name = (TextView) view.findViewById(R.id.request_user_name);
-            phone = (TextView) view.findViewById(R.id.request_user_mnumber);
-            profilePic = (ImageView) view.findViewById(R.id.request_user_image);
-            acceptBtn = (Button) view.findViewById(R.id.request_user_accept_btn);
-            rejectBtn = (Button) view.findViewById(R.id.request_user_reject_btn);
+            name = view.findViewById(R.id.request_user_name);
+            phone = view.findViewById(R.id.request_user_mnumber);
+            profilePic = view.findViewById(R.id.request_user_image);
+            acceptBtn = view.findViewById(R.id.request_user_accept_btn);
+            rejectBtn = view.findViewById(R.id.request_user_reject_btn);
         }
     }
 
@@ -149,24 +143,5 @@ public class RequestUserViewAdapter extends RecyclerView.Adapter<RequestUserView
     @Override
     public int getItemCount() {
         return (null != userID ? userID.size() : 0);
-    }
-
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
-
-        private final TextView name;
-        private final TextView phone;
-        ImageView profilePic;
-        Button acceptBtn, rejectBtn;
-
-        public ViewHolder(View view) {
-            super(view);
-
-            name = (TextView) view.findViewById(R.id.request_user_name);
-            phone = (TextView) view.findViewById(R.id.request_user_mnumber);
-            profilePic = (ImageView) view.findViewById(R.id.request_user_image);
-            acceptBtn = (Button) view.findViewById(R.id.request_user_accept_btn);
-            rejectBtn = (Button) view.findViewById(R.id.request_user_reject_btn);
-        }
     }
 }
