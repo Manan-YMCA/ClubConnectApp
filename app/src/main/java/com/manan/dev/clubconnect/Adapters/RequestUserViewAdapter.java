@@ -86,19 +86,18 @@ public class RequestUserViewAdapter extends RecyclerView.Adapter<RequestUserView
             @Override
             public void onClick(View view) {
                 pd.show();
-                FirebaseDatabase.getInstance().getReference().child("notification").child(clubName).child(user.tempData).setValue(null)
+                if (user.getPendingClubs() != null)
+                    user.getPendingClubs().remove(clubName);
+
+                if (user.getMyClubs() == null)
+                    user.setMyClubs(new ArrayList<String>());
+                user.getMyClubs().add(clubName);
+                FirebaseDatabase.getInstance().getReference().child("users").child(user.UID).setValue(user)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
-                                    if (user.getPendingClubs() != null)
-                                        user.getPendingClubs().remove(clubName);
-
-                                    if (user.getMyClubs() == null)
-                                        user.setMyClubs(new ArrayList<String>());
-                                    user.getMyClubs().add(clubName);
-
-                                    FirebaseDatabase.getInstance().getReference().child("users").child(user.UID).setValue(user)
+                                    FirebaseDatabase.getInstance().getReference().child("notification").child(clubName).child(user.tempData).setValue(null)
                                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                 @Override
                                                 public void onComplete(@NonNull Task<Void> task) {
@@ -119,15 +118,16 @@ public class RequestUserViewAdapter extends RecyclerView.Adapter<RequestUserView
             @Override
             public void onClick(View view) {
                 pd.show();
-                FirebaseDatabase.getInstance().getReference().child("notification").child(clubName).child(user.tempData).setValue(null)
+
+                if (user.getPendingClubs() != null)
+                    user.getPendingClubs().remove(clubName);
+
+                FirebaseDatabase.getInstance().getReference().child("users").child(user.UID).setValue(user)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
-                                    if (user.getPendingClubs() != null)
-                                        user.getPendingClubs().remove(clubName);
-
-                                    FirebaseDatabase.getInstance().getReference().child("users").child(user.UID).setValue(user)
+                                    FirebaseDatabase.getInstance().getReference().child("notification").child(clubName).child(user.tempData).setValue(null)
                                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                 @Override
                                                 public void onComplete(@NonNull Task<Void> task) {
