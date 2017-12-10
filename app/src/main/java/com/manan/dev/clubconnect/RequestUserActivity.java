@@ -28,7 +28,7 @@ public class RequestUserActivity extends AppCompatActivity {
     private ChildEventListener mChildEventListCurEvent;
 
     private ArrayList<UserData> userIdArrayList;
-    private ArrayList<String> userIdList;
+    private Map<String, String> userIdList;
     private Map<String, UserData> allUsers;
 
     @Override
@@ -37,7 +37,7 @@ public class RequestUserActivity extends AppCompatActivity {
         setContentView(R.layout.activity_request_user);
 
         userIdArrayList = new ArrayList<>();
-        userIdList = new ArrayList<>();
+        userIdList = new HashMap<>();
         allUsers = new HashMap<>();
 
         RecyclerView requestRecyclerView = findViewById(R.id.request_recycler_view);
@@ -100,7 +100,7 @@ public class RequestUserActivity extends AppCompatActivity {
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     try {
                         String refValue = dataSnapshot.getValue(String.class);
-                        userIdList.add(refValue);
+                        userIdList.put(dataSnapshot.getKey(),refValue);
                         modifyUserIdArrayList();
                         requestListRecyclerAdapter.notifyDataSetChanged();
                     } catch (Exception e) {
@@ -115,7 +115,7 @@ public class RequestUserActivity extends AppCompatActivity {
                 @Override
                 public void onChildRemoved(DataSnapshot dataSnapshot) {
                     try {
-                        userIdList.remove(dataSnapshot.getValue(String.class));
+                        userIdList.remove(dataSnapshot.getKey());
                         modifyUserIdArrayList();
                         requestListRecyclerAdapter.notifyDataSetChanged();
                     } catch (Exception e) {
@@ -142,8 +142,10 @@ public class RequestUserActivity extends AppCompatActivity {
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     try {
                         UserData u = dataSnapshot.getValue(UserData.class);
-                        if (u != null)
+                        if (u != null) {
+                            u.UID = dataSnapshot.getKey();
                             allUsers.put(dataSnapshot.getKey(), u);
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -156,8 +158,10 @@ public class RequestUserActivity extends AppCompatActivity {
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                     try {
                         UserData u = dataSnapshot.getValue(UserData.class);
-                        if (u != null)
+                        if (u != null) {
+                            u.UID = dataSnapshot.getKey();
                             allUsers.put(dataSnapshot.getKey(), u);
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -193,8 +197,13 @@ public class RequestUserActivity extends AppCompatActivity {
 
     private void modifyUserIdArrayList() {
         userIdArrayList.clear();
-        for (String key : userIdList)
-            if (allUsers.containsKey(key))
-                userIdArrayList.add(allUsers.get(key));
+        String uid;
+        for (String pushId : userIdList.keySet()) {
+            uid = userIdList.get(pushId);
+            if (allUsers.containsKey(uid)) {
+                allUsers.get(uid).tempData = pushId;
+                userIdArrayList.add(allUsers.get(uid));
+            }
+        }
     }
 }

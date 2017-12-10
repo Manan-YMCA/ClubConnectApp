@@ -15,6 +15,10 @@ public class UserData {
     Map<String, String> going, bookmarked;
     ArrayList<String> pendingClubs, myClubs;
     Long userGraduationYear;
+    @Exclude
+    public String UID;
+    @Exclude
+    public String tempData;
 
     public UserData() {
     }
