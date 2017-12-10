@@ -15,7 +15,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,7 +22,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,7 +34,6 @@ import com.manan.dev.clubconnect.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class UserProfileActivity extends AppCompatActivity {
 
@@ -46,26 +44,25 @@ public class UserProfileActivity extends AppCompatActivity {
     private EditText userEmail;
     private LinearLayout llClubs;
     private FirebaseAuth mAuth;
-    private FloatingActionButton submitFab;
     private ProgressDialog pd;
-    private DatabaseReference mDatabaseReference;
     private Spinner dropdown;
     private Spinner course;
     private Spinner batch;
     private UserData user;
+    private String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
-        userImg = (ImageView) findViewById(R.id.photo_crop_user);
-        userName = (EditText) findViewById(R.id.et_name);
-        userPhone = (EditText) findViewById(R.id.user_profile_phone);
-        userRoll = (EditText) findViewById(R.id.et_RollNo);
-        userEmail = (EditText) findViewById(R.id.et_email);
-        submitFab = (FloatingActionButton) findViewById(R.id.submit_fab);
-        llClubs = (LinearLayout) findViewById(R.id.club_radiogrp);
+        userImg = findViewById(R.id.photo_crop_user);
+        userName = findViewById(R.id.et_name);
+        userPhone = findViewById(R.id.user_profile_phone);
+        userRoll = findViewById(R.id.et_RollNo);
+        userEmail = findViewById(R.id.et_email);
+        FloatingActionButton submitFab = findViewById(R.id.submit_fab);
+        llClubs = findViewById(R.id.club_radiogrp);
         user = new UserData();
 
         pd = new ProgressDialog(this);
@@ -75,15 +72,18 @@ public class UserProfileActivity extends AppCompatActivity {
         //pd.show();
 
         mAuth = FirebaseAuth.getInstance();
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("users");
+        DatabaseReference mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("users");
         ValueEventListener listener = new ValueEventListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot data : dataSnapshot.getChildren()){
-                    if(data.getKey().equals(mAuth.getCurrentUser().getUid())){
+                    if(data.getKey().equals(userId)){
                         user = data.getValue(UserData.class);
-                        Log.d("user id", data.getValue().toString());
+                        if(user!=null && user.getEmailId()!=null)
+                            Log.d("user id", user.getEmailId());
+                        else
+                            Log.d("user id", "null");
                         updateValues(user);
                     }
                 }
@@ -99,18 +99,18 @@ public class UserProfileActivity extends AppCompatActivity {
         //Picasso.with(UserProfileActivity.this).load(mAuth.getCurrentUser().getPhotoUrl()).transform(new CircleTransform()).into(userImg);
         //userName.setText(mAuth.getCurrentUser().getDisplayName());
 
-        dropdown = (Spinner)findViewById(R.id.spinner1);
-        course = (Spinner)findViewById(R.id.spinner2);
-        batch = (Spinner) findViewById(R.id.spinner3);
+        dropdown = findViewById(R.id.spinner1);
+        course = findViewById(R.id.spinner2);
+        batch = findViewById(R.id.spinner3);
 
 
 
         String[] itemsBatch = new String[]{"Select Graduation Year","2016","2017","2018", "2019", "2020","2021"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, itemsBatch);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, itemsBatch);
         dropdown.setAdapter(adapter);
 
         final String[]  itemsCou = new String[]{"Select Course", "B.Tech","M.Tech","M.Sc"};
-        ArrayAdapter<String> adapter_2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, itemsCou);
+        ArrayAdapter<String> adapter_2 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, itemsCou);
         course.setAdapter(adapter_2);
 
 
@@ -119,31 +119,28 @@ public class UserProfileActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String[]  itemsBatch = new String[]{};
-                ArrayAdapter<String> adapter_2 = new ArrayAdapter<String>(UserProfileActivity.this, android.R.layout.simple_spinner_dropdown_item, itemsBatch);;
                 switch(i)
                 {
                     case 0:
                         break;
                     case 1:
                         itemsBatch = new String[]{"Select Batch","CE","IT","ECE","EIC","Mech","EL"};
-                        adapter_2 = new ArrayAdapter<String>(UserProfileActivity.this, android.R.layout.simple_spinner_dropdown_item, itemsBatch);
                         break;
                     case 2:
                         itemsBatch = new String[]{"Select Batch","CE","IT","ECE","EIC","Mech","EL"};
-                        adapter_2 = new ArrayAdapter<String>(UserProfileActivity.this, android.R.layout.simple_spinner_dropdown_item, itemsBatch);
                         break;
                     case 3:
                         itemsBatch = new String[]{"Select Batch","Physics","Maths"};
-                        adapter_2 = new ArrayAdapter<String>(UserProfileActivity.this, android.R.layout.simple_spinner_dropdown_item, itemsBatch);
                         break;
                 }
+                ArrayAdapter<String> adapter_2 = new ArrayAdapter<>(UserProfileActivity.this, android.R.layout.simple_spinner_dropdown_item, itemsBatch);
                 batch.setAdapter(adapter_2);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
                 String[] itemsBatch1 = new String[]{"Select Batch"};
-                ArrayAdapter<String> adapter_3 = new ArrayAdapter<String>(UserProfileActivity.this, android.R.layout.simple_spinner_dropdown_item, itemsBatch1);
+                ArrayAdapter<String> adapter_3 = new ArrayAdapter<>(UserProfileActivity.this, android.R.layout.simple_spinner_dropdown_item, itemsBatch1);
                 batch.setAdapter(adapter_3);
             }
         });
@@ -156,83 +153,109 @@ public class UserProfileActivity extends AppCompatActivity {
         submitFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            pd.setIndeterminate(false);
-            pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            pd.setMax(100);
-            pd.show();
-
-
-            String phoneNo = userPhone.getText().toString();
-            String rollNo = userRoll.getText().toString().toUpperCase();
-            String photoID = mAuth.getCurrentUser().getPhotoUrl().toString();
-            String name = mAuth.getCurrentUser().getDisplayName();
-            String branch = batch.getSelectedItem().toString();
-            String coursedata = course.getSelectedItem().toString();
-            String email = userEmail.getText().toString();
-            long graduationYear = Long.parseLong(dropdown.getSelectedItem().toString());
-            ArrayList<String> pendingClubs=new ArrayList<>();
-
-            for(int i=0; i<llClubs.getChildCount(); i++)
-            {
-                CheckBox cb = (CheckBox) llClubs.getChildAt(i);
-                if(cb.isChecked()){
-                    Toast.makeText(UserProfileActivity.this, cb.getText().toString(), Toast.LENGTH_SHORT).show();
-                    try {
-                        pendingClubs.add(cb.getText().toString());
-                    }catch (Exception e){
-                        Toast.makeText(UserProfileActivity.this, cb.getText(), Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-
-            //UserData userData = new UserData(phoneNo, branch, coursedata, rollNo, photoID, name, graduationYear);
-
-
-            final UserData userData = new UserData(phoneNo, branch, coursedata, rollNo, photoID, name, email, null, null, pendingClubs, null, graduationYear);
-
-            boolean checker = (!userData.getName().equals("") &&
-                    !userData.getPhotoID().equals("") &&
-                    !userData.getUserPhoneNo().equals("") &&
-                    !userData.getUserRollNo().equals("") &&
-                    batch.getSelectedItem().toString().equals("Select Batch") &&
-                    course.getSelectedItem().toString().equals("Select Course") &&
-                    dropdown.getSelectedItem().toString().equals("Select Graduation Year")
-            );
-
-            if (true) {
-                for (String club : pendingClubs) {
-                    FirebaseDatabase.getInstance().getReference().child("notification").child(club).push().setValue(mAuth.getCurrentUser().getUid()).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(UserProfileActivity.this, "Success", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(UserProfileActivity.this, "Failed", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-                }
-                uploadProfile(userData);
-
-            }
-            else {
-                if(userData.getName().equals(""))
-                    userName.setError("Required");
-                if(userData.getUserPhoneNo().equals(""))
-                    userPhone.setError("Required");
-                if(userData.getUserRollNo().equals(""))
-                    userRoll.setError("Required");
-                if(dropdown.getSelectedItem().toString().equals("Select Graduation Year"))
-                    ((TextView)dropdown.getSelectedView()).setError("Required");
-                if(batch.getSelectedItem().toString().equals("Select Batch"))
-                    ((TextView)batch.getSelectedItem()).setError("Required");
-                if(course.getSelectedItem().toString().equals("Select Course"))
-                    ((TextView)course.getSelectedItem()).setError("Required");
-                pd.hide();
-            }
+            onSubmitPressed();
             }
         });
 
+        FirebaseUser curUser = mAuth.getCurrentUser();
+        if(curUser==null) {
+            finish();
+            return;
+        }
+        userId = curUser.getUid();
+
+    }
+
+    private void onSubmitPressed() {
+        pd.setIndeterminate(false);
+        pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        pd.setMax(100);
+        pd.show();
+
+
+        FirebaseUser curUser = mAuth.getCurrentUser();
+        if(curUser==null) {
+            Toast.makeText(UserProfileActivity.this, "Error!", Toast.LENGTH_SHORT).show();
+            pd.dismiss();
+            return;
+        }
+        String photoID = null;
+        if(curUser.getPhotoUrl()!=null)
+            photoID = curUser.getPhotoUrl().toString();
+        String phoneNo = userPhone.getText().toString();
+        String rollNo = userRoll.getText().toString().toUpperCase();
+        String name = mAuth.getCurrentUser().getDisplayName();
+        String branch=null;
+        if(batch.getSelectedItem()!=null)
+            branch = batch.getSelectedItem().toString();
+        String coursedata=null;
+        if(course.getSelectedItem()!=null)
+            coursedata = course.getSelectedItem().toString();
+        String email = userEmail.getText().toString();
+        Long graduationYear = null;
+        if(dropdown.getSelectedItem()!=null)
+            graduationYear = Long.parseLong(dropdown.getSelectedItem().toString());
+        ArrayList<String> pendingClubs=new ArrayList<>();
+
+        for(int i=0; i<llClubs.getChildCount(); i++)
+        {
+            CheckBox cb = (CheckBox) llClubs.getChildAt(i);
+            if(cb.isChecked()){
+                Toast.makeText(UserProfileActivity.this, cb.getText().toString(), Toast.LENGTH_SHORT).show();
+                try {
+                    pendingClubs.add(cb.getText().toString());
+                }catch (Exception e){
+                    Toast.makeText(UserProfileActivity.this, cb.getText(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+
+        //UserData userData = new UserData(phoneNo, branch, coursedata, rollNo, photoID, name, graduationYear);
+
+
+        final UserData userData = new UserData(phoneNo, branch, coursedata, rollNo, photoID, name, email, null, null, pendingClubs, null, graduationYear);
+
+        /*
+        boolean checker = (!userData.getName().equals("") &&
+                !userData.getPhotoID().equals("") &&
+                !userData.getUserPhoneNo().equals("") &&
+                !userData.getUserRollNo().equals("") &&
+                batch.getSelectedItem().toString().equals("Select Batch") &&
+                course.getSelectedItem().toString().equals("Select Course") &&
+                dropdown.getSelectedItem().toString().equals("Select Graduation Year")
+        );
+        */
+
+        if (true) {
+            for (String club : pendingClubs) {
+                FirebaseDatabase.getInstance().getReference().child("notification").child(club).push().setValue(mAuth.getCurrentUser().getUid()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(UserProfileActivity.this, "Success", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(UserProfileActivity.this, "Failed", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+            uploadProfile(userData);
+        }
+        else {
+            if(userData.getName().equals(""))
+                userName.setError("Required");
+            if(userData.getUserPhoneNo().equals(""))
+                userPhone.setError("Required");
+            if(userData.getUserRollNo().equals(""))
+                userRoll.setError("Required");
+            if(dropdown.getSelectedItem().toString().equals("Select Graduation Year"))
+                ((TextView)dropdown.getSelectedView()).setError("Required");
+            if(batch.getSelectedItem().toString().equals("Select Batch"))
+                ((TextView)batch.getSelectedItem()).setError("Required");
+            if(course.getSelectedItem().toString().equals("Select Course"))
+                ((TextView)course.getSelectedItem()).setError("Required");
+            pd.hide();
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -250,132 +273,141 @@ public class UserProfileActivity extends AppCompatActivity {
         }
         if(user.getUserGraduationYear() != null){
             String[] itemsBatch = new String[]{Long.toString(user.getUserGraduationYear()),"Select Graduation Year","2016","2017","2018", "2019", "2020","2021"};
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, itemsBatch);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, itemsBatch);
             dropdown.setAdapter(adapter);
         }
         if(user.getUserCourse()!= null){
             final String[]  itemsCou = new String[]{user.getUserCourse(),"Select Course", "B.Tech","M.Tech","M.Sc"};
-            ArrayAdapter<String> adapter_2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, itemsCou);
+            ArrayAdapter<String> adapter_2 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, itemsCou);
             course.setAdapter(adapter_2);
         }
         if(user.getUserBranch()!= null){
             String course = user.getUserCourse();
-            ArrayAdapter<String> adapter_2 = new ArrayAdapter<String>(UserProfileActivity.this, android.R.layout.simple_spinner_dropdown_item);
-            if(course.equals("B.Tech")){
-                String[] itemsBatch = new String[]{user.getUserBranch(), "Select Batch","CE","IT","ECE","EIC","Mech","EL"};
-                adapter_2 = new ArrayAdapter<String>(UserProfileActivity.this, android.R.layout.simple_spinner_dropdown_item, itemsBatch);
-            }else if(course.equals("M.Tech")){
-                String[] itemsBatch = new String[]{user.getUserBranch(), "Select Batch","CE","IT","ECE","EIC","Mech","EL"};
-                adapter_2 = new ArrayAdapter<String>(UserProfileActivity.this, android.R.layout.simple_spinner_dropdown_item, itemsBatch);
-            }else if(course.equals("M.Sc")){
-                String[] itemsBatch = new String[]{user.getUserBranch(), "Select Batch","Physics","Maths"};
-                adapter_2 = new ArrayAdapter<String>(UserProfileActivity.this, android.R.layout.simple_spinner_dropdown_item, itemsBatch);
+            String[] itemsBatch = new String[]{};
+            switch (course) {
+                case "B.Tech":
+                    itemsBatch = new String[]{user.getUserBranch(), "Select Batch", "CE", "IT", "ECE", "EIC", "Mech", "EL"};
+                    break;
+                case "M.Tech":
+                    itemsBatch = new String[]{user.getUserBranch(), "Select Batch", "CE", "IT", "ECE", "EIC", "Mech", "EL"};
+                    break;
+                case "M.Sc":
+                    itemsBatch = new String[]{user.getUserBranch(), "Select Batch", "Physics", "Maths"};
+                    break;
             }
+            ArrayAdapter<String> adapter_2 = new ArrayAdapter<>(UserProfileActivity.this, android.R.layout.simple_spinner_dropdown_item, itemsBatch);
             batch.setAdapter(adapter_2);
         }
+
         if(user.getPendingClubs() != null){
             for(String item : user.getPendingClubs()){
-                if(item.equals("Manan")){
-                    CheckBox cb = (CheckBox) findViewById(R.id.Manan);
-                    cb.setEnabled(false);
-                }
-                else if(item.equals("Srijan")){
-                    CheckBox cb = (CheckBox) findViewById(R.id.Srijan);
-                    cb.setEnabled(false);
-                }
-                else if(item.equals("Ananya")){
-                    CheckBox cb = (CheckBox) findViewById(R.id.Ananya);
-                    cb.setEnabled(false);
-                }
-                else if(item.equals("Vividha")){
-                    CheckBox cb = (CheckBox) findViewById(R.id.Vividha);
-                    cb.setEnabled(false);
-                }
-                else if(item.equals("Microbird")){
-                    CheckBox cb = (CheckBox) findViewById(R.id.Microbird);
-                    cb.setEnabled(false);
-                }
-                else if(item.equals("Jhalak")){
-                    CheckBox cb = (CheckBox) findViewById(R.id.Jhalak);
-                    cb.setEnabled(false);
-                }
-                else if(item.equals("Samarpan")){
-                    CheckBox cb = (CheckBox) findViewById(R.id.Samarpan);
-                    cb.setEnabled(false);
-                }
-                else if(item.equals("Natraja")){
-                    CheckBox cb = (CheckBox) findViewById(R.id.Natraja);
-                    cb.setEnabled(false);
-                }
-                else if(item.equals("Mechnext")){
-                    CheckBox cb = (CheckBox) findViewById(R.id.Mechnext);
-                    cb.setEnabled(false);
-                }
-                else if(item.equals("Tarannum")){
-                    CheckBox cb = (CheckBox) findViewById(R.id.Tarannum);
-                    cb.setEnabled(false);
+                CheckBox cb;
+                switch (item) {
+                    case "Manan":
+                        cb = findViewById(R.id.Manan);
+                        cb.setEnabled(false);
+                        break;
+                    case "Srijan":
+                        cb = findViewById(R.id.Srijan);
+                        cb.setEnabled(false);
+                        break;
+                    case "Ananya":
+                        cb = findViewById(R.id.Ananya);
+                        cb.setEnabled(false);
+                        break;
+                    case "Vividha":
+                        cb = findViewById(R.id.Vividha);
+                        cb.setEnabled(false);
+                        break;
+                    case "Microbird":
+                        cb = findViewById(R.id.Microbird);
+                        cb.setEnabled(false);
+                        break;
+                    case "Jhalak":
+                        cb = findViewById(R.id.Jhalak);
+                        cb.setEnabled(false);
+                        break;
+                    case "Samarpan":
+                        cb = findViewById(R.id.Samarpan);
+                        cb.setEnabled(false);
+                        break;
+                    case "Natraja":
+                        cb = findViewById(R.id.Natraja);
+                        cb.setEnabled(false);
+                        break;
+                    case "Mechnext":
+                        cb = findViewById(R.id.Mechnext);
+                        cb.setEnabled(false);
+                        break;
+                    case "Tarannum":
+                        cb = findViewById(R.id.Tarannum);
+                        cb.setEnabled(false);
+                        break;
                 }
             }
 
         }
         if(user.getMyClubs() != null){
             for(String item : user.getMyClubs()){
-                if(item.equals("Manan")){
-                    CheckBox cb = (CheckBox) findViewById(R.id.Manan);
-                    cb.setEnabled(false);
-                    cb.setChecked(true);
-                }
-                else if(item.equals("Srijan")){
-                    CheckBox cb = (CheckBox) findViewById(R.id.Srijan);
-                    cb.setEnabled(false);
-                    cb.setChecked(true);
-                }
-                else if(item.equals("Ananya")){
-                    CheckBox cb = (CheckBox) findViewById(R.id.Ananya);
-                    cb.setEnabled(false);
-                    cb.setChecked(true);
-                }
-                else if(item.equals("Vividha")){
-                    CheckBox cb = (CheckBox) findViewById(R.id.Vividha);
-                    cb.setEnabled(false);
-                    cb.setChecked(true);
-                }
-                else if(item.equals("Microbird")){
-                    CheckBox cb = (CheckBox) findViewById(R.id.Microbird);
-                    cb.setEnabled(false);
-                    cb.setChecked(true);
-                }
-                else if(item.equals("Jhalak")){
-                    CheckBox cb = (CheckBox) findViewById(R.id.Jhalak);
-                    cb.setEnabled(false);
-                    cb.setChecked(true);
-                }
-                else if(item.equals("Samarpan")){
-                    CheckBox cb = (CheckBox) findViewById(R.id.Samarpan);
-                    cb.setEnabled(false);
-                    cb.setChecked(true);
-                }
-                else if(item.equals("Natraja")){
-                    CheckBox cb = (CheckBox) findViewById(R.id.Natraja);
-                    cb.setEnabled(false);
-                    cb.setChecked(true);
-                }
-                else if(item.equals("Mechnext")){
-                    CheckBox cb = (CheckBox) findViewById(R.id.Mechnext);
-                    cb.setEnabled(false);
-                    cb.setChecked(true);
-                }
-                else if(item.equals("Tarannum")){
-                    CheckBox cb = (CheckBox) findViewById(R.id.Tarannum);
-                    cb.setEnabled(false);
-                    cb.setChecked(true);
+                CheckBox cb;
+                switch (item) {
+                    case "Manan":
+                        cb = findViewById(R.id.Manan);
+                        cb.setEnabled(false);
+                        cb.setChecked(true);
+                        break;
+                    case "Srijan":
+                        cb = findViewById(R.id.Srijan);
+                        cb.setEnabled(false);
+                        cb.setChecked(true);
+                        break;
+                    case "Ananya":
+                        cb = findViewById(R.id.Ananya);
+                        cb.setEnabled(false);
+                        cb.setChecked(true);
+                        break;
+                    case "Vividha":
+                        cb = findViewById(R.id.Vividha);
+                        cb.setEnabled(false);
+                        cb.setChecked(true);
+                        break;
+                    case "Microbird":
+                        cb = findViewById(R.id.Microbird);
+                        cb.setEnabled(false);
+                        cb.setChecked(true);
+                        break;
+                    case "Jhalak":
+                        cb = findViewById(R.id.Jhalak);
+                        cb.setEnabled(false);
+                        cb.setChecked(true);
+                        break;
+                    case "Samarpan":
+                        cb = findViewById(R.id.Samarpan);
+                        cb.setEnabled(false);
+                        cb.setChecked(true);
+                        break;
+                    case "Natraja":
+                        cb = findViewById(R.id.Natraja);
+                        cb.setEnabled(false);
+                        cb.setChecked(true);
+                        break;
+                    case "Mechnext":
+                        cb = findViewById(R.id.Mechnext);
+                        cb.setEnabled(false);
+                        cb.setChecked(true);
+                        break;
+                    case "Tarannum":
+                        cb = findViewById(R.id.Tarannum);
+                        cb.setEnabled(false);
+                        cb.setChecked(true);
+                        break;
                 }
             }
         }
     }
 
     private void uploadProfile(UserData userData) {
-        FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid()).setValue(userData).addOnCompleteListener(new OnCompleteListener<Void>() {
+        FirebaseDatabase.getInstance().getReference().child("users").child(userId).setValue(userData).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {

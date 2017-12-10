@@ -150,7 +150,9 @@ public class MainActivity extends AppCompatActivity {
                 Map<String, Object> values = user.toMap();
 
                 Map<String,Object> childUpdates = new HashMap<>();
-                childUpdates.put("/users/"+key, values);
+                if(currentUser.getPhotoUrl()!=null)
+                    childUpdates.put("/users/"+key+"/photoID/", currentUser.getPhotoUrl().toString());
+                childUpdates.put("/users/"+key+"/name/", currentUser.getDisplayName());
                 FirebaseDatabase.getInstance().getReference().updateChildren(childUpdates);
             }
             catch (Exception e){
