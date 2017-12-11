@@ -100,6 +100,11 @@ public class RequestUserActivity extends AppCompatActivity {
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     try {
                         String refValue = dataSnapshot.getValue(String.class);
+                        for(String key: userIdList.keySet())
+                            if(userIdList.get(key).equals(refValue)){
+                                dataSnapshot.getRef().setValue(null);
+                                return;
+                            }
                         userIdList.put(dataSnapshot.getKey(),refValue);
                         modifyUserIdArrayList();
                         requestListRecyclerAdapter.notifyDataSetChanged();
