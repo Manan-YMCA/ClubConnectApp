@@ -1,12 +1,10 @@
-package com.manan.dev.clubconnect.User;
+package com.manan.dev.clubconnect.user;
 
-import android.annotation.SuppressLint;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
 
 import com.manan.dev.clubconnect.CircleTransform;
-import com.manan.dev.clubconnect.DashboardUserActivity;
 import com.manan.dev.clubconnect.R;
 import com.squareup.picasso.Picasso;
 

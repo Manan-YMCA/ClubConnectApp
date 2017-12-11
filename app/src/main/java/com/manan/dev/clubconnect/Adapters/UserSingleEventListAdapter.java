@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.manan.dev.clubconnect.Models.Event;
 import com.manan.dev.clubconnect.R;
-import com.manan.dev.clubconnect.User.EventsDetailsActivity;
+import com.manan.dev.clubconnect.user.EventsDetailsActivity;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;

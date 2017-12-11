@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.manan.dev.clubconnect.EditEvent.EventVenue">
+    tools:context="com.manan.dev.clubconnect.editEvent.EventVenue">
     <AutoCompleteTextView
         android:id="@+id/etEventVenue"
         android:layout_width="match_parent"

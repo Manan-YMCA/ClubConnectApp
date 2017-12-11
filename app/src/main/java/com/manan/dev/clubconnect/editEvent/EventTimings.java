@@ -1,4 +1,4 @@
-package com.manan.dev.clubconnect.EditEvent;
+package com.manan.dev.clubconnect.editEvent;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;

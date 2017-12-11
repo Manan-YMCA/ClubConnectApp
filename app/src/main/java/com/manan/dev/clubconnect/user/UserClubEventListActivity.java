@@ -1,4 +1,4 @@
-package com.manan.dev.clubconnect.User;
+package com.manan.dev.clubconnect.user;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;

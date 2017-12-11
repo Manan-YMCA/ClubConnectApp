@@ -1,4 +1,4 @@
-package com.manan.dev.clubconnect.User;
+package com.manan.dev.clubconnect.user;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -44,7 +44,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.manan.dev.clubconnect.Adapters.UserSingleEventListAdapter;
 import com.manan.dev.clubconnect.CircleTransform;
-import com.manan.dev.clubconnect.Manifest;
 import com.manan.dev.clubconnect.Models.Coordinator;
 import com.manan.dev.clubconnect.Models.Event;
 import com.manan.dev.clubconnect.Models.TimeInterval;

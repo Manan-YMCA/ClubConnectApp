@@ -1,4 +1,4 @@
-package com.manan.dev.clubconnect.User;
+package com.manan.dev.clubconnect.user;
 
 import android.app.ProgressDialog;
 import android.os.Build;
@@ -276,27 +276,44 @@ public class UserProfileActivity extends AppCompatActivity {
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, itemsBatch);
             dropdown.setAdapter(adapter);
         }
+        String[] itemsBatch = new String[]{};
+
         if(user.getUserCourse()!= null){
-            final String[]  itemsCou = new String[]{user.getUserCourse(),"Select Course", "B.Tech","M.Tech","M.Sc"};
+            final String[]  itemsCou = new String[]{"Select Course", "B.Tech","M.Tech","M.Sc"};
             ArrayAdapter<String> adapter_2 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, itemsCou);
+            ArrayAdapter<String> adapter_batch;
             course.setAdapter(adapter_2);
-        }
-        if(user.getUserBranch()!= null){
+            int pos = 0;
+            for(int i=0;i<itemsCou.length; i++)
+                if(itemsCou[i].equals(user.getUserCourse())) {
+                    pos = i;
+                    break;
+                }
+            course.setSelection(pos);
+
             String course = user.getUserCourse();
-            String[] itemsBatch = new String[]{};
             switch (course) {
                 case "B.Tech":
-                    itemsBatch = new String[]{user.getUserBranch(), "Select Batch", "CE", "IT", "ECE", "EIC", "Mech", "EL"};
+                    itemsBatch = new String[]{"Select Batch", "CE", "IT", "ECE", "EIC", "Mech", "EL"};
                     break;
                 case "M.Tech":
-                    itemsBatch = new String[]{user.getUserBranch(), "Select Batch", "CE", "IT", "ECE", "EIC", "Mech", "EL"};
+                    itemsBatch = new String[]{"Select Batch", "CE", "IT", "ECE", "EIC", "Mech", "EL"};
                     break;
                 case "M.Sc":
-                    itemsBatch = new String[]{user.getUserBranch(), "Select Batch", "Physics", "Maths"};
+                    itemsBatch = new String[]{"Select Batch", "Physics", "Maths"};
                     break;
             }
-            ArrayAdapter<String> adapter_2 = new ArrayAdapter<>(UserProfileActivity.this, android.R.layout.simple_spinner_dropdown_item, itemsBatch);
-            batch.setAdapter(adapter_2);
+            adapter_batch = new ArrayAdapter<>(UserProfileActivity.this, android.R.layout.simple_spinner_dropdown_item, itemsBatch);
+            batch.setAdapter(adapter_batch);
+        }
+        if(user.getUserBranch()!= null){
+            int pos = 0;
+            for(int i=0;i<itemsBatch.length; i++)
+                if(itemsBatch[i].equals(user.getUserBranch())) {
+                    pos = i;
+                    break;
+                }
+            batch.setSelection(pos);
         }
 
         if(user.getPendingClubs() != null){

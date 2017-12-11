@@ -34,9 +34,9 @@ import com.manan.dev.clubconnect.Models.Event;
 import com.manan.dev.clubconnect.Models.Photos;
 import com.manan.dev.clubconnect.Models.SectionDataModel;
 import com.manan.dev.clubconnect.Models.TimeInterval;
-import com.manan.dev.clubconnect.User.DevelopersActivity;
-import com.manan.dev.clubconnect.User.UserClubEventListActivity;
-import com.manan.dev.clubconnect.User.UserProfileActivity;
+import com.manan.dev.clubconnect.user.DevelopersActivity;
+import com.manan.dev.clubconnect.user.UserClubEventListActivity;
+import com.manan.dev.clubconnect.user.UserProfileActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

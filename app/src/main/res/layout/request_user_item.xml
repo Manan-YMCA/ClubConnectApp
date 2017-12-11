@@ -48,10 +48,5 @@
                 android:layout_height="wrap_content"
                 android:text="Reject"/>
         </LinearLayout>
-
-
-    </LinearLayout>>
-
-
-
+    </LinearLayout>
 </LinearLayout>

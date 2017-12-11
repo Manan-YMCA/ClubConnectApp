@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.manan.dev.clubconnect.EditEvent.EventDetails">
+    tools:context="com.manan.dev.clubconnect.editEvent.EventDetails">
     <EditText
         android:id="@+id/etEventDetails"
         android:layout_width="match_parent"

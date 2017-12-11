@@ -51,13 +51,13 @@
         <activity
             android:name=".AdminZoneActivity"
             android:theme="@style/CodeFont" />
-        <activity android:name=".User.UserClubEventListActivity" />
+        <activity android:name=".user.UserClubEventListActivity" />
         <activity
             android:name=".DashboardUserActivity"
             android:label="@string/title_activity_dashboard_user"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".User.EventsDetailsActivity"
+            android:name=".user.EventsDetailsActivity"
             android:label="@string/title_activity_events_details"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -65,25 +65,29 @@
                 android:value="com.manan.dev.clubconnect.DashboardUserActivity" />
         </activity>
         <activity
-            android:name=".User.UserProfileActivity"
+            android:name=".user.UserProfileActivity"
             android:label="Profile"
             android:parentActivityName=".DashboardUserActivity" />
         <activity android:name=".AddNewClubActivity" />
-        <activity android:name=".User.DevelopersActivity" />
+        <activity android:name=".user.DevelopersActivity" />
         <activity
             android:name=".EditEventActivity"
             android:label="[Event Name]"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".EditEvent.EventName"
-            android:label="Enter the event name" />
+            android:name=".editEvent.EventName"
+            android:label="Enter the event name"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
-            android:name=".EditEvent.EventVenue"
-            android:label="Enter the event venue" />
-        <activity android:name=".EditEvent.EventDetails" />
-        <activity android:name=".EditEvent.ModifyCoordinators" />
-        <activity android:name=".EditEvent.EventTimings" />
-        <activity android:name=".RequestUserActivity"></activity>
+            android:name=".editEvent.EventVenue"
+            android:label="Enter the event venue"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".editEvent.EventDetails"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".editEvent.ModifyCoordinators" />
+        <activity android:name=".editEvent.EventTimings"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".RequestUserActivity"/>
     </application>
 
 </manifest>

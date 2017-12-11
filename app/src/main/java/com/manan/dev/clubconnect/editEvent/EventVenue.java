@@ -1,4 +1,4 @@
-package com.manan.dev.clubconnect.EditEvent;
+package com.manan.dev.clubconnect.editEvent;
 
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.manan.dev.clubconnect.EditEventActivity;

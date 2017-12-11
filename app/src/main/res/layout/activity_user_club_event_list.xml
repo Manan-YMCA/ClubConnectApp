@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.manan.dev.clubconnect.User.UserClubEventListActivity">
+    tools:context="com.manan.dev.clubconnect.user.UserClubEventListActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_user_club_list"

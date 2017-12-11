@@ -1,4 +1,4 @@
-package com.manan.dev.clubconnect.EditEvent;
+package com.manan.dev.clubconnect.editEvent;
 
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
