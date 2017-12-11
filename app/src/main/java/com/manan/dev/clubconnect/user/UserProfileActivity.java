@@ -1,6 +1,7 @@
 package com.manan.dev.clubconnect.user;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -50,6 +51,8 @@ public class UserProfileActivity extends AppCompatActivity {
     private Spinner batch;
     private UserData user;
     private String userId;
+    private ValueEventListener listener;
+    private DatabaseReference mDatabaseReferenceUsers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,24 +67,20 @@ public class UserProfileActivity extends AppCompatActivity {
         FloatingActionButton submitFab = findViewById(R.id.submit_fab);
         llClubs = findViewById(R.id.club_radiogrp);
         user = new UserData();
-
-        pd = new ProgressDialog(this);
-        pd.setMessage("Loading...");
-        pd.setCanceledOnTouchOutside(false);
-        pd.setCancelable(false);
-        //pd.show();
+        //pd.setCancelable(false);
 
         mAuth = FirebaseAuth.getInstance();
-        DatabaseReference mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("users");
-        ValueEventListener listener = new ValueEventListener() {
+        mDatabaseReferenceUsers = FirebaseDatabase.getInstance().getReference().child("users");
+        listener = new ValueEventListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot data : dataSnapshot.getChildren()){
-                    if(data.getKey().equals(userId)){
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    if (data.getKey().equals(userId)) {
                         user = data.getValue(UserData.class);
-                        if(user!=null && user.getEmailId()!=null)
+                        if (user != null && user.getEmailId() != null) {
                             Log.d("user id", user.getEmailId());
+                        }
                         else
                             Log.d("user id", "null");
                         updateValues(user);
@@ -94,8 +93,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
             }
         };
-        mDatabaseReference.addListenerForSingleValueEvent(listener);
-
+        //mDatabaseReferenceUsers.addListenerForSingleValueEvent(listener);
         //Picasso.with(UserProfileActivity.this).load(mAuth.getCurrentUser().getPhotoUrl()).transform(new CircleTransform()).into(userImg);
         //userName.setText(mAuth.getCurrentUser().getDisplayName());
 
@@ -104,37 +102,50 @@ public class UserProfileActivity extends AppCompatActivity {
         batch = findViewById(R.id.spinner3);
 
 
-
-        String[] itemsBatch = new String[]{"Select Graduation Year","2016","2017","2018", "2019", "2020","2021"};
+        String[] itemsBatch = new String[]{"Select Graduation Year", "2016", "2017", "2018", "2019", "2020", "2021"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, itemsBatch);
         dropdown.setAdapter(adapter);
 
-        final String[]  itemsCou = new String[]{"Select Course", "B.Tech","M.Tech","M.Sc"};
+        final String[] itemsCou = new String[]{"Select Course", "B.Tech", "M.Tech", "M.Sc"};
         ArrayAdapter<String> adapter_2 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, itemsCou);
         course.setAdapter(adapter_2);
-
 
 
         course.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                String[]  itemsBatch = new String[]{};
-                switch(i)
-                {
+                String[] itemsBatch = new String[]{};
+                switch (i) {
                     case 0:
                         break;
                     case 1:
-                        itemsBatch = new String[]{"Select Batch","CE","IT","ECE","EIC","Mech","EL"};
+                        itemsBatch = new String[]{"Select Batch", "CE", "IT", "ECE", "EIC", "Mech", "EL"};
                         break;
                     case 2:
-                        itemsBatch = new String[]{"Select Batch","CE","IT","ECE","EIC","Mech","EL"};
+                        itemsBatch = new String[]{"Select Batch", "CE", "IT", "ECE", "EIC", "Mech", "EL"};
                         break;
                     case 3:
-                        itemsBatch = new String[]{"Select Batch","Physics","Maths"};
+                        itemsBatch = new String[]{"Select Batch", "Physics", "Maths"};
                         break;
                 }
                 ArrayAdapter<String> adapter_2 = new ArrayAdapter<>(UserProfileActivity.this, android.R.layout.simple_spinner_dropdown_item, itemsBatch);
                 batch.setAdapter(adapter_2);
+
+
+                try {
+                    if (user.getUserBranch() != null && course.getSelectedItem().toString().equals(user.getUserCourse())) {
+                        int pos = 0;
+                        for (int c = 0; c < batch.getAdapter().getCount(); c++)
+                            if (batch.getAdapter().getItem(c).toString().equals(user.getUserBranch())) {
+                                pos = c;
+                                break;
+                            }
+                        batch.setSelection(pos);
+                    }
+                }catch (Exception e){
+                    //Toast.makeText(this, e.getLocalizedMessage(),Toast.LENGTH_LONG).show();
+                }
+
             }
 
             @Override
@@ -148,17 +159,16 @@ public class UserProfileActivity extends AppCompatActivity {
         pd = new ProgressDialog(this);
         pd.setMessage("Please Wait...");
         pd.setCanceledOnTouchOutside(false);
-        pd.setCancelable(false);
 
         submitFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            onSubmitPressed();
+                onSubmitPressed();
             }
         });
 
         FirebaseUser curUser = mAuth.getCurrentUser();
-        if(curUser==null) {
+        if (curUser == null) {
             finish();
             return;
         }
@@ -166,45 +176,83 @@ public class UserProfileActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("onResume", "Called");
+        pd.show();
+        pd.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+                UserProfileActivity.this.finish();
+            }
+        });
+        FirebaseDatabase.getInstance().getReference().child("justUpdate").setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Log.d("onComplete", "Called");
+                pd.dismiss();
+                pd.setOnCancelListener(null);
+                if(task.isSuccessful())
+                {
+                    Log.d("taskSuccess", "Called");
+                    mDatabaseReferenceUsers.addListenerForSingleValueEvent(listener);
+                }else{
+                    Log.d("taskFailure", "Called");
+                    Toast.makeText(UserProfileActivity.this, "Sorry Bro! Get a better Internet Connection!", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
     private void onSubmitPressed() {
         pd.setIndeterminate(false);
         pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         pd.setMax(100);
+        pd.setCancelable(false);
         pd.show();
 
 
         FirebaseUser curUser = mAuth.getCurrentUser();
-        if(curUser==null) {
+        if (curUser == null) {
             Toast.makeText(UserProfileActivity.this, "Error!", Toast.LENGTH_SHORT).show();
             pd.dismiss();
             return;
         }
         String photoID = null;
-        if(curUser.getPhotoUrl()!=null)
+        if (curUser.getPhotoUrl() != null)
             photoID = curUser.getPhotoUrl().toString();
-        String phoneNo = userPhone.getText().toString();
-        String rollNo = userRoll.getText().toString().toUpperCase();
-        String name = mAuth.getCurrentUser().getDisplayName();
-        String branch=null;
-        if(batch.getSelectedItem()!=null)
-            branch = batch.getSelectedItem().toString();
-        String coursedata=null;
-        if(course.getSelectedItem()!=null)
-            coursedata = course.getSelectedItem().toString();
-        String email = userEmail.getText().toString();
-        Long graduationYear = null;
-        if(dropdown.getSelectedItem()!=null)
-            graduationYear = Long.parseLong(dropdown.getSelectedItem().toString());
-        ArrayList<String> pendingClubs=new ArrayList<>();
+        String phoneNo=null;
+        if(!userPhone.getText().toString().trim().equals(""))
+            phoneNo = userPhone.getText().toString().trim();
 
-        for(int i=0; i<llClubs.getChildCount(); i++)
-        {
+        String rollNo = null;
+        if(!userRoll.getText().toString().trim().equals(""))
+            rollNo = userRoll.getText().toString().trim().toUpperCase();
+
+        String name = mAuth.getCurrentUser().getDisplayName();
+
+        String branch = null;
+        if (batch.getSelectedItem() != null && batch.getSelectedItemPosition() != 0)
+            branch = batch.getSelectedItem().toString();
+        String coursedata = null;
+        if (course.getSelectedItem() != null && course.getSelectedItemPosition() != 0)
+            coursedata = course.getSelectedItem().toString();
+        String email = null;
+        if(!userEmail.getText().toString().trim().equals(""))
+            email = userEmail.getText().toString().trim();
+        Long graduationYear = null;
+        if (dropdown.getSelectedItem() != null && dropdown.getSelectedItemPosition() != 0)
+            graduationYear = Long.parseLong(dropdown.getSelectedItem().toString());
+        ArrayList<String> pendingClubs = new ArrayList<>();
+
+        for (int i = 0; i < llClubs.getChildCount(); i++) {
             CheckBox cb = (CheckBox) llClubs.getChildAt(i);
-            if(cb.isChecked()){
+            if (cb.isChecked()) {
                 Toast.makeText(UserProfileActivity.this, cb.getText().toString(), Toast.LENGTH_SHORT).show();
                 try {
                     pendingClubs.add(cb.getText().toString());
-                }catch (Exception e){
+                } catch (Exception e) {
                     Toast.makeText(UserProfileActivity.this, cb.getText(), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -213,7 +261,7 @@ public class UserProfileActivity extends AppCompatActivity {
         //UserData userData = new UserData(phoneNo, branch, coursedata, rollNo, photoID, name, graduationYear);
 
 
-        final UserData userData = new UserData(phoneNo, branch, coursedata, rollNo, photoID, name, email, null, null, pendingClubs, null, graduationYear);
+        final UserData userData = new UserData(phoneNo, branch, coursedata, rollNo, photoID, name, email, null, null, pendingClubs, user.getMyClubs(), graduationYear);
 
         /*
         boolean checker = (!userData.getName().equals("") &&
@@ -240,20 +288,19 @@ public class UserProfileActivity extends AppCompatActivity {
                 });
             }
             uploadProfile(userData);
-        }
-        else {
-            if(userData.getName().equals(""))
+        } else {
+            if (userData.getName().equals(""))
                 userName.setError("Required");
-            if(userData.getUserPhoneNo().equals(""))
+            if (userData.getUserPhoneNo().equals(""))
                 userPhone.setError("Required");
-            if(userData.getUserRollNo().equals(""))
+            if (userData.getUserRollNo().equals(""))
                 userRoll.setError("Required");
-            if(dropdown.getSelectedItem().toString().equals("Select Graduation Year"))
-                ((TextView)dropdown.getSelectedView()).setError("Required");
-            if(batch.getSelectedItem().toString().equals("Select Batch"))
-                ((TextView)batch.getSelectedItem()).setError("Required");
-            if(course.getSelectedItem().toString().equals("Select Course"))
-                ((TextView)course.getSelectedItem()).setError("Required");
+            if (dropdown.getSelectedItem().toString().equals("Select Graduation Year"))
+                ((TextView) dropdown.getSelectedView()).setError("Required");
+            if (batch.getSelectedItem().toString().equals("Select Batch"))
+                ((TextView) batch.getSelectedItem()).setError("Required");
+            if (course.getSelectedItem().toString().equals("Select Course"))
+                ((TextView) course.getSelectedItem()).setError("Required");
             pd.hide();
         }
     }
@@ -262,62 +309,32 @@ public class UserProfileActivity extends AppCompatActivity {
     private void updateValues(UserData user) {
         Picasso.with(UserProfileActivity.this).load(user.getPhotoID()).transform(new CircleTransform()).into(userImg);
         userName.setText(user.getName());
-        if(user.getUserRollNo()!= null){
+        if (user.getUserRollNo() != null) {
             userRoll.setText(user.getUserRollNo());
         }
-        if(user.getEmailId()!=null){
+        if (user.getEmailId() != null) {
             userEmail.setText(user.getEmailId());
         }
-        if(user.getUserPhoneNo()!=null){
+        if (user.getUserPhoneNo() != null) {
             userPhone.setText(user.getUserPhoneNo());
         }
-        if(user.getUserGraduationYear() != null){
-            String[] itemsBatch = new String[]{Long.toString(user.getUserGraduationYear()),"Select Graduation Year","2016","2017","2018", "2019", "2020","2021"};
+        if (user.getUserGraduationYear() != null) {
+            String[] itemsBatch = new String[]{Long.toString(user.getUserGraduationYear()), "Select Graduation Year", "2016", "2017", "2018", "2019", "2020", "2021"};
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, itemsBatch);
             dropdown.setAdapter(adapter);
         }
-        String[] itemsBatch = new String[]{};
-
-        if(user.getUserCourse()!= null){
-            final String[]  itemsCou = new String[]{"Select Course", "B.Tech","M.Tech","M.Sc"};
-            ArrayAdapter<String> adapter_2 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, itemsCou);
-            ArrayAdapter<String> adapter_batch;
-            course.setAdapter(adapter_2);
+        if (user.getUserCourse() != null) {
             int pos = 0;
-            for(int i=0;i<itemsCou.length; i++)
-                if(itemsCou[i].equals(user.getUserCourse())) {
+            for (int i = 0; i < course.getAdapter().getCount(); i++)
+                if (course.getAdapter().getItem(i).toString().equals(user.getUserCourse())) {
                     pos = i;
                     break;
                 }
             course.setSelection(pos);
-
-            String course = user.getUserCourse();
-            switch (course) {
-                case "B.Tech":
-                    itemsBatch = new String[]{"Select Batch", "CE", "IT", "ECE", "EIC", "Mech", "EL"};
-                    break;
-                case "M.Tech":
-                    itemsBatch = new String[]{"Select Batch", "CE", "IT", "ECE", "EIC", "Mech", "EL"};
-                    break;
-                case "M.Sc":
-                    itemsBatch = new String[]{"Select Batch", "Physics", "Maths"};
-                    break;
-            }
-            adapter_batch = new ArrayAdapter<>(UserProfileActivity.this, android.R.layout.simple_spinner_dropdown_item, itemsBatch);
-            batch.setAdapter(adapter_batch);
         }
-        if(user.getUserBranch()!= null){
-            int pos = 0;
-            for(int i=0;i<itemsBatch.length; i++)
-                if(itemsBatch[i].equals(user.getUserBranch())) {
-                    pos = i;
-                    break;
-                }
-            batch.setSelection(pos);
-        }
-
-        if(user.getPendingClubs() != null){
-            for(String item : user.getPendingClubs()){
+        if (user.getPendingClubs() != null)
+        {
+            for (String item : user.getPendingClubs()) {
                 CheckBox cb;
                 switch (item) {
                     case "Manan":
@@ -364,8 +381,10 @@ public class UserProfileActivity extends AppCompatActivity {
             }
 
         }
-        if(user.getMyClubs() != null){
-            for(String item : user.getMyClubs()){
+        if (user.getMyClubs() != null)
+
+        {
+            for (String item : user.getMyClubs()) {
                 CheckBox cb;
                 switch (item) {
                     case "Manan":
@@ -421,18 +440,19 @@ public class UserProfileActivity extends AppCompatActivity {
                 }
             }
         }
+
     }
 
     private void uploadProfile(UserData userData) {
         FirebaseDatabase.getInstance().getReference().child("users").child(userId).setValue(userData).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
+                pd.dismiss();
                 if (task.isSuccessful()) {
                     Toast.makeText(UserProfileActivity.this, "Updated", Toast.LENGTH_SHORT).show();
-                    pd.dismiss();
                     finish();
-                } else {
-                    pd.hide();
+                }else{
+                    Toast.makeText(UserProfileActivity.this, "Updating Failed", Toast.LENGTH_SHORT).show();
                 }
             }
         });

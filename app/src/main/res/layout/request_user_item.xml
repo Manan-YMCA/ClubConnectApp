@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
     android:orientation="horizontal"
     android:outlineProvider="paddedBounds">
 
     <ImageView
-        android:layout_height="100dp"
-        android:layout_width="100dp"
-        android:scaleType="centerCrop"
-        android:layout_marginRight="10dp"
         android:id="@+id/request_user_image"
-        android:src="@drawable/login_back"/>
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginRight="10dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/login_back" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -23,30 +24,45 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Name of Person"
-            android:textSize="24dp"/>
+            android:textSize="24dp" />
+
         <TextView
             android:id="@+id/request_user_mnumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="985689321"
-            android:textSize="15dp"/>
+            android:textSize="15dp" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-        <Button
-            android:id="@+id/request_user_accept_btn"
-            android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="Accept"
-            android:backgroundTint="@color/colorAccent"/>
+
             <Button
+                android:layout_margin="3dp"
+                android:id="@+id/request_user_accept_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="#fff"
+                android:background="@drawable/border_accent"
+                android:backgroundTint="@color/colorAccent"
+                android:text="Accept" />
+
+            <Button
+                android:layout_margin="3dp"
                 android:id="@+id/request_user_reject_btn"
                 android:layout_width="match_parent"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="Reject"/>
+                android:layout_weight="1"
+                android:background="@drawable/border_accent"
+                android:textColor="#ff8a65"
+                android:text="Reject" />
         </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="10dp"
+            android:background="#aaa"/>
     </LinearLayout>
 </LinearLayout>
