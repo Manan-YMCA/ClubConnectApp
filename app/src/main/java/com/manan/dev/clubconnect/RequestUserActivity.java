@@ -1,10 +1,12 @@
 package com.manan.dev.clubconnect;
 
+import android.app.PendingIntent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -48,6 +50,17 @@ public class RequestUserActivity extends AppCompatActivity {
 
 
         String clubName = getIntent().getStringExtra("name");
+        //clubName = "Manan";
+        if(getIntent().getExtras() != null){
+            for(String key : getIntent().getExtras().keySet()){
+                if(key.equals("from")){
+                    clubName = getIntent().getExtras().getString(key);
+                    clubName = clubName.substring(8);
+                    //Toast.makeText(RequestUserActivity.this, key, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RequestUserActivity.this, clubName, Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("notification").child(clubName);
         mDBRefCurEvent = FirebaseDatabase.getInstance().getReference().child("users");
 
