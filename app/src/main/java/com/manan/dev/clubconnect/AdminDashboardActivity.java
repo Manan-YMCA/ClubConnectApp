@@ -11,6 +11,11 @@ import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingService;
+
+import java.io.IOException;
 
 public class AdminDashboardActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -21,6 +26,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_dashboard);
         mAuth = FirebaseAuth.getInstance();
+        FirebaseMessaging.getInstance().subscribeToTopic(mAuth.getCurrentUser().getDisplayName());
         FloatingActionButton addNewEventFab = findViewById(R.id.add_new_event_fab);
         //addNewEventFab.setBackgroundTintList(ColorStateList.valueOf(R.color.darkBlack));
         //.withAlpha(R.color.cardview_shadow_start_color));
@@ -52,6 +58,16 @@ public class AdminDashboardActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            FirebaseInstanceId.getInstance().deleteInstanceId();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
                 FirebaseAuth.getInstance().signOut();
                 finish();
                 return true;
