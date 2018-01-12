@@ -35,6 +35,7 @@ import com.manan.dev.clubconnect.Models.Photos;
 import com.manan.dev.clubconnect.Models.SectionDataModel;
 import com.manan.dev.clubconnect.Models.TimeInterval;
 import com.manan.dev.clubconnect.user.DevelopersActivity;
+import com.manan.dev.clubconnect.user.UserBookmarkActivity;
 import com.manan.dev.clubconnect.user.UserClubEventListActivity;
 import com.manan.dev.clubconnect.user.UserProfileActivity;
 import com.squareup.picasso.Picasso;
@@ -387,6 +388,10 @@ public class DashboardUserActivity extends AppCompatActivity
         else if (id == R.id.nav_dev)
         {
             startActivity(new Intent(DashboardUserActivity.this, DevelopersActivity.class));
+        }
+        else if(id == R.id.nav_bookmark)
+        {
+            startActivity(new Intent(DashboardUserActivity.this, UserBookmarkActivity.class));
         }
 
 

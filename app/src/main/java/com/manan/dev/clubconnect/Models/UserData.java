@@ -12,9 +12,10 @@ import java.util.Map;
 
 public class UserData {
     String userPhoneNo, userBranch, userCourse, userRollNo, photoID, name, emailId;
-    Map<String, String> going, bookmarked;
+    ArrayList <String> going, bookmarked;
     ArrayList<String> pendingClubs, myClubs;
     Long userGraduationYear;
+
     @Exclude
     public String UID;
     @Exclude
@@ -23,7 +24,7 @@ public class UserData {
     public UserData() {
     }
 
-    public UserData(String userPhoneNo, String userBranch, String userCourse, String userRollNo, String photoID, String name, String emailId, Map<String, String> going, Map<String, String> bookmarked, ArrayList<String> pendingClubs, ArrayList<String> myClubs, Long userGraduationYear) {
+    public UserData(String userPhoneNo, String userBranch, String userCourse, String userRollNo, String photoID, String name, String emailId, ArrayList<String> going, ArrayList <String> bookmarked, ArrayList<String> pendingClubs, ArrayList<String> myClubs, Long userGraduationYear) {
 
         this.userPhoneNo = userPhoneNo;
         this.userBranch = userBranch;
@@ -32,8 +33,8 @@ public class UserData {
         this.photoID = photoID;
         this.name = name;
         this.emailId = emailId;
-        this.going = going;
         this.bookmarked = bookmarked;
+        this.going = going;
         this.pendingClubs = pendingClubs;
         this.myClubs = myClubs;
         this.userGraduationYear = userGraduationYear;
@@ -67,19 +68,19 @@ public class UserData {
         this.emailId = emailId;
     }
 
-    public Map<String, String> getGoing() {
+    public ArrayList<String> getGoing() {
         return going;
     }
 
-    public void setGoing(Map<String, String> going) {
+    public void setGoing(ArrayList< String> going) {
         this.going = going;
     }
 
-    public Map<String, String> getBookmarked() {
+    public ArrayList<String> getBookmarked() {
         return bookmarked;
     }
 
-    public void setBookmarked(Map<String, String> bookmarked) {
+    public void setBookmarked(ArrayList<String> bookmarked) {
         this.bookmarked = bookmarked;
     }
 
@@ -142,6 +143,8 @@ public class UserData {
         result.put("name", name);
         result.put("emailId", emailId);
         result.put("pendingClubs", pendingClubs);
+        result.put("bookmarked", bookmarked);
+        result.put("going",going);
         result.put("userBranch", userBranch);
         result.put("userCourse", userCourse);
         result.put("userGraduationYear", userGraduationYear);

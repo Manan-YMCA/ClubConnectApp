@@ -12,10 +12,10 @@
             android:id="@+id/nav_profile"
             android:icon="@drawable/vector_coordinator"
             android:title="Profile" />
-        <!--<item-->
-            <!--android:id="@+id/nav_slideshow"-->
-            <!--android:icon="@drawable/vector_star"-->
-            <!--android:title="Starred Events" />-->
+        <item
+            android:id="@+id/nav_bookmark"
+            android:icon="@drawable/vector_star"
+            android:title="Bookmarked Events" />
         <item
             android:id="@+id/nav_about"
             android:icon="@drawable/vector_name"

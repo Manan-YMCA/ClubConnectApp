@@ -35,18 +35,33 @@
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_events_details" />
-
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_anchor="@id/app_bar"
+    app:layout_anchorGravity="bottom|end"
+    android:orientation="horizontal">
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/bookmark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/vector_star"
+        app:layout_anchor="@id/app_bar"
+        app:layout_anchorGravity="bottom|start"
+        android:backgroundTint="#ddd"
+        app:borderWidth="0dp"
+        app:srcCompat="@android:drawable/ic_dialog_dialer" />
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/vector_date"
-        app:layout_anchor="@id/app_bar"
-        app:layout_anchorGravity="bottom|end"
+
         android:backgroundTint="#ddd"
         app:borderWidth="0dp"
         app:srcCompat="@android:drawable/ic_dialog_email" />
-
+</LinearLayout>>
 
 </android.support.design.widget.CoordinatorLayout>

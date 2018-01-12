@@ -47,8 +47,9 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".AdminDashboardActivity"
-            android:label="Admin Dashboard"/>
+        <activity
+            android:name=".AdminDashboardActivity"
+            android:label="Admin Dashboard" />
         <activity
             android:name=".AdminZoneActivity"
             android:theme="@style/CodeFont" />
@@ -78,34 +79,38 @@
         <activity
             android:name=".editEvent.EventName"
             android:label="Enter the event name"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".editEvent.EventVenue"
             android:label="Enter the event venue"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".editEvent.EventDetails"
+        <activity
+            android:name=".editEvent.EventDetails"
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".editEvent.ModifyCoordinators" />
-        <activity android:name=".editEvent.EventTimings"
+        <activity
+            android:name=".editEvent.EventTimings"
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".RequestUserActivity">
             <intent-filter>
                 <action android:name="com.manan.dev.clubconnect_friend_request" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <service
-            android:name=".MyFirebaseMessagingService">
+
+        <service android:name=".MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <service
-            android:name=".MyFirebaseInstanceIDService">
+        <service android:name=".MyFirebaseInstanceIDService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+
+        <activity android:name=".user.UserBookmarkActivity"></activity>
     </application>
 
 </manifest>

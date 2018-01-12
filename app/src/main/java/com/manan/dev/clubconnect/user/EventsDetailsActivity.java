@@ -1,5 +1,6 @@
 package com.manan.dev.clubconnect.user;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -34,11 +35,13 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -47,16 +50,21 @@ import com.manan.dev.clubconnect.CircleTransform;
 import com.manan.dev.clubconnect.Models.Coordinator;
 import com.manan.dev.clubconnect.Models.Event;
 import com.manan.dev.clubconnect.Models.TimeInterval;
+import com.manan.dev.clubconnect.Models.UserData;
 import com.manan.dev.clubconnect.R;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import java.io.File;
+import java.security.cert.Extension;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
+import static com.manan.dev.clubconnect.R.drawable.vector_star;
 
 public class EventsDetailsActivity extends AppCompatActivity {
 
@@ -72,6 +80,8 @@ public class EventsDetailsActivity extends AppCompatActivity {
     private ChildEventListener mChildEventListener;
     private DatabaseReference mDatabaseReference;
 
+    private ChildEventListener getmChildUser;
+    private DatabaseReference mDatabaseReferenceUsers;
     private Map<String, Coordinator> coordinatorsAll;
 
     TextView tvTime, tvDate, tvVenue, tvDetails;
@@ -79,6 +89,10 @@ public class EventsDetailsActivity extends AppCompatActivity {
     private AppBarLayout appBar;
     private FirebaseStorage storage;
     private ProgressDialog pd;
+    private FirebaseAuth mAuth;
+    private UserData user;
+    private FloatingActionButton bookm;
+    private int togglebookm=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,12 +119,18 @@ public class EventsDetailsActivity extends AppCompatActivity {
         clubName = bundle.getString(UserSingleEventListAdapter.CLUB_NAME);
         eventId = bundle.getString(UserSingleEventListAdapter.EVENT_ID);
 
+        mAuth = FirebaseAuth.getInstance();
         coordinatorsAll = new HashMap<>();
+
+        mDatabaseReferenceUsers = FirebaseDatabase.getInstance().getReference().child("users");
+                   //Toast.makeText(EventsDetailsActivity.this,mAuth.getCurrentUser().getUid(), Toast.LENGTH_SHORT).show();
+
+
 
         //eventDetailsToken = (TextView) findViewById(R.id.event_details_);
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -128,6 +148,29 @@ public class EventsDetailsActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+
+         bookm = (FloatingActionButton) findViewById(R.id.bookmark);
+
+        bookm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            bookMarkTodb();
+            }
+        });
+
+
+
+
+
+
+
+
+
+        mAuth = FirebaseAuth.getInstance();
+
+
+
+  // Toast.makeText(EventsDetailsActivity.this,mAuth.getCurrentUser().getUid(),Toast.LENGTH_SHORT).show();
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("coordinators").child(clubName);
         mDBRefCurEvent = FirebaseDatabase.getInstance().getReference().child("events").child(clubName);
@@ -197,6 +240,11 @@ public class EventsDetailsActivity extends AppCompatActivity {
             mDatabaseReference.removeEventListener(mChildEventListener);
             mChildEventListener = null;
         }
+
+        if (getmChildUser != null) {
+            mDatabaseReferenceUsers.removeEventListener(getmChildUser);
+            getmChildUser = null;
+        }
     }
 
     private void attachDatabaseListener() {
@@ -204,6 +252,7 @@ public class EventsDetailsActivity extends AppCompatActivity {
             mChildEventListCurEvent = new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+               //     Toast.makeText(EventsDetailsActivity.this, "this is 1", Toast.LENGTH_SHORT).show();
                     try {
                         Log.d("OnAdded", dataSnapshot.toString());
                         if (dataSnapshot.getKey().equals(eventId)) {
@@ -291,6 +340,94 @@ public class EventsDetailsActivity extends AppCompatActivity {
             };
             mDatabaseReference.addChildEventListener(mChildEventListener);
         }
+
+        if (getmChildUser == null) {
+            getmChildUser = new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    try {
+
+                        if(dataSnapshot.getKey().equals(mAuth.getCurrentUser().getUid())) {
+                            user = dataSnapshot.getValue(UserData.class);
+
+
+                        if(user.getBookmarked().isEmpty()) {
+                            togglebookm = 0;
+//                            Toast.makeText(EventsDetailsActivity.this, "Black", Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                        {
+                            if(user.getBookmarked().contains(eventId)) {
+                                togglebookm=1;
+                                bookm.setImageResource(R.drawable.vector_yellow_star);
+                             Toast.makeText(EventsDetailsActivity.this, "This Event is Bookmarked by you", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+//            user.setBookmarked(new ArrayList<String>());
+//            user.getBookmarked().add(eventId);
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                    try {
+
+                        if(dataSnapshot.getKey().equals(mAuth.getCurrentUser().getUid())) {
+                            user = dataSnapshot.getValue(UserData.class);
+
+
+                            if(user.getBookmarked().isEmpty()) {
+                                togglebookm = 0;
+ //                               Toast.makeText(EventsDetailsActivity.this, "Black", Toast.LENGTH_SHORT).show();
+                            }
+                            else
+                            {
+                                if(user.getBookmarked().contains(eventId)) {
+                                    togglebookm=1;
+                                    bookm.setImageResource(R.drawable.vector_yellow_star);
+ //                                  Toast.makeText(EventsDetailsActivity.this, "Yellow", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+//            user.setBookmarked(new ArrayList<String>());
+//            user.getBookmarked().add(eventId);
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+
+
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+                }
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            };
+            mDatabaseReferenceUsers.addChildEventListener(getmChildUser);
+        }
+
+
+
+
+
+
     }
 
     private void updateUI() {
@@ -472,6 +609,43 @@ public class EventsDetailsActivity extends AppCompatActivity {
                 MY_PERMISSIONS_REQUEST);
     }
 
+    private void bookMarkTodb()
+    {
+        if(togglebookm == 1 )
+        {Toast.makeText(EventsDetailsActivity.this,"Already Bookmarked",Toast.LENGTH_SHORT).show();
+
+        }
+        if(togglebookm == 0)
+        {
+
+            if(user.getBookmarked()!= null) {
+                user.getBookmarked().add(eventId);
+            }
+            if(user.getBookmarked()== null) {
+                user.setBookmarked(new ArrayList<String>());
+                user.getBookmarked().add(eventId);
+                //       Toast.makeText(EventsDetailsActivity.this, user.getBookmarked().get(1), Toast.LENGTH_SHORT).show();
+
+            }
+            FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid()).setValue(user)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Toast.makeText(EventsDetailsActivity.this, "Bookmarked Succesfully", Toast.LENGTH_SHORT).show();
+
+
+                        }
+                    });
+
+        }
+
+
+    }
+
+
+
+
+
     private void updateList() {
         llCoordinators.removeAllViews();
 
@@ -507,9 +681,9 @@ public class EventsDetailsActivity extends AppCompatActivity {
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED
                         && grantResults[1] == PackageManager.PERMISSION_GRANTED
                         ) {
-                    Toast.makeText(EventsDetailsActivity.this, permissions[0] + " and " + permissions[1] +" granted", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EventsDetailsActivity.this, permissions[0] + " and " + permissions[1] + " granted", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(EventsDetailsActivity.this, permissions[0] + " or " + permissions[1] +" denied", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EventsDetailsActivity.this, permissions[0] + " or " + permissions[1] + " denied", Toast.LENGTH_SHORT).show();
                 }
             }
             break;
