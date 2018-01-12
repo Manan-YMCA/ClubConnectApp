@@ -47,7 +47,8 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".AdminDashboardActivity" />
+        <activity android:name=".AdminDashboardActivity"
+            android:label="Admin Dashboard"/>
         <activity
             android:name=".AdminZoneActivity"
             android:theme="@style/CodeFont" />

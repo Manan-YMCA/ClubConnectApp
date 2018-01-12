@@ -90,8 +90,8 @@ public class EditEventActivity extends AppCompatActivity {
     public static final String REQ_PARA_EVENT_DATE = "event_date";
     public static final String REQ_PARA_EVENT_STIME = "event_stime";
     public static final String REQ_PARA_EVENT_ETIME = "event_etime";
-    private static final String REQ_PARA_EVENT_POSTERS = "event_posters";
-    private static final String REQ_PARA_EVENT_ID = "event_id";
+    public static final String REQ_PARA_EVENT_POSTERS = "event_posters";
+    public static final String REQ_PARA_EVENT_ID = "event_id";
 
     private static final String TAG = "EditEventActivity";
 
@@ -169,6 +169,8 @@ public class EditEventActivity extends AppCompatActivity {
         phone = data.getStringArrayListExtra(REQ_PARA_EVENT_COORD_PHONE);
         photo = data.getStringArrayListExtra(REQ_PARA_EVENT_COORD_PHOTO);
 
+        Toast.makeText(EditEventActivity.this, event.getEventId() + " " + event.getEventName(), Toast.LENGTH_SHORT).show();
+
         updateUIText();
         updatePostersBasedOnDownloadURLs();
         updateCoordinators(name,phone,email,photo);
@@ -190,8 +192,6 @@ public class EditEventActivity extends AppCompatActivity {
 
         coordinatorsAll = new HashMap<>();
         posters = new ArrayList<>();
-        posters.add(null);
-
         editTimingReqSentFor = null;
 
     }
@@ -222,6 +222,9 @@ public class EditEventActivity extends AppCompatActivity {
             selectPoster.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if(posters.size() == 0){
+                        posters.add(null);
+                    }
                     Intent intent = new Intent();
                     intent.setType("image/*");
                     intent.setAction(Intent.ACTION_PICK);
@@ -312,6 +315,9 @@ public class EditEventActivity extends AppCompatActivity {
             addPosters.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if(posters.size() == 0){
+                        posters.add(null);
+                    }
                     Intent intent = new Intent();
                     intent.setType("image/*");
                     intent.setAction(Intent.ACTION_PICK);
@@ -352,6 +358,7 @@ public class EditEventActivity extends AppCompatActivity {
                 try {
                     final File localFile = File.createTempFile("image"+i, "jpg");
                     final int finalI = i;
+                    posters.add(null);
                     ref.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
@@ -754,6 +761,7 @@ public class EditEventActivity extends AppCompatActivity {
 
         for (int i = 0; i < posters.size(); i++) {
 
+
             Bitmap bmp;
             try {
                 bmp = MediaStore.Images.Media.getBitmap(EditEventActivity.this.getContentResolver(), posters.get(i));
@@ -793,6 +801,7 @@ public class EditEventActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+        Toast.makeText(EditEventActivity.this, Integer.toString(promises.size()), Toast.LENGTH_SHORT).show();
         return promises;
     }
 
