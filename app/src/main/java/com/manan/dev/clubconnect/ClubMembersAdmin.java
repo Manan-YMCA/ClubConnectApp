@@ -40,9 +40,11 @@ public class ClubMembersAdmin extends AppCompatActivity {
     private TextView userYear;
     private TextView userCourse;
     private TextView userBranch;
+    private TextView userCoord;
     private Button addCoord;
     private ProgressDialog pd;
     private String userId;
+    private Boolean isCoordinator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +63,7 @@ public class ClubMembersAdmin extends AppCompatActivity {
         userCourse = (TextView) findViewById(R.id.member_course);
         userBranch = (TextView) findViewById(R.id.member_branch);
         addCoord = (Button) findViewById(R.id.member_add_coordinator);
+        userCoord = (TextView) findViewById(R.id.member_is_coord);
 
         pd = new ProgressDialog(this);
         pd.setMessage("Please Wait...");
@@ -179,11 +182,15 @@ public class ClubMembersAdmin extends AppCompatActivity {
                     try {
                         ClubMember clubMember = dataSnapshot.getValue(ClubMember.class);
                         if (clubMember.getUserId().equals(userId)) {
-                            Boolean isCoordinator = clubMember.getCoordinator();
+                            isCoordinator = clubMember.getCoordinator();
                             memberKey = dataSnapshot.getKey();
                             Log.d("key ", memberKey);
                             if(isCoordinator){
+                                userCoord.setText("YES");
                                 addCoord.setVisibility(View.GONE);
+                            }
+                            else {
+                                userCoord.setText("NO");
                             }
                         }
                     }
@@ -194,7 +201,24 @@ public class ClubMembersAdmin extends AppCompatActivity {
 
                 @Override
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
+                    try {
+                        ClubMember clubMember = dataSnapshot.getValue(ClubMember.class);
+                        if (clubMember.getUserId().equals(userId)) {
+                            isCoordinator = clubMember.getCoordinator();
+                            memberKey = dataSnapshot.getKey();
+                            Log.d("key ", memberKey);
+                            if(isCoordinator){
+                                userCoord.setText("YES");
+                                addCoord.setVisibility(View.GONE);
+                            }
+                            else {
+                                userCoord.setText("NO");
+                            }
+                        }
+                    }
+                    catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }
 
                 @Override
@@ -217,12 +241,12 @@ public class ClubMembersAdmin extends AppCompatActivity {
     }
 
     private void updateValues(UserData user) {
-        userName.setText(userName.getText() + user.getName());
-        userPhone.setText(userPhone.getText() + user.getUserPhoneNo());
-        userEmail.setText(userEmail.getText() + user.getEmailId());
-        userBranch.setText(userBranch.getText() + user.getUserBranch());
-        userCourse.setText(userCourse.getText() + user.getUserCourse());
-        userYear.setText(userYear.getText() + Long.toString(user.getUserGraduationYear()));
+        userName.setText(user.getName());
+        userPhone.setText(user.getUserPhoneNo());
+        userEmail.setText(user.getEmailId());
+        userBranch.setText(user.getUserBranch());
+        userCourse.setText(user.getUserCourse());
+        userYear.setText(Long.toString(user.getUserGraduationYear()));
         Picasso.with(ClubMembersAdmin.this).load(user.getPhotoID()).transform(new CircleTransform()).into(userProfile);
     }
 }

@@ -111,4 +111,11 @@
     <string name="members">MEMBERS</string>
     <string name="coordinators">COORDINATORS</string>
     <string name="add_coordinator">ADD COORDINATOR</string>
+    <string name="name">NAME:</string>
+    <string name="phone">PHONE:</string>
+    <string name="email">EMAIL:</string>
+    <string name="graduation_year">GRADUATION YEAR:</string>
+    <string name="course">COURSE:</string>
+    <string name="branch">BRANCH:</string>
+    <string name="is_coordinator">IS COORDINATOR:</string>
 </resources>

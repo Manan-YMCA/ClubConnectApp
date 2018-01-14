@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class UserData {
     String userPhoneNo, userBranch, userCourse, userRollNo, photoID, name, emailId;
-    ArrayList <String> going, bookmarked;
+    Map<String, String> going, bookmarked;
     ArrayList<String> pendingClubs, myClubs;
     Long userGraduationYear;
 
@@ -24,7 +24,7 @@ public class UserData {
     public UserData() {
     }
 
-    public UserData(String userPhoneNo, String userBranch, String userCourse, String userRollNo, String photoID, String name, String emailId, ArrayList<String> going, ArrayList <String> bookmarked, ArrayList<String> pendingClubs, ArrayList<String> myClubs, Long userGraduationYear) {
+    public UserData(String userPhoneNo, String userBranch, String userCourse, String userRollNo, String photoID, String name, String emailId, Map<String, String> going, Map<String, String> bookmarked, ArrayList<String> pendingClubs, ArrayList<String> myClubs, Long userGraduationYear) {
 
         this.userPhoneNo = userPhoneNo;
         this.userBranch = userBranch;
@@ -68,19 +68,19 @@ public class UserData {
         this.emailId = emailId;
     }
 
-    public ArrayList<String> getGoing() {
+    public Map<String, String> getGoing() {
         return going;
     }
 
-    public void setGoing(ArrayList< String> going) {
+    public void setGoing(Map<String, String> going) {
         this.going = going;
     }
 
-    public ArrayList<String> getBookmarked() {
+    public Map<String, String> getBookmarked() {
         return bookmarked;
     }
 
-    public void setBookmarked(ArrayList<String> bookmarked) {
+    public void setBookmarked(Map<String, String> bookmarked) {
         this.bookmarked = bookmarked;
     }
 

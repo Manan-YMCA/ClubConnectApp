@@ -104,8 +104,7 @@ public class FragmentMemberClub extends Fragment {
                                 dataSnapshot.getRef().setValue(null);
                                 return;
                             }
-                        if(!refValue.getCoordinator())
-                            userIdList.put(dataSnapshot.getKey(), refValue.getUserId());
+                        userIdList.put(dataSnapshot.getKey(), refValue.getUserId());
                         modifyUserIdArrayList();
                         adapter.notifyDataSetChanged();
                     } catch (Exception e) {

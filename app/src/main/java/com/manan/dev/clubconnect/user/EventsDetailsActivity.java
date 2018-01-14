@@ -357,7 +357,7 @@ public class EventsDetailsActivity extends AppCompatActivity {
                         }
                         else
                         {
-                            if(user.getBookmarked().contains(eventId)) {
+                            if(user.getBookmarked().containsKey(eventId)) {
                                 togglebookm=1;
                                 bookm.setImageResource(R.drawable.vector_yellow_star);
                              Toast.makeText(EventsDetailsActivity.this, "This Event is Bookmarked by you", Toast.LENGTH_SHORT).show();
@@ -387,7 +387,7 @@ public class EventsDetailsActivity extends AppCompatActivity {
                             }
                             else
                             {
-                                if(user.getBookmarked().contains(eventId)) {
+                                if(user.getBookmarked().containsKey(eventId)) {
                                     togglebookm=1;
                                     bookm.setImageResource(R.drawable.vector_yellow_star);
  //                                  Toast.makeText(EventsDetailsActivity.this, "Yellow", Toast.LENGTH_SHORT).show();
@@ -612,18 +612,31 @@ public class EventsDetailsActivity extends AppCompatActivity {
     private void bookMarkTodb()
     {
         if(togglebookm == 1 )
-        {Toast.makeText(EventsDetailsActivity.this,"Already Bookmarked",Toast.LENGTH_SHORT).show();
-
+        {
+            user.getBookmarked().remove(eventId);
+            FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid()).setValue(user)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()) {
+                                bookm.setImageResource(R.drawable.vector_star);
+                                togglebookm = 0;
+                                Toast.makeText(EventsDetailsActivity.this, "Bookmark removed Successfully", Toast.LENGTH_SHORT).show();
+                            }
+                            else
+                                Toast.makeText(EventsDetailsActivity.this, "CHECK YOUR NET BRO!!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
         }
         if(togglebookm == 0)
         {
 
             if(user.getBookmarked()!= null) {
-                user.getBookmarked().add(eventId);
+                user.getBookmarked().put(eventId, clubName);
             }
             if(user.getBookmarked()== null) {
-                user.setBookmarked(new ArrayList<String>());
-                user.getBookmarked().add(eventId);
+                user.setBookmarked(new HashMap<String, String>());
+                user.getBookmarked().put(eventId, clubName);
                 //       Toast.makeText(EventsDetailsActivity.this, user.getBookmarked().get(1), Toast.LENGTH_SHORT).show();
 
             }
@@ -631,8 +644,11 @@ public class EventsDetailsActivity extends AppCompatActivity {
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            Toast.makeText(EventsDetailsActivity.this, "Bookmarked Succesfully", Toast.LENGTH_SHORT).show();
-
+                            if(task.isSuccessful()) {
+                                togglebookm = 1;
+                                Toast.makeText(EventsDetailsActivity.this, "Bookmarked Succesfully", Toast.LENGTH_SHORT).show();
+                            }else
+                                Toast.makeText(EventsDetailsActivity.this, "CHECK YOUR NETWORK BRO!!", Toast.LENGTH_SHORT).show();
 
                         }
                     });

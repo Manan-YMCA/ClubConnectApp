@@ -293,11 +293,15 @@ public class DashboardUserActivity extends AppCompatActivity
             sort(preEventsItem);
             sort(curEventsItem);
             //Toast.makeText(DashboardUserActivity.this, Integer.toString(allEventsItem.size()), Toast.LENGTH_SHORT).show();
-            curEvents.setAllItemsInSection(curEventsItem);
-            preEvents.setAllItemsInSection(preEventsItem);
+            if(curEventsItem.size() > 0) {
+                curEvents.setAllItemsInSection(curEventsItem);
+                eventListForRecyclerView.add(curEvents);
+            }
+            if(preEventsItem.size() > 0) {
+                preEvents.setAllItemsInSection(preEventsItem);
+                eventListForRecyclerView.add(preEvents);
+            }
 
-            eventListForRecyclerView.add(curEvents);
-            eventListForRecyclerView.add(preEvents);
             adapter.notifyDataSetChanged();
         } catch (Exception e) {
             Log.d("updateListEx", e.getMessage());
