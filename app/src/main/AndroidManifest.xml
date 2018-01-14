@@ -91,13 +91,6 @@
         <activity
             android:name=".editEvent.EventTimings"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".RequestUserActivity">
-            <intent-filter>
-                <action android:name="com.manan.dev.clubconnect_friend_request" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
 
         <service android:name=".MyFirebaseMessagingService">
             <intent-filter>
@@ -110,7 +103,15 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".user.UserBookmarkActivity"></activity>
+        <activity android:name=".user.UserBookmarkActivity" />
+        <activity android:name=".ClubMembersRequest">
+            <intent-filter>
+                <action android:name="com.manan.dev.clubconnect_friend_request" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ClubMembersAdmin"></activity>
     </application>
 
 </manifest>

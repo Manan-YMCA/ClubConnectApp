@@ -119,7 +119,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
                     return true;
                 }
                 String cllubName = usser.getDisplayName();
-                startActivity(new Intent(AdminDashboardActivity.this, RequestUserActivity.class).putExtra("name",cllubName));
+                startActivity(new Intent(AdminDashboardActivity.this, ClubMembersRequest.class).putExtra("name",cllubName));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

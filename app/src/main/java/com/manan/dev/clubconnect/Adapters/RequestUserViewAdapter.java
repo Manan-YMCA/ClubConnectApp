@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.manan.dev.clubconnect.CircleTransform;
+import com.manan.dev.clubconnect.Models.ClubMember;
 import com.manan.dev.clubconnect.Models.UserData;
 import com.manan.dev.clubconnect.R;
 import com.squareup.picasso.Picasso;
@@ -95,17 +96,29 @@ public class RequestUserViewAdapter extends RecyclerView.Adapter<RequestUserView
                                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                 @Override
                                                 public void onComplete(@NonNull Task<Void> task) {
-                                                    pd.dismiss();
-                                                    if (task.isSuccessful())
+                                                    //pd.dismiss();
+                                                    if (task.isSuccessful()) {
                                                         Toast.makeText(context, "Request Accepted!", Toast.LENGTH_SHORT).show();
+                                                        ClubMember member = new ClubMember(user.UID, false);
+                                                        FirebaseDatabase.getInstance().getReference().child("members").child(clubName).push().setValue(member)
+                                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                    @Override
+                                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                                        if(task.isSuccessful()){
+                                                                            pd.dismiss();
+                                                                            Toast.makeText(context, "Member Added!!" , Toast.LENGTH_SHORT).show();
+                                                                        }
+                                                                    }
+                                                                });
+                                                    }
                                                 }
                                             });
-                                } else {
+                                }
+                                else{
                                     pd.dismiss();
                                 }
                             }
                         });
-
             }
         });
         holder.rejectBtn.setOnClickListener(new View.OnClickListener() {

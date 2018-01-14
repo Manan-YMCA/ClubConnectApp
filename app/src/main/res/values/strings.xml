@@ -107,4 +107,8 @@
     <string name="default_duration">[Start Time - End Time]</string>
     <string name="default_start_time">[Start Time]</string>
     <string name="default_start_date">[Start Date]</string>
+    <string name="new_request">New Request</string>
+    <string name="members">MEMBERS</string>
+    <string name="coordinators">COORDINATORS</string>
+    <string name="add_coordinator">ADD COORDINATOR</string>
 </resources>

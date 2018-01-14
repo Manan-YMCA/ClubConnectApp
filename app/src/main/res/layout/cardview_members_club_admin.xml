@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    android:layout_marginTop="10dp"
+    android:id="@+id/member_card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:elevation="24dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/member_user_image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginRight="10dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/login_back" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="15dp">
+
+            <TextView
+                android:id="@+id/member_user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Name of Person"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/member_user_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="985689321"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/member_user_emailid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:text="email"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

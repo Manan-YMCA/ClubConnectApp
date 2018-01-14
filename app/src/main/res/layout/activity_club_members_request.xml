@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.manan.dev.clubconnect.ClubMembersRequest">
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tab_layout_admin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            
+            <android.support.design.widget.TabItem
+                android:id="@+id/tab1_request"
+                android:text="@string/members"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content" />
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/tab2_members"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/coordinators"/>
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/tab3_coordinators"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/new_request"/>
+            
+        </android.support.design.widget.TabLayout>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/view_pager_admin"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/tab_layout_admin"
+            android:layout_alignParentBottom="true"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>
