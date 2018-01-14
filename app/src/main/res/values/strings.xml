@@ -118,4 +118,6 @@
     <string name="course">COURSE:</string>
     <string name="branch">BRANCH:</string>
     <string name="is_coordinator">IS COORDINATOR:</string>
+    <string name="going">GOING</string>
+    <string name="bookmarked">INTERESTED</string>
 </resources>

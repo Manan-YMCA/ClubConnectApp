@@ -92,7 +92,9 @@ public class EventsDetailsActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private UserData user;
     private FloatingActionButton bookm;
-    private int togglebookm=0;
+    private FloatingActionButton going;
+    private int togglebookm = 0;
+    private int toggleGoing = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,7 +151,7 @@ public class EventsDetailsActivity extends AppCompatActivity {
         }
 
 
-         bookm = (FloatingActionButton) findViewById(R.id.bookmark);
+        bookm = (FloatingActionButton) findViewById(R.id.bookmark);
 
         bookm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -158,13 +160,13 @@ public class EventsDetailsActivity extends AppCompatActivity {
             }
         });
 
-
-
-
-
-
-
-
+        going = (FloatingActionButton) findViewById(R.id.going);
+        going.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goingTodb();
+            }
+        });
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -349,22 +351,25 @@ public class EventsDetailsActivity extends AppCompatActivity {
 
                         if(dataSnapshot.getKey().equals(mAuth.getCurrentUser().getUid())) {
                             user = dataSnapshot.getValue(UserData.class);
-
-
-                        if(user.getBookmarked().isEmpty()) {
-                            togglebookm = 0;
-//                            Toast.makeText(EventsDetailsActivity.this, "Black", Toast.LENGTH_SHORT).show();
-                        }
-                        else
-                        {
-                            if(user.getBookmarked().containsKey(eventId)) {
-                                togglebookm=1;
-                                bookm.setImageResource(R.drawable.vector_yellow_star);
-                             Toast.makeText(EventsDetailsActivity.this, "This Event is Bookmarked by you", Toast.LENGTH_SHORT).show();
+                            if(user.getBookmarked() == null) {
+                                togglebookm = 0;
+    //                            Toast.makeText(EventsDetailsActivity.this, "Black", Toast.LENGTH_SHORT).show();
                             }
-                        }
-//            user.setBookmarked(new ArrayList<String>());
-//            user.getBookmarked().add(eventId);
+                            else {
+                                if(user.getBookmarked().containsKey(eventId)) {
+                                    togglebookm=1;
+                                    bookm.setImageResource(R.drawable.vector_yellow_star);
+                                 Toast.makeText(EventsDetailsActivity.this, "This Event is Bookmarked by you", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                            if(user.getGoing() == null){
+                                toggleGoing = 0;
+                            }else {
+                                if(user.getGoing().containsKey(eventId)){
+                                    toggleGoing = 1;
+                                    going.setImageResource(R.drawable.vector_going_yellow);
+                                }
+                            }
                         }
 
                     } catch (Exception e) {
@@ -379,23 +384,25 @@ public class EventsDetailsActivity extends AppCompatActivity {
 
                         if(dataSnapshot.getKey().equals(mAuth.getCurrentUser().getUid())) {
                             user = dataSnapshot.getValue(UserData.class);
-
-
                             if(user.getBookmarked().isEmpty()) {
                                 togglebookm = 0;
  //                               Toast.makeText(EventsDetailsActivity.this, "Black", Toast.LENGTH_SHORT).show();
                             }
-                            else
-                            {
+                            else {
                                 if(user.getBookmarked().containsKey(eventId)) {
                                     togglebookm=1;
                                     bookm.setImageResource(R.drawable.vector_yellow_star);
  //                                  Toast.makeText(EventsDetailsActivity.this, "Yellow", Toast.LENGTH_SHORT).show();
                                 }
                             }
-
-//            user.setBookmarked(new ArrayList<String>());
-//            user.getBookmarked().add(eventId);
+                            if(user.getGoing().isEmpty()){
+                                toggleGoing = 0;
+                            }else {
+                                if(user.getGoing().containsKey(eventId)){
+                                    toggleGoing = 1;
+                                    going.setImageResource(R.drawable.vector_going_yellow);
+                                }
+                            }
                         }
 
                     } catch (Exception e) {
@@ -607,6 +614,46 @@ public class EventsDetailsActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(EventsDetailsActivity.this,
                 new String[]{permission, permission2},
                 MY_PERMISSIONS_REQUEST);
+    }
+
+    private void goingTodb() {
+        if(toggleGoing == 1){
+            user.getGoing().remove(eventId);
+            FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid()).setValue(user)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()) {
+                                going.setImageResource(R.drawable.vector_going);
+                                toggleGoing = 0;
+                                Toast.makeText(EventsDetailsActivity.this, "Going removed Successfully", Toast.LENGTH_SHORT).show();
+                            }
+                            else
+                                Toast.makeText(EventsDetailsActivity.this, "CHECK YOUR NET BRO!!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
+        if(toggleGoing == 0){
+            if(user.getGoing() == null){
+                user.setGoing(new HashMap<String, String>());
+            }
+            user.getGoing().put(eventId, clubName);
+            FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid()).setValue(user)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()) {
+                                toggleGoing = 1;
+                                going.setImageResource(R.drawable.vector_going_yellow);
+                                Toast.makeText(EventsDetailsActivity.this, "Going Succesfully", Toast.LENGTH_SHORT).show();
+                            }else
+                                Toast.makeText(EventsDetailsActivity.this, "CHECK YOUR NETWORK BRO!!", Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
+
+        }
+
     }
 
     private void bookMarkTodb()
