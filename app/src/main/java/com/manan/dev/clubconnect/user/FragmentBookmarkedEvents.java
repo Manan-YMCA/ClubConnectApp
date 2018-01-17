@@ -38,7 +38,7 @@ public class FragmentBookmarkedEvents extends Fragment {
     private UserSingleEventListAdapter adapter;
     private RecyclerView interstedEventsView;
     private ArrayList<Event> userInterestedEvents;
-    private ArrayList<String> userEvents;
+    private ArrayList<String> userEvents, goingEvents;
     private DatabaseReference mUserDatabaseReference;
     private DatabaseReference mEventDatabaseReference;
     private ChildEventListener mUserChildEventListener;
@@ -62,6 +62,7 @@ public class FragmentBookmarkedEvents extends Fragment {
 
         curEvent = new Event();
         userEvents = new ArrayList<>();
+        goingEvents = new ArrayList<>();
         user = new UserData();
         intEvents = new HashMap<>();
 
@@ -79,6 +80,7 @@ public class FragmentBookmarkedEvents extends Fragment {
         intEvents.clear();
         userInterestedEvents.clear();
         userEvents.clear();
+        goingEvents.clear();
     }
 
     private void detatchDatabaseListener() {
@@ -108,6 +110,8 @@ public class FragmentBookmarkedEvents extends Fragment {
                             user = dataSnapshot.getValue(UserData.class);
                             Map<String, String> mp = user.getBookmarked();
                             userEvents.addAll(mp.keySet());
+                            Map<String, String> mp1 = user.getGoing();
+                            goingEvents.addAll(mp1.keySet());
                         }
                     }catch (Exception e){
                         e.printStackTrace();
@@ -121,6 +125,8 @@ public class FragmentBookmarkedEvents extends Fragment {
                             user = dataSnapshot.getValue(UserData.class);
                             Map<String, String> mp = user.getBookmarked();
                             userEvents.addAll(mp.keySet());
+                            Map<String, String> mp1 = user.getGoing();
+                            goingEvents.addAll(mp1.keySet());
                         }
                     }catch (Exception e){
                         e.printStackTrace();
@@ -134,6 +140,8 @@ public class FragmentBookmarkedEvents extends Fragment {
                             user = dataSnapshot.getValue(UserData.class);
                             Map<String, String> mp = user.getBookmarked();
                             userEvents.addAll(mp.keySet());
+                            Map<String, String> mp1 = user.getGoing();
+                            goingEvents.addAll(mp1.keySet());
                         }
                     }catch (Exception e){
                         e.printStackTrace();
@@ -216,11 +224,12 @@ public class FragmentBookmarkedEvents extends Fragment {
     private void updateList() {
         userInterestedEvents.clear();
         if(userEvents != null){
-            Toast.makeText(getActivity(), Integer.toString(userEvents.size()), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), Integer.toString(userEvents.size()), Toast.LENGTH_SHORT).show();
             for(String id : userEvents){
-                Toast.makeText(getActivity(), id, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), id, Toast.LENGTH_SHORT).show();
                 if(intEvents.containsKey(id)){
-                    userInterestedEvents.add(intEvents.get(id));
+                    if(!goingEvents.contains(id))
+                        userInterestedEvents.add(intEvents.get(id));
                 }
             }
         }

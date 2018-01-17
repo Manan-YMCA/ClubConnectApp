@@ -161,6 +161,9 @@ public class AdminDashboardActivity extends AppCompatActivity {
                         Event obj = dataSnapshot.getValue(Event.class);
                         obj.setEventId(dataSnapshot.getKey());
                         obj.setClubName(clubName);
+                        if(obj.getAttendees() == null){
+                            obj.setAttendees(new ArrayList<String>());
+                        }
                         userSingleEventListArrayList.add(obj);
                     } catch (Exception e) {
                         e.printStackTrace();

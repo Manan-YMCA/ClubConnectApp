@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public class Event implements Comparable<Event>{
     public String eventName,eventDesc,eventVenue;
     public ArrayList<String> coordinatorID;
+    public ArrayList<String> attendees;
     public Photos photoID;
     public String clubName, eventId;
     public ArrayList<TimeInterval> days;
@@ -35,15 +36,24 @@ public class Event implements Comparable<Event>{
         photoID = new Photos();
     }
 
-    public Event(String eventName, String eventDesc, String eventVenue, ArrayList<String> coordinatorID, Photos photoID, String clubName, String eventId, ArrayList<TimeInterval> days) {
+    public Event(String eventName, String eventDesc, String eventVenue, ArrayList<String> coordinatorID, ArrayList<String> attendees, Photos photoID, String clubName, String eventId, ArrayList<TimeInterval> days) {
         this.eventName = eventName;
         this.eventDesc = eventDesc;
         this.eventVenue = eventVenue;
         this.coordinatorID = coordinatorID;
+        this.attendees = attendees;
         this.photoID = photoID;
         this.clubName = clubName;
         this.eventId = eventId;
         this.days = days;
+    }
+
+    public ArrayList<String> getAttendees() {
+        return attendees;
+    }
+
+    public void setAttendees(ArrayList<String> attendees) {
+        this.attendees = attendees;
     }
 
     public String getEventName() {

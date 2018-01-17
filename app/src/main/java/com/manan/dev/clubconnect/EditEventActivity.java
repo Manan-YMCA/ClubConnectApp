@@ -47,6 +47,7 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
+import com.manan.dev.clubconnect.editEvent.EventAttendees;
 import com.manan.dev.clubconnect.editEvent.EventDetails;
 import com.manan.dev.clubconnect.editEvent.EventName;
 import com.manan.dev.clubconnect.editEvent.EventTimings;
@@ -92,6 +93,7 @@ public class EditEventActivity extends AppCompatActivity {
     public static final String REQ_PARA_EVENT_ETIME = "event_etime";
     public static final String REQ_PARA_EVENT_POSTERS = "event_posters";
     public static final String REQ_PARA_EVENT_ID = "event_id";
+    public static final String REQ_PARA_EVENT_ATTENDEES = "event_attendees";
 
     private static final String TAG = "EditEventActivity";
 
@@ -111,6 +113,7 @@ public class EditEventActivity extends AppCompatActivity {
     private ImageView ivMainPoster;
     private TextView tvStartTime;
     private TextView tvStartDate;
+    private TextView tvAttendees;
 
     private ProgressDialog pd;
 
@@ -156,6 +159,7 @@ public class EditEventActivity extends AppCompatActivity {
         event.setEventVenue(data.getStringExtra(REQ_PARA_EVENT_VENUE));
         event.getPhotoID().setPosters(data.getStringArrayListExtra(REQ_PARA_EVENT_POSTERS));
         event.setCoordinatorID(data.getStringArrayListExtra(REQ_PARA_EVENT_COORD_EMAIL));
+        event.setAttendees(data.getStringArrayListExtra(REQ_PARA_EVENT_ATTENDEES));
         long[] date,stime,etime;
         date = data.getLongArrayExtra(REQ_PARA_EVENT_DATE);
         stime = data.getLongArrayExtra(REQ_PARA_EVENT_STIME);
@@ -182,6 +186,7 @@ public class EditEventActivity extends AppCompatActivity {
         event.days = new ArrayList<>();
         event.photoID.posters = new ArrayList<>();
         event.photoID.afterEvent = new ArrayList<>();
+        event.attendees = new ArrayList<>();
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
@@ -205,6 +210,7 @@ public class EditEventActivity extends AppCompatActivity {
         ivMainPoster = findViewById(R.id.iv_main_poster);
         tvStartTime = findViewById(R.id.tv_time);
         tvStartDate = findViewById(R.id.tv_date);
+        tvAttendees = findViewById(R.id.label_attendees_count);
 
         appBar = findViewById(R.id.app_bar);
         collapsingToolbarLayout = findViewById(R.id.toolbar_layout);
@@ -322,6 +328,24 @@ public class EditEventActivity extends AppCompatActivity {
                     intent.setType("image/*");
                     intent.setAction(Intent.ACTION_PICK);
                     startActivityForResult(Intent.createChooser(intent, "Select Image"), REQ_ID_ATTACH_IMAGE);
+                }
+            });
+        }
+
+        View viewAttendees = findViewById(R.id.tv_attendees_view);
+        if(viewAttendees != null){
+            viewAttendees.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(event.getAttendees() == null){
+                        event.setAttendees(new ArrayList<String>());
+                    }
+                    if(event.getAttendees().size() > 0){
+                        startActivity(new Intent(EditEventActivity.this, EventAttendees.class).putExtra(REQ_PARA_EVENT_ATTENDEES, event.getAttendees()));
+                    }
+                    else {
+                        Toast.makeText(EditEventActivity.this, "NO ATTENDEES TILL NOW", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         }
@@ -447,6 +471,9 @@ public class EditEventActivity extends AppCompatActivity {
             tvVenue.setText(event.getEventVenue());
         if (event.getEventDesc() != null)
             tvDetails.setText(event.getEventDesc());
+
+        String count = Integer.toString(event.getAttendees().size());
+        tvAttendees.setText(count);
 
         llTimings.removeAllViews();
 

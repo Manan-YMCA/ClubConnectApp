@@ -47,6 +47,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.manan.dev.clubconnect.Adapters.UserSingleEventListAdapter;
 import com.manan.dev.clubconnect.CircleTransform;
+import com.manan.dev.clubconnect.EditEventActivity;
 import com.manan.dev.clubconnect.Models.Coordinator;
 import com.manan.dev.clubconnect.Models.Event;
 import com.manan.dev.clubconnect.Models.TimeInterval;
@@ -84,7 +85,7 @@ public class EventsDetailsActivity extends AppCompatActivity {
     private DatabaseReference mDatabaseReferenceUsers;
     private Map<String, Coordinator> coordinatorsAll;
 
-    TextView tvTime, tvDate, tvVenue, tvDetails;
+    TextView tvTime, tvDate, tvVenue, tvDetails, tvAttendees;
     LinearLayout llCoordinators;
     private AppBarLayout appBar;
     private FirebaseStorage storage;
@@ -113,6 +114,7 @@ public class EventsDetailsActivity extends AppCompatActivity {
         tvDate = (TextView) findViewById(R.id.tv_date);
         tvVenue = (TextView) findViewById(R.id.tv_venue);
         tvDetails = (TextView) findViewById(R.id.tv_details);
+        tvAttendees = (TextView) findViewById(R.id.label_attendees_count_user);
 
         llCoordinators = (LinearLayout) findViewById(R.id.ll_coordinators);
 
@@ -444,6 +446,12 @@ public class EventsDetailsActivity extends AppCompatActivity {
         Log.d("updateUI", curEvent.getEventName());
         collapsingToolbarLayout.setTitle(curEvent.getEventName());
 
+        if(curEvent.getAttendees() == null){
+            curEvent.setAttendees(new ArrayList<String>());
+        }
+        String counter = Integer.toString(curEvent.getAttendees().size());
+        tvAttendees.setText(counter);
+
         if (curEvent.getEventDesc() != null)
             tvDetails.setText(curEvent.getEventDesc());
 
@@ -619,6 +627,10 @@ public class EventsDetailsActivity extends AppCompatActivity {
     private void goingTodb() {
         if(toggleGoing == 1){
             user.getGoing().remove(eventId);
+            if(curEvent.getAttendees().size() > 0 ){
+                Toast.makeText(EventsDetailsActivity.this, curEvent.getAttendees().get(0), Toast.LENGTH_SHORT).show();
+            }
+            curEvent.getAttendees().remove(mAuth.getCurrentUser().getUid());
             FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid()).setValue(user)
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
@@ -626,6 +638,15 @@ public class EventsDetailsActivity extends AppCompatActivity {
                             if(task.isSuccessful()) {
                                 going.setImageResource(R.drawable.vector_going);
                                 toggleGoing = 0;
+                                FirebaseDatabase.getInstance().getReference().child("events").child(clubName).child(eventId).setValue(curEvent)
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if(task.isSuccessful()){
+                                                    Toast.makeText(EventsDetailsActivity.this, "REMOVED", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
                                 Toast.makeText(EventsDetailsActivity.this, "Going removed Successfully", Toast.LENGTH_SHORT).show();
                             }
                             else
@@ -637,7 +658,13 @@ public class EventsDetailsActivity extends AppCompatActivity {
             if(user.getGoing() == null){
                 user.setGoing(new HashMap<String, String>());
             }
+            if(curEvent.getAttendees() == null){
+                Toast.makeText(EventsDetailsActivity.this, "nhi hai abhi tak", Toast.LENGTH_SHORT).show();
+                curEvent.setAttendees(new ArrayList<String>());
+            }
             user.getGoing().put(eventId, clubName);
+            curEvent.getAttendees().add(mAuth.getCurrentUser().getUid());
+            Toast.makeText(EventsDetailsActivity.this, curEvent.getAttendees().get(0), Toast.LENGTH_SHORT).show();
             FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid()).setValue(user)
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
@@ -645,6 +672,18 @@ public class EventsDetailsActivity extends AppCompatActivity {
                             if(task.isSuccessful()) {
                                 toggleGoing = 1;
                                 going.setImageResource(R.drawable.vector_going_yellow);
+                                FirebaseDatabase.getInstance().getReference().child("events").child(clubName).child(eventId).setValue(curEvent)
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if(task.isSuccessful()){
+                                                    Toast.makeText(EventsDetailsActivity.this, "GOING", Toast.LENGTH_SHORT).show();
+                                                }
+                                                else {
+                                                    Toast.makeText(EventsDetailsActivity.this, "Panga ho gya", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
                                 Toast.makeText(EventsDetailsActivity.this, "Going Succesfully", Toast.LENGTH_SHORT).show();
                             }else
                                 Toast.makeText(EventsDetailsActivity.this, "CHECK YOUR NETWORK BRO!!", Toast.LENGTH_SHORT).show();

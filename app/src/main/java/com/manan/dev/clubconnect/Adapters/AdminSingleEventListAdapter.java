@@ -136,6 +136,7 @@ public class AdminSingleEventListAdapter extends RecyclerView.Adapter<AdminSingl
                 singleEventDetailBundle.putStringArrayList(EditEventActivity.REQ_PARA_EVENT_COORD_EMAIL, cEmail);
                 singleEventDetailBundle.putStringArrayList(EditEventActivity.REQ_PARA_EVENT_COORD_PHONE, cPhone);
                 singleEventDetailBundle.putStringArrayList(EditEventActivity.REQ_PARA_EVENT_COORD_PHOTO, cPhoto);
+                singleEventDetailBundle.putStringArrayList(EditEventActivity.REQ_PARA_EVENT_ATTENDEES, u.getAttendees());
 
                 singleEventDetailIntent.putExtras(singleEventDetailBundle);
                 context.startActivity(singleEventDetailIntent);

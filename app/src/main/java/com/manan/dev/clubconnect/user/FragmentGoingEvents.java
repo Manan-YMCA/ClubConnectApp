@@ -32,38 +32,38 @@ import java.util.Map;
 
 public class FragmentGoingEvents extends Fragment {
 
-    private UserSingleEventListAdapter adapter;
-    private RecyclerView interstedEventsView;
-    private ArrayList<Event> userInterestedEvents;
+    private UserSingleEventListAdapter GoingAdapter;
+    private RecyclerView GoingEventsView;
+    private ArrayList<Event> userGoingEvents;
     private ArrayList<String> userEvents;
-    private DatabaseReference mUserDatabaseReference;
-    private DatabaseReference mEventDatabaseReference;
-    private ChildEventListener mUserChildEventListener;
-    private ChildEventListener mEventChildEventListener;
+    private DatabaseReference mUserGoingDatabaseReference;
+    private DatabaseReference mEventGoingDatabaseReference;
+    private ChildEventListener mUserGoingChildEventListener;
+    private ChildEventListener mEventGoingChildEventListener;
     private Event curEvent;
-    private UserData user;
-    Map<String, Event> intEvents;
+    private UserData userGoing;
+    Map<String, Event> GoingEvents;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_going_events, container, false);
 
-        interstedEventsView = (RecyclerView) view.findViewById(R.id.going_recycler_view);
-        userInterestedEvents = new ArrayList<>();
+        GoingEventsView = (RecyclerView) view.findViewById(R.id.going_recycler_view);
+        userGoingEvents = new ArrayList<>();
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        interstedEventsView.setLayoutManager(layoutManager);
+        GoingEventsView.setLayoutManager(layoutManager);
 
-        adapter = new UserSingleEventListAdapter(userInterestedEvents, getActivity());
-        interstedEventsView.setAdapter(adapter);
+        GoingAdapter = new UserSingleEventListAdapter(userGoingEvents, getActivity());
+        GoingEventsView.setAdapter(GoingAdapter);
 
         curEvent = new Event();
         userEvents = new ArrayList<>();
-        user = new UserData();
-        intEvents = new HashMap<>();
+        userGoing = new UserData();
+        GoingEvents = new HashMap<>();
 
-        mUserDatabaseReference = FirebaseDatabase.getInstance().getReference().child("users");
-        mEventDatabaseReference = FirebaseDatabase.getInstance().getReference().child("events");
+        mUserGoingDatabaseReference = FirebaseDatabase.getInstance().getReference().child("users");
+        mEventGoingDatabaseReference = FirebaseDatabase.getInstance().getReference().child("events");
 
         return view;
     }
@@ -73,19 +73,19 @@ public class FragmentGoingEvents extends Fragment {
         super.onPause();
         detatchDatabaseListener();
         curEvent = null;
-        intEvents.clear();
-        userInterestedEvents.clear();
+        GoingEvents.clear();
+        userGoingEvents.clear();
         userEvents.clear();
     }
 
     private void detatchDatabaseListener() {
-        if(mUserChildEventListener != null){
-            mUserDatabaseReference.removeEventListener(mUserChildEventListener);
-            mUserChildEventListener = null;
+        if(mUserGoingChildEventListener != null){
+            mUserGoingDatabaseReference.removeEventListener(mUserGoingChildEventListener);
+            mUserGoingChildEventListener = null;
         }
-        if(mEventChildEventListener != null){
-            mEventDatabaseReference.removeEventListener(mEventChildEventListener);
-            mEventChildEventListener = null;
+        if(mEventGoingChildEventListener != null){
+            mEventGoingDatabaseReference.removeEventListener(mEventGoingChildEventListener);
+            mEventGoingChildEventListener = null;
         }
     }
 
@@ -96,14 +96,14 @@ public class FragmentGoingEvents extends Fragment {
     }
 
     private void attachDatabaseListener() {
-        if(mUserChildEventListener == null){
-            mUserChildEventListener = new ChildEventListener() {
+        if(mUserGoingChildEventListener == null){
+            mUserGoingChildEventListener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     try{
                         if(dataSnapshot.getKey().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
-                            user = dataSnapshot.getValue(UserData.class);
-                            Map<String, String> mp = user.getGoing();
+                            userGoing = dataSnapshot.getValue(UserData.class);
+                            Map<String, String> mp = userGoing.getGoing();
                             userEvents.addAll(mp.keySet());
                         }
                     }catch (Exception e){
@@ -115,8 +115,8 @@ public class FragmentGoingEvents extends Fragment {
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                     try{
                         if(dataSnapshot.getKey().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
-                            user = dataSnapshot.getValue(UserData.class);
-                            Map<String, String> mp = user.getGoing();
+                            userGoing = dataSnapshot.getValue(UserData.class);
+                            Map<String, String> mp = userGoing.getGoing();
                             userEvents.addAll(mp.keySet());
                         }
                     }catch (Exception e){
@@ -128,8 +128,8 @@ public class FragmentGoingEvents extends Fragment {
                 public void onChildRemoved(DataSnapshot dataSnapshot) {
                     try{
                         if(dataSnapshot.getKey().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
-                            user = dataSnapshot.getValue(UserData.class);
-                            Map<String, String> mp = user.getGoing();
+                            userGoing = dataSnapshot.getValue(UserData.class);
+                            Map<String, String> mp = userGoing.getGoing();
                             userEvents.addAll(mp.keySet());
                         }
                     }catch (Exception e){
@@ -147,10 +147,10 @@ public class FragmentGoingEvents extends Fragment {
 
                 }
             };
-            mUserDatabaseReference.addChildEventListener(mUserChildEventListener);
+            mUserGoingDatabaseReference.addChildEventListener(mUserGoingChildEventListener);
         }
-        if(mEventChildEventListener == null){
-            mEventChildEventListener = new ChildEventListener() {
+        if(mEventGoingChildEventListener == null){
+            mEventGoingChildEventListener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     try{
@@ -158,7 +158,7 @@ public class FragmentGoingEvents extends Fragment {
                             curEvent = data.getValue(Event.class);
                             curEvent.setClubName(dataSnapshot.getKey());
                             curEvent.setEventId(data.getKey());
-                            intEvents.put(data.getKey(), curEvent);
+                            GoingEvents.put(data.getKey(), curEvent);
                         }
                         updateList();
                     }catch (Exception e){
@@ -173,7 +173,7 @@ public class FragmentGoingEvents extends Fragment {
                             curEvent = data.getValue(Event.class);
                             curEvent.setClubName(dataSnapshot.getKey());
                             curEvent.setEventId(data.getKey());
-                            intEvents.put(data.getKey(), curEvent);
+                            GoingEvents.put(data.getKey(), curEvent);
                         }
                         updateList();
                     }catch (Exception e){
@@ -188,7 +188,7 @@ public class FragmentGoingEvents extends Fragment {
                             curEvent = data.getValue(Event.class);
                             curEvent.setClubName(dataSnapshot.getKey());
                             curEvent.setEventId(data.getKey());
-                            intEvents.put(data.getKey(), curEvent);
+                            GoingEvents.put(data.getKey(), curEvent);
                         }
                         updateList();
                     }catch (Exception e){
@@ -206,21 +206,21 @@ public class FragmentGoingEvents extends Fragment {
 
                 }
             };
-            mEventDatabaseReference.addChildEventListener(mEventChildEventListener);
+            mEventGoingDatabaseReference.addChildEventListener(mEventGoingChildEventListener);
         }
     }
 
     private void updateList() {
-        userInterestedEvents.clear();
+        userGoingEvents.clear();
         if(userEvents != null){
-            Toast.makeText(getActivity(), Integer.toString(userEvents.size()), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), Integer.toString(userEvents.size()), Toast.LENGTH_SHORT).show();
             for(String id : userEvents){
-                Toast.makeText(getActivity(), id, Toast.LENGTH_SHORT).show();
-                if(intEvents.containsKey(id)){
-                    userInterestedEvents.add(intEvents.get(id));
+                //Toast.makeText(getActivity(), id, Toast.LENGTH_SHORT).show();
+                if(GoingEvents.containsKey(id)){
+                    userGoingEvents.add(GoingEvents.get(id));
                 }
             }
         }
-        adapter.notifyDataSetChanged();
+        GoingAdapter.notifyDataSetChanged();
     }
 }
