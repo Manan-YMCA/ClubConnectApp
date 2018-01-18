@@ -34,6 +34,7 @@ import com.manan.dev.clubconnect.Models.Event;
 import com.manan.dev.clubconnect.Models.Photos;
 import com.manan.dev.clubconnect.Models.SectionDataModel;
 import com.manan.dev.clubconnect.Models.TimeInterval;
+import com.manan.dev.clubconnect.Models.UserData;
 import com.manan.dev.clubconnect.user.DevelopersActivity;
 import com.manan.dev.clubconnect.user.UserBookmarkActivity;
 import com.manan.dev.clubconnect.user.UserClubEventListActivity;
@@ -57,16 +58,23 @@ public class DashboardUserActivity extends AppCompatActivity
     private Toolbar toolbar;
     private DrawerLayout drawer;
     private DatabaseReference mDatabaseReference;
+    private DatabaseReference mPrivateDatabaseEvents;
     private ChildEventListener mChildEventListener;
+    private ChildEventListener mprivateChildEventListener;
+    private UserData user;
     private Map<String, ArrayList<Pair<String, Event>>> eventsMap;
     private String clubName;
+    private String userId;
     private Event event;
+    private ArrayList<String> myClubs;
     //private SectionDataModel allEvents;
     //private ArrayList<Event> allEventsItem;
     private SectionDataModel preEvents;
     private ArrayList<Event> preEventsItem;
     private SectionDataModel curEvents;
     private ArrayList<Event> curEventsItem;
+    private SectionDataModel privateEvents;
+    private ArrayList<Event> privateEventItem;
     private RecyclerView my_recycler_view;
 
     ArrayList<SectionDataModel> eventListForRecyclerView;
@@ -89,10 +97,18 @@ public class DashboardUserActivity extends AppCompatActivity
         preEvents = new SectionDataModel();
         preEvents.setHeaderTitle("Past Events");
         preEventsItem = new ArrayList<>();
+        userId = mAuth.getCurrentUser().getUid();
 
         curEvents = new SectionDataModel();
         curEvents.setHeaderTitle("Future Events");
         curEventsItem = new ArrayList<>();
+
+        privateEvents = new SectionDataModel();
+        privateEvents.setHeaderTitle("Private Events");
+        privateEventItem = new ArrayList<>();
+
+        user = new UserData();
+        myClubs = new ArrayList<>();
 
         my_recycler_view = (RecyclerView) findViewById(R.id.my_recycler_view);
 
@@ -141,6 +157,7 @@ public class DashboardUserActivity extends AppCompatActivity
         nav_view.setCheckedItem(R.id.nav_camera);
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("events");
+        mPrivateDatabaseEvents = FirebaseDatabase.getInstance().getReference().child("users");
 
         adapter = new RecyclerViewDataAdapter(this, eventListForRecyclerView);
         my_recycler_view.setAdapter(adapter);
@@ -176,6 +193,8 @@ public class DashboardUserActivity extends AppCompatActivity
         eventsMap.clear();
         preEventsItem.clear();
         curEventsItem.clear();
+        privateEventItem.clear();
+        myClubs.clear();
 
         eventListForRecyclerView.clear();
 
@@ -187,6 +206,10 @@ public class DashboardUserActivity extends AppCompatActivity
         if (mChildEventListener != null) {
             mDatabaseReference.removeEventListener(mChildEventListener);
             mChildEventListener = null;
+        }
+        if(mprivateChildEventListener != null){
+            mPrivateDatabaseEvents.removeEventListener(mprivateChildEventListener);
+            mprivateChildEventListener = null;
         }
     }
 
@@ -243,13 +266,66 @@ public class DashboardUserActivity extends AppCompatActivity
             };
             mDatabaseReference.addChildEventListener(mChildEventListener);
         }
+
+        if(mprivateChildEventListener == null){
+            mprivateChildEventListener = new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    if (dataSnapshot.getKey().equals(userId)) {
+                        user = dataSnapshot.getValue(UserData.class);
+                        if (user != null && user.getEmailId() != null) {
+                            Log.d("user id", user.getEmailId());
+                        } else
+                            Log.d("user id", "null");
+                        updateList();
+                    }
+                }
+
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                    if (dataSnapshot.getKey().equals(userId)) {
+                        user = dataSnapshot.getValue(UserData.class);
+                        if (user != null && user.getEmailId() != null) {
+                            Log.d("user id", user.getEmailId());
+                        } else
+                            Log.d("user id", "null");
+                        updateList();
+                    }
+                }
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                }
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            };
+            mPrivateDatabaseEvents.addChildEventListener(mprivateChildEventListener);
+        }
+    }
+
+    private void updateValues(UserData user) {
+        if(user.getMyClubs() != null)
+            myClubs.addAll(user.getMyClubs());
     }
 
     private void updateList() {
         try {
             preEventsItem.clear();
             curEventsItem.clear();
+            privateEventItem.clear();
             eventListForRecyclerView.clear();
+            if(user.getMyClubs() != null)
+                myClubs.addAll(user.getMyClubs());
+            Toast.makeText(DashboardUserActivity.this, Integer.toString(myClubs.size()), Toast.LENGTH_SHORT).show();
 
             for (Map.Entry<String, ArrayList<Pair<String, Event>>> entry : eventsMap.entrySet()) {
                 pb.setVisibility(View.GONE);
@@ -284,14 +360,24 @@ public class DashboardUserActivity extends AppCompatActivity
                     cal.set(Calendar.MINUTE, 0);
                     cal.set(Calendar.SECOND, 0);
                     long curDate = cal.getTimeInMillis();
-                    if (model.getDays().get(0).getDate() < curDate)
-                        preEventsItem.add(model);
-                    else
-                        curEventsItem.add(model);
+                    if(eventItem.getPrivate() == null){
+                        Toast.makeText(DashboardUserActivity.this, "private value", Toast.LENGTH_SHORT).show();
+                    }else {
+                        if (!eventItem.getPrivate()) {
+                            if (model.getDays().get(0).getDate() < curDate)
+                                preEventsItem.add(model);
+                            else
+                                curEventsItem.add(model);
+                        } else if (eventItem.getPrivate()) {
+                            if(myClubs.contains(eventItem.getClubName()))
+                                privateEventItem.add(model);
+                        }
+                    }
                 }
             }
             sort(preEventsItem);
             sort(curEventsItem);
+            sort(privateEventItem);
             //Toast.makeText(DashboardUserActivity.this, Integer.toString(allEventsItem.size()), Toast.LENGTH_SHORT).show();
             if(curEventsItem.size() > 0) {
                 curEvents.setAllItemsInSection(curEventsItem);
@@ -301,6 +387,12 @@ public class DashboardUserActivity extends AppCompatActivity
                 preEvents.setAllItemsInSection(preEventsItem);
                 eventListForRecyclerView.add(preEvents);
             }
+            if(privateEventItem.size() > 0){
+                privateEvents.setAllItemsInSection(privateEventItem);
+                eventListForRecyclerView.add(privateEvents);
+            }
+
+            Toast.makeText(DashboardUserActivity.this, Integer.toString(curEventsItem.size()) + " " + Integer.toString(preEventsItem.size()) + " " + Integer.toString(privateEventItem.size()), Toast.LENGTH_SHORT).show();
 
             adapter.notifyDataSetChanged();
         } catch (Exception e) {

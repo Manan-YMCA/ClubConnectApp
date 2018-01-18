@@ -15,6 +15,32 @@ public class Event implements Comparable<Event>{
     public Photos photoID;
     public String clubName, eventId;
     public ArrayList<TimeInterval> days;
+    public Boolean isPrivate;
+
+    public Event() {
+        photoID = new Photos();
+    }
+
+    public Event(String eventName, String eventDesc, String eventVenue, ArrayList<String> coordinatorID, ArrayList<String> attendees, Photos photoID, String clubName, String eventId, ArrayList<TimeInterval> days, Boolean eventType) {
+        this.eventName = eventName;
+        this.eventDesc = eventDesc;
+        this.eventVenue = eventVenue;
+        this.coordinatorID = coordinatorID;
+        this.attendees = attendees;
+        this.photoID = photoID;
+        this.clubName = clubName;
+        this.eventId = eventId;
+        this.days = days;
+        this.isPrivate = eventType;
+    }
+
+    public Boolean getPrivate() {
+        return isPrivate;
+    }
+
+    public void setPrivate(Boolean aPrivate) {
+        isPrivate = aPrivate;
+    }
 
     public String getClubName() {
         return clubName;
@@ -30,22 +56,6 @@ public class Event implements Comparable<Event>{
 
     public void setEventId(String eventId) {
         this.eventId = eventId;
-    }
-
-    public Event() {
-        photoID = new Photos();
-    }
-
-    public Event(String eventName, String eventDesc, String eventVenue, ArrayList<String> coordinatorID, ArrayList<String> attendees, Photos photoID, String clubName, String eventId, ArrayList<TimeInterval> days) {
-        this.eventName = eventName;
-        this.eventDesc = eventDesc;
-        this.eventVenue = eventVenue;
-        this.coordinatorID = coordinatorID;
-        this.attendees = attendees;
-        this.photoID = photoID;
-        this.clubName = clubName;
-        this.eventId = eventId;
-        this.days = days;
     }
 
     public ArrayList<String> getAttendees() {

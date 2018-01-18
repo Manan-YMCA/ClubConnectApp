@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -94,6 +95,7 @@ public class EditEventActivity extends AppCompatActivity {
     public static final String REQ_PARA_EVENT_POSTERS = "event_posters";
     public static final String REQ_PARA_EVENT_ID = "event_id";
     public static final String REQ_PARA_EVENT_ATTENDEES = "event_attendees";
+    public static final String REQ_PARA_EVENT_TYPE = "event_type";
 
     private static final String TAG = "EditEventActivity";
 
@@ -114,6 +116,8 @@ public class EditEventActivity extends AppCompatActivity {
     private TextView tvStartTime;
     private TextView tvStartDate;
     private TextView tvAttendees;
+    private RadioButton rbPublic;
+    private RadioButton rbPrivate;
 
     private ProgressDialog pd;
 
@@ -175,6 +179,8 @@ public class EditEventActivity extends AppCompatActivity {
 
         Toast.makeText(EditEventActivity.this, event.getEventId() + " " + event.getEventName(), Toast.LENGTH_SHORT).show();
 
+        event.setPrivate(data.getExtras().getBoolean(REQ_PARA_EVENT_TYPE));
+        Toast.makeText(EditEventActivity.this, event.getPrivate().toString(), Toast.LENGTH_SHORT).show();
         updateUIText();
         updatePostersBasedOnDownloadURLs();
         updateCoordinators(name,phone,email,photo);
@@ -211,6 +217,8 @@ public class EditEventActivity extends AppCompatActivity {
         tvStartTime = findViewById(R.id.tv_time);
         tvStartDate = findViewById(R.id.tv_date);
         tvAttendees = findViewById(R.id.label_attendees_count);
+        rbPrivate = findViewById(R.id.event_private);
+        rbPublic = findViewById(R.id.event_public);
 
         appBar = findViewById(R.id.app_bar);
         collapsingToolbarLayout = findViewById(R.id.toolbar_layout);
@@ -472,6 +480,16 @@ public class EditEventActivity extends AppCompatActivity {
         if (event.getEventDesc() != null)
             tvDetails.setText(event.getEventDesc());
 
+        if(event.getPrivate() != null) {
+            if (event.getPrivate()) {
+                rbPrivate.setChecked(true);
+                rbPublic.setChecked(false);
+            } else if (!event.getPrivate()) {
+                rbPublic.setChecked(true);
+                rbPrivate.setChecked(false);
+            }
+        }
+
         String count = Integer.toString(event.getAttendees().size());
         tvAttendees.setText(count);
 
@@ -715,6 +733,11 @@ public class EditEventActivity extends AppCompatActivity {
     }
 
     void uploadEvent() {
+        if(rbPublic.isChecked()){
+            event.setPrivate(false);
+        } else if(rbPrivate.isChecked()){
+            event.setPrivate(true);
+        }
         if (event.getEventName() == null || event.getEventName().equals("")) {
             Toast.makeText(EditEventActivity.this, "Event Name cannot be empty!", Toast.LENGTH_SHORT).show();
         } else if (event.getEventVenue() == null || event.getEventVenue().equals("")) {
