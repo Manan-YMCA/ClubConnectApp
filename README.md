@@ -2,6 +2,8 @@
 
 Club Connect is a simplistic platform for event management , whether it is event details to be seen by the user or the over all event control by the admin , Club Connect provides a platform for both the end users to stay tuned with there events.
 
+![App Banner](https://image.ibb.co/cWvPNo/clubconnect_banner.png)
+
 ### Whats New
 *1. User Authentication</br>*
 *2. Real Event Data Flow</br>*
