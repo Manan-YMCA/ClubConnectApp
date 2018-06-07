@@ -6,13 +6,13 @@ Club Connect is a simplistic platform for event management , whether it is event
 
 ### Whats New
 *1. User Authentication</br>*
-*2. Real Event Data Flow</br>*
+*2. Real Time Event Data Flow</br>*
 *3. Notifications System for the Events</br>*
 *4. Classified Events</br>*
 *5. Event Attendees and Bookmark<br />*
 *6. Club Member Management<br />*
 *7. Club Coordinator Management<br />*
-*8. Club Coordinator Management<br />*
+*8. Club Event Analytics<br />*
 
 ## Built With
 * [Android Studio](https://developer.android.com/studio/) - The Development Platform used for Android Application
