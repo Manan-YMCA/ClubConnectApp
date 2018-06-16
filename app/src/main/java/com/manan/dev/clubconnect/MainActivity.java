@@ -42,17 +42,11 @@ public class MainActivity extends AppCompatActivity {
     AnimationDrawable anim;
     private ProgressDialog pd;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    static boolean offline = true;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (offline) {
-            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-            offline = false;
-        }
 
         setContentView(R.layout.activity_main);
         containeer = (RelativeLayout) findViewById(R.id.container);
