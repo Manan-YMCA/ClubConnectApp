@@ -15,7 +15,7 @@ import com.manan.dev.clubconnect.Models.Coordinator;
 
 public class DeleteAddCoordinator {
 
-
+//Class to Delete Coordinator in DB for a Club
     public void addCoordinator(Coordinator coordinator, String clubName){
         FirebaseDatabase.getInstance().getReference().child("coordinators").child(clubName).push().setValue(coordinator).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
