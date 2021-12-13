@@ -30,7 +30,7 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduc
 * [Kushank Arora](https://github.com/Kushank-Arora)
 * [Yatin Dhingra](https://github.com/yatind01)
 * [Shubham Sharma](https://github.com/shubham0008)
-* [Shubham Kachroo](https://github.com/the-Alchemister)
+* [Shubham Kachroo](https://github.com/s-kachroo)
 * [Naman Sachdeva](https://github.com/namansachdeva)
 
 See also the list of [contributors](https://github.com/Manan-YMCA/ClubConnectApp/graphs/contributors) who participated in this project.     
